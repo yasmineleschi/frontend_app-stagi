@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "337090548271",
+    "project_id": "stagi-ec386",
+    "storage_bucket": "stagi-ec386.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:337090548271:android:da4495a9ed8d8603466cda",
+        "android_client_info": {
+          "package_name": "com.example.frontend_app_stagi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "337090548271-r2okr2i0shs9jrf8n5i5hdk65vll9ita.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.frontend_app_stagi",
+            "certificate_hash": "f4401d1ed1e541e81aa4ec3ef782c153311a5c41"
+          }
+        },
+        {
+          "client_id": "337090548271-8fvunakd7qf8n0g1rcvg6kbq175e73l3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0wXOkE6BVPRsMdZXs8v3tAjPskBlkFwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "337090548271-8fvunakd7qf8n0g1rcvg6kbq175e73l3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

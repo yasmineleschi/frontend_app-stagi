@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_app_stagi/views/Profil/Student_view.dart';
+import 'package:frontend_app_stagi/views/widgets/WidgetSignUp/CustomDropdown.dart';
 import 'package:provider/provider.dart';
-import '../viewmodels/signup_viewmodel.dart';
-import '../views/widgets/custom_text_field.dart';
+import '../../viewmodels/signup_viewmodel.dart';
+import '../widgets/WidgetSignUp/custom_text_field.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -16,6 +18,8 @@ class _SignUpViewState extends State<SignUpView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool hidePassword = true;
+  String role = "Student";
+  final List<String> roles = ["Student", "Company"];
 
   @override
   void dispose() {
@@ -127,6 +131,17 @@ class _SignUpViewState extends State<SignUpView> {
                               },
                             ),
                             const SizedBox(height: 20),
+                            CustomDropdown(
+                              value: role,
+                              items: roles,
+                              onChanged: (value) {
+                                setState(() {
+                                  role = value!;
+                                  viewModel.setRole(role);
+                                });
+                              },
+                            ),
+                            SizedBox(height: 20),
                             ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF4267B2)),
@@ -140,18 +155,31 @@ class _SignUpViewState extends State<SignUpView> {
                               onPressed: () async {
                                 if (_formKey.currentState?.validate() ?? false) {
                                   await viewModel.signUp();
+
                                   if (viewModel.errorMessage.isNotEmpty) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(content: Text(viewModel.errorMessage)),
                                     );
                                   } else {
-
-                                    Navigator.pushNamed(context, '/home');
+                                    final userId = viewModel.userId;
+                                    if (userId != null) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => StudentProfileView(userId: userId),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text('Failed to retrieve user ID')),
+                                      );
+                                    }
                                   }
                                 }
                               },
-                              child: const Text('Sign Up' , style: TextStyle(color: Colors.white),),
+                              child: const Text('Sign Up', style: TextStyle(color: Colors.white)),
                             ),
+
                             const SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -174,9 +202,22 @@ class _SignUpViewState extends State<SignUpView> {
                                   ),
                                 ),
                               ),
-                              onPressed: () {
-                                // TODO: Ajouter la logique pour la connexion avec Google
+                              onPressed: () async {
+                                if (_formKey.currentState?.validate() ?? false) {
+                                  await viewModel.signUp();
+
+                                  if (viewModel.errorMessage.isNotEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text(viewModel.errorMessage)),
+                                    );
+                                  } else {
+
+                                    final userId = viewModel.userId;
+
+                                  }
+                                }
                               },
+
                               icon: Image.asset('assets/google_logo.png', height: 24),
                               label: const Text('Sign Up with Google', style: TextStyle(color: Colors.black)),
                             ),
@@ -214,4 +255,7 @@ class _SignUpViewState extends State<SignUpView> {
       ),
     );
   }
+
 }
+
+
