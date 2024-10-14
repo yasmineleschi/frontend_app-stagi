@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_app_stagi/viewmodels/signin_viewmodel.dart';
-import 'package:frontend_app_stagi/views/widgets/WidgetSignUp/custom_text_field.dart';
-import 'package:frontend_app_stagi/views/Profil/Student_view.dart';
 import 'package:provider/provider.dart';
-import 'package:frontend_app_stagi/views/authentification/signin_view.dart';
+import 'package:frontend_app_stagi/viewmodels/signin_viewmodel.dart';
+import 'package:frontend_app_stagi/views/Profil/Student_view.dart';
+import 'package:frontend_app_stagi/views/widgets/WidgetSignUp/custom_text_field.dart';
 
 class SignInView extends StatefulWidget {
   const SignInView({super.key});
@@ -60,7 +59,8 @@ class _SignInViewState extends State<SignInView> {
                             const SizedBox(height: 150),
                             const Text(
                               "Welcome Back!",
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 30),
                             CustomTextField(
@@ -75,7 +75,8 @@ class _SignInViewState extends State<SignInView> {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter an email';
                                 }
-                                final RegExp emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                                final RegExp emailRegex =
+                                RegExp(r'^[^@]+@[^@]+\.[^@]+');
                                 if (!emailRegex.hasMatch(value)) {
                                   return 'Please enter a valid email address';
                                 }
@@ -96,7 +97,9 @@ class _SignInViewState extends State<SignInView> {
                                   });
                                 },
                                 icon: Icon(
-                                  hidePassword ? Icons.visibility_off : Icons.visibility,
+                                  hidePassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
                                   color: Colors.black.withOpacity(0.7),
                                 ),
                               ),
@@ -110,8 +113,11 @@ class _SignInViewState extends State<SignInView> {
                             const SizedBox(height: 20),
                             ElevatedButton(
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF4267B2)),
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                backgroundColor:
+                                MaterialStateProperty.all<Color>(
+                                    const Color(0xFF4267B2)),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                     side: const BorderSide(color: Colors.white),
@@ -119,60 +125,37 @@ class _SignInViewState extends State<SignInView> {
                                 ),
                               ),
                               onPressed: () async {
-                                if (_formKey.currentState?.validate() ?? false) {
+                                if (_formKey.currentState?.validate() ??
+                                    false) {
                                   await viewModel.signIn();
 
                                   if (viewModel.errorMessage.isNotEmpty) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(viewModel.errorMessage)),
+                                      SnackBar(
+                                          content:
+                                          Text(viewModel.errorMessage)),
                                     );
                                   } else {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => StudentProfileView(userId: viewModel.email), // Change as necessary
+                                        builder: (context) =>
+                                            StudentProfileView(
+                                                userId: viewModel.email),
                                       ),
                                     );
                                   }
                                 }
                               },
-                              child: const Text('Sign In', style: TextStyle(color: Colors.white)),
-                            ),
-                            const SizedBox(height: 20),
-                            ElevatedButton.icon(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                    side: const BorderSide(color: Colors.grey),
-                                  ),
-                                ),
-                              ),
-                              onPressed: () async {
-                                await viewModel.signInWithGoogle();
-
-                                if (viewModel.errorMessage.isNotEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(viewModel.errorMessage)),
-                                  );
-                                } else {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => StudentProfileView(userId: viewModel.email), // Change as necessary
-                                    ),
-                                  );
-                                }
-                              },
-                              icon: Image.asset('assets/google_logo.png', height: 24),
-                              label: const Text('Sign In with Google', style: TextStyle(color: Colors.black)),
+                              child: const Text('Sign In',
+                                  style: TextStyle(color: Colors.white)),
                             ),
                             const SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text("Don't have an account?", style: TextStyle(color: Colors.black)),
+                                const Text("Don't have an account?",
+                                    style: TextStyle(color: Colors.black)),
                                 const SizedBox(width: 5),
                                 TextButton(
                                   onPressed: () {

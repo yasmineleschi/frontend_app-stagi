@@ -1,9 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert'; // For JSON encoding/decoding
 
 class SignInViewModel extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final String backendUrl = 'http://localhost:5000/api/users/login'; // Replace with your backend URL
   String email = '';
   String password = '';
   String errorMessage = '';
@@ -30,41 +30,25 @@ class SignInViewModel extends ChangeNotifier {
       isLoading = true;
       notifyListeners();
 
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-
-      isLoading = false;
-      notifyListeners();
-    } catch (e) {
-      errorMessage = e.toString();
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> signInWithGoogle() async {
-    try {
-      isLoading = true;
-      notifyListeners();
-
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) {
-        isLoading = false;
-        notifyListeners();
-        return;
-      }
-
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
+      final response = await http.post(
+        Uri.parse(backendUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
       );
 
-      await _auth.signInWithCredential(credential);
-      isLoading = false;
-      notifyListeners();
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final token = data['accessToken']; // JWT token from backend
+
+        // Optionally store token for later use
+        errorMessage = '';
+      } else {
+        final errorData = jsonDecode(response.body);
+        errorMessage = errorData['message'] ?? 'Login failed';
+      }
     } catch (e) {
-      errorMessage = e.toString();
+      errorMessage = 'An error occurred: $e';
+    } finally {
       isLoading = false;
       notifyListeners();
     }
