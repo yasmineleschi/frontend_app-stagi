@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
 class ApiService {
-  final String baseUrl = 'http://10.0.2.2:5000/api/users';
+  final String baseUrl = 'http://localhost:5000/api/users';
 
 
   Future<void> signUp(User user) async {
