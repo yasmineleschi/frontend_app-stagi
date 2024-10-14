@@ -8,7 +8,7 @@ class SignInViewModel extends ChangeNotifier {
   String password = '';
   String errorMessage = '';
   bool isLoading = false;
-
+  String token = ''; // Store token
   void setEmail(String value) {
     email = value;
     notifyListeners();
@@ -38,7 +38,7 @@ class SignInViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final token = data['accessToken']; // JWT token from backend
+         token = data['accessToken']; // JWT token from backend
 
         // Optionally store token for later use
         errorMessage = '';

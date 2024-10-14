@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_app_stagi/views/Home/Home_view.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend_app_stagi/viewmodels/signin_viewmodel.dart';
 import 'package:frontend_app_stagi/views/Profil/Student_view.dart';
@@ -125,28 +126,24 @@ class _SignInViewState extends State<SignInView> {
                                 ),
                               ),
                               onPressed: () async {
-                                if (_formKey.currentState?.validate() ??
-                                    false) {
+                                if (_formKey.currentState?.validate() ?? false) {
                                   await viewModel.signIn();
 
                                   if (viewModel.errorMessage.isNotEmpty) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content:
-                                          Text(viewModel.errorMessage)),
+                                      SnackBar(content: Text(viewModel.errorMessage)),
                                     );
                                   } else {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            StudentProfileView(
-                                                userId: viewModel.email),
+                                        builder: (context) => HomeView(token: viewModel.token),
                                       ),
                                     );
                                   }
                                 }
                               },
+
                               child: const Text('Sign In',
                                   style: TextStyle(color: Colors.white)),
                             ),
