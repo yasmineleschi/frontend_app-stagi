@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/views/Profil/Student_view.dart';
-import 'package:frontend_app_stagi/views/widgets/WidgetSignUp/CustomDropdown.dart';
+import 'package:frontend_app_stagi/views/Profil/create_studentprofile_view.dart';
+import 'package:frontend_app_stagi/widgets/WidgetSignUp/CustomDropdown.dart';
+import 'package:frontend_app_stagi/widgets/WidgetSignUp/custom_text_field.dart';
+import 'package:frontend_app_stagi/widgets/WidgetSignUp/label_text.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodels/signup_viewmodel.dart';
-import '../widgets/WidgetSignUp/custom_text_field.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -13,11 +15,15 @@ class SignUpView extends StatefulWidget {
 }
 
 class _SignUpViewState extends State<SignUpView> {
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   bool hidePassword = true;
+
   String role = "Student";
   final List<String> roles = ["Student", "Company"];
 
@@ -67,8 +73,9 @@ class _SignUpViewState extends State<SignUpView> {
                               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 30),
+                            const LabeledText(label: "Username"),
+                            const SizedBox(height: 10),
                             CustomTextField(
-                              labelText: 'Username',
                               hintText: 'Enter your username',
                               controller: _usernameController,
                               obscureText: false,
@@ -85,10 +92,11 @@ class _SignUpViewState extends State<SignUpView> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 14),
+                            const LabeledText(label: "Email"),
+                            const SizedBox(height: 10),
                             CustomTextField(
-                              labelText: 'Email Address',
-                              hintText: 'Enter your email',
+                              hintText: 'Enter your email@gmail.com',
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
                               obscureText: false,
@@ -105,9 +113,10 @@ class _SignUpViewState extends State<SignUpView> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 14),
+                            const LabeledText(label: "Password"),
+                            const SizedBox(height: 10),
                             CustomTextField(
-                              labelText: 'Password',
                               hintText: 'Enter your password',
                               controller: _passwordController,
                               obscureText: hidePassword,
@@ -127,10 +136,18 @@ class _SignUpViewState extends State<SignUpView> {
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter a password';
                                 }
-                                return null;
+                                if (value.length < 8) {
+                                  return 'Password must be at least 8 characters';
+                                }
+                                if (value.contains(' ')) {
+                                  return 'Password cannot contain spaces';
+                                }
+                                return null; // Valide si aucune condition n'est violée
                               },
                             ),
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 14),
+                            const LabeledText(label: "Sign up As "),
+                            const SizedBox(height: 10),
                             CustomDropdown(
                               value: role,
                               items: roles,
@@ -141,7 +158,7 @@ class _SignUpViewState extends State<SignUpView> {
                                 });
                               },
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 14),
                             ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF4267B2)),
@@ -161,12 +178,13 @@ class _SignUpViewState extends State<SignUpView> {
                                       SnackBar(content: Text(viewModel.errorMessage)),
                                     );
                                   } else {
-                                    final userId = viewModel.userId;
-                                    if (userId != null) {
+                                    final userId = await viewModel.getUserId();
+                                    if (userId != null && userId.isNotEmpty) {
+
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => StudentProfileView(userId: userId),
+                                          builder: (context) => ProfileStepper(userId: userId),
                                         ),
                                       );
                                     } else {
@@ -177,10 +195,10 @@ class _SignUpViewState extends State<SignUpView> {
                                   }
                                 }
                               },
-                              child: const Text('Sign Up', style: TextStyle(color: Colors.white)),
-                            ),
 
-                            const SizedBox(height: 20),
+                              child: const Text('Create my account', style: TextStyle(color: Colors.white)),
+                            ),
+                            const SizedBox(height: 14),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -191,37 +209,52 @@ class _SignUpViewState extends State<SignUpView> {
                                 Container(height: 1, width: 100, color: Colors.white),
                               ],
                             ),
-                            const SizedBox(height: 20),
-                            ElevatedButton.icon(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                    side: const BorderSide(color: Colors.grey),
-                                  ),
+                            const SizedBox(height: 14),
+                          ElevatedButton.icon(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  side: const BorderSide(color: Colors.grey),
                                 ),
                               ),
-                              onPressed: () async {
-                                if (_formKey.currentState?.validate() ?? false) {
-                                  await viewModel.signUp();
-
-                                  if (viewModel.errorMessage.isNotEmpty) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(content: Text(viewModel.errorMessage)),
-                                    );
-                                  } else {
-
-                                    final userId = viewModel.userId;
-
-                                  }
-                                }
-                              },
-
-                              icon: Image.asset('assets/google_logo.png', height: 24),
-                              label: const Text('Sign Up with Google', style: TextStyle(color: Colors.black)),
                             ),
-                            const SizedBox(height: 20),
+                            onPressed: () async {
+                              // Démarrer le processus d'inscription avec Google, sans validation de formulaire
+                              await viewModel.signUpWithGoogle();
+
+                              // Afficher un message d'erreur ou de succès selon le résultat
+                              if (viewModel.errorMessage.isNotEmpty) {
+                                // En cas d'erreur
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(viewModel.errorMessage),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              } else {
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Signed up successfully!'),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+
+
+
+                              }
+                            },
+                            icon: Image.asset('assets/google_logo.png', height: 24), // Icône Google
+                            label: const Text(
+                              'Sign Up with Google',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+
+
+                          const SizedBox(height: 14),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

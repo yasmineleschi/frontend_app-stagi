@@ -18,7 +18,7 @@ class ApiService {
         if (studentProfileJson != null) {
           return StudentProfile.fromJson(studentProfileJson);
         } else {
-          print('Failed to load student profile');
+          print('Failed to load student profile , Response: $decodedJson');
           return null;
         }
       } else {
@@ -30,7 +30,28 @@ class ApiService {
       return null;
     }
   }
+  Future<bool> createStudentProfile(StudentProfile studentProfile) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/createProfile'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(studentProfile.toJson()),
+      );
 
-
+      if (response.statusCode == 201) {
+        print('Profile created successfully : ${response.body}');
+        return true;
+      } else {
+        print('Failed to create profile: ${response.body}');
+        return false;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return false;
+    }
+  }
 }
+
+
+
 

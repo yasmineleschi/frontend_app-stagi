@@ -15,9 +15,9 @@ class StudentProfile {
     required this.firstName,
     required this.lastName,
     required this.phone,
-    this.bio = "No bio available",
-    this.specialite = "No specialty available",
-    this.location = "Not specified",
+    required this.bio ,
+    required this.specialite ,
+    required this.location ,
     required this.education,
     required this.skills,
     required this.experience,
@@ -25,23 +25,23 @@ class StudentProfile {
 
   factory StudentProfile.fromJson(Map<String, dynamic> json) {
     return StudentProfile(
-      userId: json['userId'] ?? '',
-      firstName: json['firstName'] ?? '',
-      lastName: json['lastName'] ?? '',
-      phone: json['phone'] ?? '',
-      bio: json['bio'] ?? 'No bio available',
-      specialite: json['specialite'] ?? 'No specialty available',
-      location: json['location'] ?? 'Not specified',
-      education: (json['education'] as List?)
-          ?.map((e) => Education.fromJson(e))
+      userId: json['userId'] as String? ?? '',
+      firstName: json['firstName'] as String? ?? '',
+      lastName: json['lastName'] as String? ?? '',
+      phone: json['phone'] as String? ?? '',
+      bio: json['bio'] as String? ?? 'No bio available',
+      specialite: json['specialite'] as String? ?? 'No specialty available',
+      location: json['location'] as String? ?? 'Not specified',
+      education: (json['education'] as List<dynamic>?)
+          ?.map((e) => Education.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],
-      skills: (json['skills'] as List?)
-          ?.map((e) => Skill.fromJson(e))
+      skills: (json['skills'] as List<dynamic>?)
+          ?.map((e) => Skill.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],
-      experience: (json['experience'] as List?)
-          ?.map((e) => Experience.fromJson(e))
+      experience: (json['experience'] as List<dynamic>?)
+          ?.map((e) => Experience.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],
     );
@@ -78,8 +78,8 @@ class Education {
 
   factory Education.fromJson(Map<String, dynamic> json) {
     return Education(
-      degree: json['degree'] ?? '',
-      institution: json['institution'] ?? '',
+      degree: json['degree'] as String? ?? '',
+      institution: json['institution'] as String? ?? '',
       startDate: DateTime.parse(json['startDate'] ?? DateTime.now().toString()),
       endDate: DateTime.parse(json['endDate'] ?? DateTime.now().toString()),
     );
@@ -95,7 +95,6 @@ class Education {
   }
 }
 
-
 class Skill {
   final String name;
   final int percentage;
@@ -107,8 +106,8 @@ class Skill {
 
   factory Skill.fromJson(Map<String, dynamic> json) {
     return Skill(
-      name: json['name'] ?? '',
-      percentage: json['percentage'] ?? 0,
+      name: json['name'] as String? ?? '',
+      percentage: json['percentage'] as int? ?? 0,
     );
   }
 
@@ -137,8 +136,8 @@ class Experience {
 
   factory Experience.fromJson(Map<String, dynamic> json) {
     return Experience(
-      jobTitle: json['jobTitle'] ?? '',
-      company: json['company'] ?? '',
+      jobTitle: json['jobTitle'] as String? ?? '',
+      company: json['company'] as String? ?? '',
       startDate: DateTime.parse(json['startDate'] ?? DateTime.now().toString()),
       endDate: DateTime.parse(json['endDate'] ?? DateTime.now().toString()),
       responsibilities: List<String>.from(json['responsibilities'] ?? []),

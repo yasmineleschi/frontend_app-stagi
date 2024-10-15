@@ -31,4 +31,23 @@ class StudentProfileViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+  Future<bool> createStudentProfile(StudentProfile studentProfile, String userId) async {
+    _isLoading = true;
+    _errorMessage = '';
+    notifyListeners();
+
+    studentProfile.userId = userId;
+
+    final success = await _apiService.createStudentProfile(studentProfile);
+
+    if (success) {
+      _studentProfile = studentProfile;
+    } else {
+      _errorMessage = 'Failed to create profile';
+    }
+
+    _isLoading = false;
+    notifyListeners();
+    return success;
+  }
 }

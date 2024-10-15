@@ -6,7 +6,7 @@ class ApiService {
   final String baseUrl = 'http://10.0.2.2:5000/api/users';
 
 
-  Future<void> signUp(User user) async {
+  Future<String> signUp(User user) async {
     final response = await http.post(
       Uri.parse('$baseUrl/register'),
       body: jsonEncode(<String, String>{
@@ -18,17 +18,19 @@ class ApiService {
       headers: {'Content-Type': 'application/json'},
     );
 
-
     if (response.statusCode == 201) {
       print("User registered successfully");
       final data = json.decode(response.body);
-      return data['userId'];
-    } else {
 
+
+      return data['_id'];
+
+    } else {
       final errorData = jsonDecode(response.body);
       throw Exception("Failed to sign up: ${errorData['message']}");
     }
   }
+
 
   Future<void> signUpWithGoogle(User user) async {
     final response = await http.post(
