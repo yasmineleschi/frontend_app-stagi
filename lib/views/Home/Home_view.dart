@@ -1,10 +1,10 @@
 // home_view.dart
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
-  final String token; // Pass the token from the login
+  final String token;
 
   const HomeView({Key? key, required this.token}) : super(key: key);
 
@@ -13,55 +13,85 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  List<dynamic> offers = [];
-  bool isLoading = true;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    fetchOffers();
-  }
-
-  Future<void> fetchOffers() async {
-    try {
-      final response = await http.get(
-        Uri.parse('http://localhost:5000/api/publications'),
-        headers: {'Authorization': 'Bearer ${widget.token}'},
-      );
-
-      if (response.statusCode == 200) {
-        setState(() {
-          offers = json.decode(response.body);
-          isLoading = false;
-        });
-      } else {
-        throw Exception('Failed to load offers');
-      }
-    } catch (e) {
-      print('Error: $e');
-      setState(() {
-        isLoading = false;
-      });
-    }
+    final publicationViewModel =
+    Provider.of<PublicationViewModel>(context, listen: false);
+    publicationViewModel.fetchPublications(widget.token);
   }
 
   @override
   Widget build(BuildContext context) {
+    final publicationViewModel = Provider.of<PublicationViewModel>(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-        itemCount: offers.length,
-        itemBuilder: (context, index) {
-          final offer = offers[index];
-          return ListTile(
-            title: Text(offer['title']),
-            subtitle: Text(offer['content']),
-          );
-        },
+      appBar: AppBar(title: const Text('Home')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(
+                labelText: 'Title',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _contentController,
+              decoration: const InputDecoration(
+                labelText: 'Content',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 3,
+            ),
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: () {
+                final title = _titleController.text.trim();
+                final content = _contentController.text.trim();
+
+                if (title.isNotEmpty && content.isNotEmpty) {
+                  publicationViewModel.createPublication(
+                    widget.token,
+                    title,
+                    content,
+                  );
+                }
+              },
+              child: const Text('Create Publication'),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: publicationViewModel.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                itemCount: publicationViewModel.publications.length,
+                itemBuilder: (context, index) {
+                  final publication =
+                  publicationViewModel.publications[index];
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    child: ListTile(
+                      title: Text(publication['title']),
+                      subtitle: Text(publication['content']),
+                    ),
+                  );
+                },
+              ),
+            ),
+            if (publicationViewModel.errorMessage.isNotEmpty)
+              Text(
+                publicationViewModel.errorMessage,
+                style: const TextStyle(color: Colors.red),
+              ),
+          ],
+        ),
       ),
     );
   }

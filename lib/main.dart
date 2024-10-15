@@ -1,11 +1,13 @@
+// main.dart
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
 import 'package:frontend_app_stagi/viewmodels/signin_viewmodel.dart';
+import 'package:frontend_app_stagi/viewmodels/signup_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'views/authentification/signup_view.dart';
-import 'views/authentification/signin_view.dart'; // Import the SignInView
-import 'viewmodels/signup_viewmodel.dart';
-import 'firebase_options.dart'; // Firebase options for initialization
+import 'views/authentification/signin_view.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,17 +28,18 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SignUpViewModel()),
-        ChangeNotifierProvider(create: (context) => SignInViewModel()), // Add SignInViewModel
+        ChangeNotifierProvider(create: (context) => SignInViewModel()),
+        ChangeNotifierProvider(create: (context) => PublicationViewModel()), // Add PublicationViewModel here
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/signin', // Initial route set to SignInView
+        initialRoute: '/signin',
         routes: {
           '/signin': (context) => const SignInView(),
           '/signup': (context) => const SignUpView(),
         },
         onUnknownRoute: (settings) => MaterialPageRoute(
-          builder: (context) => const SignInView(), // Handle unknown routes
+          builder: (context) => const SignInView(),
         ),
       ),
     );
