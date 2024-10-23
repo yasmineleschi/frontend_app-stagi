@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart' as appUser;
-import '../services/api_service_user.dart';
+import '../services/user_service.dart';
 
 class SignUpViewModel extends ChangeNotifier {
   final ApiService _apiService = ApiService();

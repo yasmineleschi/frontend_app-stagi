@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
 import 'package:frontend_app_stagi/viewmodels/student_viewmodel.dart';
 import 'package:frontend_app_stagi/views/Profil/Student_view.dart';
-import 'package:frontend_app_stagi/widgets/WidgetsCreateProfile/basic_info_form.dart';
-import 'package:frontend_app_stagi/widgets/WidgetsCreateProfile/education_form.dart';
-import 'package:frontend_app_stagi/widgets/WidgetsCreateProfile/experience_form.dart';
-import 'package:frontend_app_stagi/widgets/WidgetsCreateProfile/skills_form.dart';
+import 'package:frontend_app_stagi/views/Profil/Forms/basic_info_form.dart';
+import 'package:frontend_app_stagi/views/Profil/Forms/education_form.dart';
+import 'package:frontend_app_stagi/views/Profil/Forms/experience_form.dart';
+import 'package:frontend_app_stagi/views/Profil/Forms/skills_form.dart';
 import 'package:provider/provider.dart';
 
 class ProfileStepper extends StatefulWidget {
@@ -30,6 +30,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
 
   final TextEditingController degreeController = TextEditingController();
   final TextEditingController institutionController = TextEditingController();
+  final TextEditingController specialitController = TextEditingController();
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
 
@@ -55,7 +56,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/img_4.png'),
+                image: AssetImage('assets/img_1.png'),
                 fit: BoxFit.cover,
 
               ),
@@ -101,13 +102,14 @@ class _ProfileStepperState extends State<ProfileStepper> {
                               locationController: locationController)) {
                             setState(() => _currentStep++);
                           }
-                        } else if (_currentStep == 1) {
+                        } if (_currentStep == 1) {
                           if (EducationForm.isValid(
                               context,
                               degreeController: degreeController,
-                              endDateController: endDateController,
                               institutionController: institutionController,
-                              startDateController: startDateController)) {
+                              specialitController: specialitController,
+                              startDateController: startDateController,
+                              endDateController: endDateController)) {
                             setState(() => _currentStep++);
                           }
                         } else if (_currentStep == 2) {
@@ -160,7 +162,6 @@ class _ProfileStepperState extends State<ProfileStepper> {
                           },
                         );
 
-                        // If user confirmed, proceed with profile creation
                         if (shouldProceed) {
                           StudentProfile profile = StudentProfile(
                             userId: widget.userId,
@@ -174,6 +175,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
                               Education(
                                 degree: degreeController.text,
                                 institution: institutionController.text,
+                                specialite: specialitController.text,
                                 startDate: DateTime.parse(startDateController.text),
                                 endDate: DateTime.parse(endDateController.text),
                               ),
@@ -210,7 +212,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
                               SnackBar(content: Text(viewModel.errorMessage)),
                             );
                           }
-                        } // If not confirmed, stay on the same page
+                        }
                       }
                     },
                     onStepCancel: () {
@@ -245,6 +247,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
                         content: EducationForm(
                           degreeController: degreeController,
                           institutionController: institutionController,
+                          specialitController: specialitController,
                           startDateController: startDateController,
                           endDateController: endDateController,
                         ),

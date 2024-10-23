@@ -75,13 +75,8 @@ flutter:
   assets:
      - assets/background_auth.png
      - assets/google_logo.png
-     - assets/background_profile.png
      - assets/photoprofile.png
-     - assets/background_create.png
-     - assets/img.png
      - assets/img_1.png
-     - assets/img_2.png
-     - assets/img_3.png
      - assets/img_4.png
 
 

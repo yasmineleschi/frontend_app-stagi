@@ -1,8 +1,8 @@
-// lib/views/Home/home_view.dart
+
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
-import 'package:frontend_app_stagi/views/widgets/WidgetHome/home_header.dart';
-import 'package:frontend_app_stagi/views/widgets/WidgetHome/sidebar.dart';
+import 'package:frontend_app_stagi/widgets/WidgetHome/Home_header.dart';
+import 'package:frontend_app_stagi/widgets/WidgetHome/sidebar.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {

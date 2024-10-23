@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
-import 'package:frontend_app_stagi/widgets/WidgetsCreateProfile/costum_widget_profile.dart';
+import 'package:frontend_app_stagi/widgets/profile/WidgetsCreateProfile/costum_widget_profile.dart';
 
 class SkillsForm extends StatefulWidget {
   final TextEditingController skillController;

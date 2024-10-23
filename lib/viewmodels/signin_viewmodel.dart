@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert'; // For JSON encoding/decoding
+import 'dart:convert';
 
 class SignInViewModel extends ChangeNotifier {
-  final String backendUrl = 'http://localhost:5000/api/users/login'; // Replace with your backend URL
+  final String backendUrl = 'http://localhost:5000/api/users/login';
   String email = '';
   String password = '';
   String errorMessage = '';
   bool isLoading = false;
-  String token = ''; // Store token
+  String token = '';
   void setEmail(String value) {
     email = value;
     notifyListeners();

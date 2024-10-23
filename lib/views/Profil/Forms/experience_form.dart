@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
-import 'package:frontend_app_stagi/widgets/WidgetsCreateProfile/costum_widget_profile.dart';
+import 'package:frontend_app_stagi/widgets/profile/WidgetsCreateProfile/costum_widget_profile.dart';
 import 'package:intl/intl.dart';
 
 class ExperienceForm extends StatefulWidget {
@@ -29,7 +29,7 @@ class ExperienceForm extends StatefulWidget {
 class _ExperienceFormState extends State<ExperienceForm> {
   List<String> responsibilities = [];
 
-  // Méthode pour sélectionner la date
+
   Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
     DateTime? picked = await showDatePicker(
       context: context,
@@ -38,11 +38,11 @@ class _ExperienceFormState extends State<ExperienceForm> {
       lastDate: DateTime(2100),
     );
     if (picked != null) {
-      controller.text = DateFormat('yyyy-MM-dd').format(picked);  // Formatage de la date
+      controller.text = DateFormat('yyyy-MM-dd').format(picked);
     }
   }
 
-  // Ajouter une expérience
+
   void _addExperience() {
     if (widget.jobTitleController.text.isNotEmpty &&
         widget.companyController.text.isNotEmpty &&
@@ -66,7 +66,7 @@ class _ExperienceFormState extends State<ExperienceForm> {
     }
   }
 
-  // Ajouter une responsabilité
+
   void _addResponsibility() {
     if (widget.responsibilityController.text.isNotEmpty) {
       setState(() {
@@ -125,7 +125,7 @@ class _ExperienceFormState extends State<ExperienceForm> {
         ),
         const SizedBox(height: 10),
 
-        // Entrée des responsabilités
+
         Row(
           children: [
             Expanded(
@@ -144,7 +144,7 @@ class _ExperienceFormState extends State<ExperienceForm> {
         ),
         const SizedBox(height: 10),
 
-        // Affichage des responsabilités ajoutées
+
         if (responsibilities.isNotEmpty)
           Column(
             children: responsibilities.map((responsibility) {
@@ -158,7 +158,7 @@ class _ExperienceFormState extends State<ExperienceForm> {
           ),
         const SizedBox(height: 10),
 
-        // Bouton pour ajouter l'expérience
+
         ElevatedButton(
           onPressed: _addExperience,
           child: const Text('Add Experience'),

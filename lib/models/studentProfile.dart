@@ -1,23 +1,23 @@
 class StudentProfile {
   String? userId;
-  final String firstName;
-  final String lastName;
-  final String phone;
-  final String bio;
-  final String specialite;
-  final String location;
-  final List<Education> education;
-  final List<Skill> skills;
-  final List<Experience> experience;
+  String firstName;  // Retiré final pour permettre la mise à jour
+  String lastName;   // Retiré final pour permettre la mise à jour
+  String phone;      // Retiré final pour permettre la mise à jour
+  String? bio;
+  String specialite; // Retiré final pour permettre la mise à jour
+  String location;   // Retiré final pour permettre la mise à jour
+  List<Education> education;
+  List<Skill> skills;
+  List<Experience> experience;
 
   StudentProfile({
     required this.userId,
     required this.firstName,
     required this.lastName,
     required this.phone,
-    required this.bio ,
-    required this.specialite ,
-    required this.location ,
+    this.bio,
+    required this.specialite,
+    required this.location,
     required this.education,
     required this.skills,
     required this.experience,
@@ -34,16 +34,13 @@ class StudentProfile {
       location: json['location'] as String? ?? 'Not specified',
       education: (json['education'] as List<dynamic>?)
           ?.map((e) => Education.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-          [],
+          .toList() ?? [],
       skills: (json['skills'] as List<dynamic>?)
           ?.map((e) => Skill.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-          [],
+          .toList() ?? [],
       experience: (json['experience'] as List<dynamic>?)
           ?.map((e) => Experience.fromJson(e as Map<String, dynamic>))
-          .toList() ??
-          [],
+          .toList() ?? [],
     );
   }
 
@@ -61,17 +58,46 @@ class StudentProfile {
       'experience': experience.map((e) => e.toJson()).toList(),
     };
   }
+
+  StudentProfile copyWith({
+    String? userId,
+    String? firstName,
+    String? lastName,
+    String? phone,
+    String? bio,
+    String? specialite,
+    String? location,
+    List<Education>? education,
+    List<Skill>? skills,
+    List<Experience>? experience,
+  }) {
+    return StudentProfile(
+      userId: userId ?? this.userId,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      phone: phone ?? this.phone,
+      bio: bio ?? this.bio,
+      specialite: specialite ?? this.specialite,
+      location: location ?? this.location,
+      education: education ?? this.education,
+      skills: skills ?? this.skills,
+      experience: experience ?? this.experience,
+    );
+  }
 }
+
 
 class Education {
   final String degree;
   final String institution;
+  final String specialite;
   final DateTime startDate;
   final DateTime endDate;
 
   Education({
     required this.degree,
     required this.institution,
+    required this.specialite,
     required this.startDate,
     required this.endDate,
   });
@@ -80,6 +106,7 @@ class Education {
     return Education(
       degree: json['degree'] as String? ?? '',
       institution: json['institution'] as String? ?? '',
+      specialite: json['specialite'] as String? ?? 'No specialty',
       startDate: DateTime.parse(json['startDate'] ?? DateTime.now().toString()),
       endDate: DateTime.parse(json['endDate'] ?? DateTime.now().toString()),
     );
@@ -89,20 +116,43 @@ class Education {
     return {
       'degree': degree,
       'institution': institution,
+      'specialite': specialite,
       'startDate': startDate.toIso8601String(),
       'endDate': endDate.toIso8601String(),
     };
   }
+
+  Education copyWith({
+    String? degree,
+    String? institution,
+    String? specialite,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) {
+    return Education(
+      degree: degree ?? this.degree,
+      institution: institution ?? this.institution,
+      specialite: specialite ?? this.specialite,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+    );
+  }
 }
 
 class Skill {
-  final String name;
-  final int percentage;
+  String name;
+  int percentage;
 
-  Skill({
-    required this.name,
-    required this.percentage,
-  });
+  Skill({required this.name, required this.percentage});
+
+
+  Skill copyWith({String? name, int? percentage}) {
+    return Skill(
+      name: name ?? this.name,
+      percentage: percentage ?? this.percentage,
+    );
+  }
+
 
   factory Skill.fromJson(Map<String, dynamic> json) {
     return Skill(
@@ -153,4 +203,21 @@ class Experience {
       'responsibilities': responsibilities,
     };
   }
+
+  Experience copyWith({
+    String? jobTitle,
+    String? company,
+    DateTime? startDate,
+    DateTime? endDate,
+    List<String>? responsibilities,
+  }) {
+    return Experience(
+      jobTitle: jobTitle ?? this.jobTitle,
+      company: company ?? this.company,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      responsibilities: responsibilities ?? this.responsibilities,
+    );
+  }
 }
+
