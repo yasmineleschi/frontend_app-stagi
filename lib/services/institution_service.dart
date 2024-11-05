@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class InstitutionService {
-  final String baseUrl = 'http://10.0.2.2:5001/api/institutions';
+  final String baseUrl = 'http://localhost:5001/api/institutions';
 
 
   Future<List<String>> fetchInstitutions(String query) async {

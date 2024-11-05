@@ -39,6 +39,7 @@ dependencies:
   country_code_picker: ^3.0.0
   board_datetime_picker: ^2.1.4
   awesome_snackbar_content: ^0.1.4
+  image_picker: ^0.8.5+3
 
 
 

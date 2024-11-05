@@ -1,7 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
-import 'package:frontend_app_stagi/widgets/WidgetHome/Home_header.dart';
+import 'package:frontend_app_stagi/views/Home/PublicationPage.dart';
 import 'package:frontend_app_stagi/widgets/WidgetHome/sidebar.dart';
 import 'package:provider/provider.dart';
 
@@ -15,9 +14,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _contentController = TextEditingController();
-  bool _isSidebarVisible = false; // Track if sidebar is visible
+  bool _isSidebarVisible = false;
 
   @override
   void initState() {
@@ -33,97 +30,127 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
+  void _navigateToPublicationPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PublicationPage(token: widget.token)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final publicationViewModel = Provider.of<PublicationViewModel>(context);
 
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
-          // Main content of the home page
-          Column(
-            children: [
-              // Pass the _toggleSidebar function to the HomeHeader
-              HomeHeader(onMenuTap: _toggleSidebar),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      TextField(
-                        controller: _titleController,
-                        decoration: const InputDecoration(
-                          labelText: 'Title',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      TextField(
-                        controller: _contentController,
-                        decoration: const InputDecoration(
-                          labelText: 'Content',
-                          border: OutlineInputBorder(),
-                        ),
-                        maxLines: 3,
-                      ),
-                      const SizedBox(height: 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          final title = _titleController.text.trim();
-                          final content = _contentController.text.trim();
-
-                          if (title.isNotEmpty && content.isNotEmpty) {
-                            publicationViewModel.createPublication(
-                              widget.token,
-                              title,
-                              content,
-                            );
-                          }
-                        },
-                        child: const Text('Create Publication'),
-                      ),
-                      const SizedBox(height: 16),
-                      Expanded(
-                        child: publicationViewModel.isLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : ListView.builder(
-                          itemCount:
-                          publicationViewModel.publications.length,
-                          itemBuilder: (context, index) {
-                            final publication =
-                            publicationViewModel.publications[index];
-                            return Card(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 8),
-                              child: ListTile(
-                                title: Text(publication['title']),
-                                subtitle: Text(publication['content']),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      if (publicationViewModel.errorMessage.isNotEmpty)
-                        Text(
-                          publicationViewModel.errorMessage,
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                    ],
-                  ),
+          AppBar(
+            leading: GestureDetector(
+              onTap: () {
+                // Navigate to ProfileSectionCard page
+              },
+              child: CircleAvatar(
+                backgroundImage: AssetImage('assets/photoprofile.png'),
+              ),
+            ),
+            title: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(24.0),
+                  borderSide: BorderSide.none,
                 ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.zero,
+              ),
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.create),
+                onPressed: _navigateToPublicationPage,
               ),
             ],
           ),
-          // Sidebar overlay (if visible)
-          if (_isSidebarVisible)
-            Positioned(
-              left: 0,
-              top: 0,
-              bottom: 0,
-              child: Sidebar(
-                onClose: _toggleSidebar, // Close sidebar when clicked
-              ),
+          Divider(color: Colors.grey[300], thickness: 1),
+          SizedBox(height: 16.0),
+          Expanded(
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: publicationViewModel.isLoading
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                    itemCount: publicationViewModel.publications.length,
+                    itemBuilder: (context, index) {
+                      final publication = publicationViewModel.publications[index];
+                      final user = publication['user'];
+
+                      return Card(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Row for profile photo and username
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundImage: AssetImage('assets/photoprofile.png'),
+                                    radius: 20,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    user['username'] ?? 'Anonymous',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 8),
+                              // Publication content
+                              Text(publication['content']),
+                              SizedBox(height: 8),
+                              // Like and comment icons
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.thumb_up_alt_outlined),
+                                    onPressed: () {
+                                      // Add like functionality here
+                                    },
+                                  ),
+                                  SizedBox(width: 8),
+                                  IconButton(
+                                    icon: Icon(Icons.comment_outlined),
+                                    onPressed: () {
+                                      // Add comment functionality here
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                if (_isSidebarVisible)
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    bottom: 0,
+                    child: Sidebar(onClose: _toggleSidebar),
+                  ),
+              ],
             ),
+          ),
         ],
       ),
     );
