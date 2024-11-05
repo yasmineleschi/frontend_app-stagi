@@ -1,11 +1,12 @@
 class StudentProfile {
   String? userId;
-  String firstName;  // Retiré final pour permettre la mise à jour
-  String lastName;   // Retiré final pour permettre la mise à jour
-  String phone;      // Retiré final pour permettre la mise à jour
+  String firstName;
+  String lastName;
+  String phone;
   String? bio;
-  String specialite; // Retiré final pour permettre la mise à jour
-  String location;   // Retiré final pour permettre la mise à jour
+  String specialite;
+  String location;
+  String? profileImage;
   List<Education> education;
   List<Skill> skills;
   List<Experience> experience;
@@ -18,6 +19,7 @@ class StudentProfile {
     this.bio,
     required this.specialite,
     required this.location,
+    this.profileImage,
     required this.education,
     required this.skills,
     required this.experience,
@@ -32,15 +34,19 @@ class StudentProfile {
       bio: json['bio'] as String? ?? 'No bio available',
       specialite: json['specialite'] as String? ?? 'No specialty available',
       location: json['location'] as String? ?? 'Not specified',
+      profileImage: json['profileImage'] as String?,
       education: (json['education'] as List<dynamic>?)
           ?.map((e) => Education.fromJson(e as Map<String, dynamic>))
-          .toList() ?? [],
+          .toList() ??
+          [],
       skills: (json['skills'] as List<dynamic>?)
           ?.map((e) => Skill.fromJson(e as Map<String, dynamic>))
-          .toList() ?? [],
+          .toList() ??
+          [],
       experience: (json['experience'] as List<dynamic>?)
           ?.map((e) => Experience.fromJson(e as Map<String, dynamic>))
-          .toList() ?? [],
+          .toList() ??
+          [],
     );
   }
 
@@ -53,6 +59,7 @@ class StudentProfile {
       'specialite': specialite,
       'bio': bio,
       'location': location,
+      'profileImage': profileImage,
       'education': education.map((e) => e.toJson()).toList(),
       'skills': skills.map((e) => e.toJson()).toList(),
       'experience': experience.map((e) => e.toJson()).toList(),
@@ -67,6 +74,7 @@ class StudentProfile {
     String? bio,
     String? specialite,
     String? location,
+    String? profileImage,
     List<Education>? education,
     List<Skill>? skills,
     List<Experience>? experience,
@@ -79,13 +87,13 @@ class StudentProfile {
       bio: bio ?? this.bio,
       specialite: specialite ?? this.specialite,
       location: location ?? this.location,
+      profileImage: profileImage ?? this.profileImage,
       education: education ?? this.education,
       skills: skills ?? this.skills,
       experience: experience ?? this.experience,
     );
   }
 }
-
 
 class Education {
   final String degree;

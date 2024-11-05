@@ -37,7 +37,7 @@ class _SignInViewState extends State<SignInView> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/background_auth.png"),
+                image: AssetImage("assets/img_3.png"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -51,22 +51,21 @@ class _SignInViewState extends State<SignInView> {
                   ),
                   child: IntrinsicHeight(
                     child: Padding(
-                      padding: const EdgeInsets.all(30.0),
+                      padding: const EdgeInsets.only(right: 60.0,left: 20.0),
                       child: Form(
                         key: _formKey,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 150),
                             const Text(
-                              "Welcome Back!",
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
+                              "Welcome Back !",
+                              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold , color: Colors.black, fontFamily: 'Roboto Slab',),
                             ),
-                            const SizedBox(height: 30),
-                            const LabeledText(label: "email"),
+                            const SizedBox(height: 40),
+                            const LabeledText(label: "Email"),
+                            const SizedBox(height: 10),
                             CustomTextField(
-                              hintText: 'Enter your email',
+                              hintText: 'Enter your email@gamil.com',
                               controller: _emailController,
                               keyboardType: TextInputType.emailAddress,
                               obscureText: false,
@@ -86,6 +85,7 @@ class _SignInViewState extends State<SignInView> {
                             ),
                             const SizedBox(height: 20),
                             const LabeledText(label: "Password"),
+                            const SizedBox(height: 10),
                             CustomTextField (
                               hintText: 'Enter your password',
                               controller: _passwordController,
@@ -116,7 +116,7 @@ class _SignInViewState extends State<SignInView> {
                               style: ButtonStyle(
                                 backgroundColor:
                                 MaterialStateProperty.all<Color>(
-                                    const Color(0xFF4267B2)),
+                                    const Color(0xFF012E65)),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -145,15 +145,15 @@ class _SignInViewState extends State<SignInView> {
                               },
 
                               child: const Text('Sign In',
-                                  style: TextStyle(color: Colors.white)),
+                                  style: TextStyle(color: Colors.white,fontFamily: 'Roboto Slab', fontSize:  18,)),
                             ),
                             const SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Text("Don't have an account?",
-                                    style: TextStyle(color: Colors.black)),
-                                const SizedBox(width: 5),
+                                    style: TextStyle(color: Colors.black,fontFamily: 'Roboto Slab',fontSize: 15 ,)),
+                                const SizedBox(width:2),
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pushNamed(context, '/signup');
@@ -161,9 +161,10 @@ class _SignInViewState extends State<SignInView> {
                                   child: const Text(
                                     'Sign Up Now',
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontStyle: FontStyle.italic,
+                                      color: Color(0xFF012E65),
+                                      fontSize: 18,
+                                      fontWeight:  FontWeight.bold,
+                                      fontFamily: 'Roboto Slab',
                                     ),
                                   ),
                                 ),

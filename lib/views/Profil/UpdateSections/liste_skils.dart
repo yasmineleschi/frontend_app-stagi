@@ -113,7 +113,7 @@ class _ListeSkillsPageState extends State<ListeSkillsPage> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.grey,
+                backgroundColor: Colors.blueGrey,
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
@@ -182,7 +182,9 @@ class _ListeSkillsPageState extends State<ListeSkillsPage> {
           return ListView.builder(
             itemCount: skillsList.length,
             itemBuilder: (context, index) {
-              final skill = skillsList[index];
+              final reverseIndex = skillsList.length - 1 - index;
+              final skill = skillsList[reverseIndex];
+
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
                 padding: const EdgeInsets.all(10),

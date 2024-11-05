@@ -81,42 +81,5 @@ class SignUpViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> signUpWithGoogle() async {
-    try {
-      isLoading = true;
-      notifyListeners();
 
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) {
-        isLoading = false;
-        notifyListeners();
-        return;
-      }
-
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      UserCredential userCredential = await _auth.signInWithCredential(credential);
-
-      appUser.User user = appUser.User(
-        username: userCredential.user?.displayName ?? '',
-        email: userCredential.user?.email ?? '',
-        password: '',
-        role: 'Student',
-      );
-
-      await _apiService.signUpWithGoogle(user);
-
-      isLoading = false;
-      notifyListeners();
-    } catch (e) {
-      errorMessage = e.toString();
-      isLoading = false;
-      notifyListeners();
-    }
-  }
 }

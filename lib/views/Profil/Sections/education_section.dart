@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
+import 'package:frontend_app_stagi/views/Profil/Forms/institution_autocomplete.dart';
 import 'package:frontend_app_stagi/views/Profil/UpdateSections/liste_education.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetViewProfile/widget_sections.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetsCreateProfile/Custom_dropdown_field_profile.dart';
@@ -10,7 +11,9 @@ class EducationSection extends StatefulWidget {
   final List<Education> educationList;
   final Function(Education) onEducationUpdated;
 
-  const EducationSection({Key? key, required this.educationList, required this.onEducationUpdated}) : super(key: key);
+  const EducationSection(
+      {Key? key, required this.educationList, required this.onEducationUpdated})
+      : super(key: key);
 
   @override
   _EducationSectionState createState() => _EducationSectionState();
@@ -18,9 +21,12 @@ class EducationSection extends StatefulWidget {
 
 class _EducationSectionState extends State<EducationSection> {
   bool _showAllEducation = false;
-  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+  List<String> filteredInstitutions = [];
+  bool showInstitutionSuggestions = false;
 
 
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -61,26 +67,25 @@ class _EducationSectionState extends State<EducationSection> {
                 CustomDropdownField(
                   labelText: 'Level of education',
                   icon: Icons.school,
-                  value: degreeController.text.isEmpty ? null : degreeController.text,
+                  value: degreeController.text.isEmpty
+                      ? null
+                      : degreeController.text,
                   hintText: 'Select your level of education',
                   items: const [
                     DropdownMenuItem(value: 'Bac', child: Text('Bac')),
                     DropdownMenuItem(value: 'Licence', child: Text('Licence')),
                     DropdownMenuItem(value: 'Master', child: Text('Master')),
-                    DropdownMenuItem(value: 'Ingénierie', child: Text('Ingénierie')),
-                    DropdownMenuItem(value: 'Doctorat', child: Text('Doctorat')),
+                    DropdownMenuItem(
+                        value: 'Ingénierie', child: Text('Ingénierie')),
+                    DropdownMenuItem(
+                        value: 'Doctorat', child: Text('Doctorat')),
                   ],
                   onChanged: (String? newValue) {
                     degreeController.text = newValue ?? '';
                   },
                 ),
                 const SizedBox(height: 20),
-                CustomTextField(
-                  controller: institutionController,
-                  labelText: 'Institution name',
-                  icon: Icons.business,
-                  hintText: 'Enter your institution',
-                ),
+                InstitutionAutocomplete(controller: institutionController),
                 const SizedBox(height: 20),
                 CustomTextField(
                   controller: specialtyController,
@@ -89,10 +94,8 @@ class _EducationSectionState extends State<EducationSection> {
                   hintText: 'Enter your Field of study',
                 ),
                 const SizedBox(height: 20),
-
                 Row(
                   children: [
-
                     Expanded(
                       child: CustomTextField(
                         controller: startDateController,
@@ -158,7 +161,7 @@ class _EducationSectionState extends State<EducationSection> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor:  Colors.blueGrey,
+                backgroundColor: Colors.blueGrey,
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
@@ -177,11 +180,10 @@ class _EducationSectionState extends State<EducationSection> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.educationList.isEmpty) {
-      return const Center(child: Text('No education available.'));
-    }
 
-    final displayedEducation = _showAllEducation ? widget.educationList : widget.educationList.take(3).toList();
+    final displayedEducation = _showAllEducation
+        ? widget.educationList
+        : widget.educationList.take(3).toList();
 
     return SingleChildScrollView(
       child: Column(
@@ -200,20 +202,20 @@ class _EducationSectionState extends State<EducationSection> {
                       children: [
                         Text(
                           '${education.institution}',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 5),
                         Text('${education.degree} in ${education.specialite}'),
                         const SizedBox(height: 5),
-                        Text('From ${education.startDate.year} to ${education.endDate.year}'),
+                        Text(
+                            'From ${education.startDate.year} to ${education.endDate.year}'),
                         const SizedBox(height: 15),
                       ],
                     );
                   }).toList(),
                 ),
-
               ],
-
             ),
             icon: Icons.school_outlined,
             hasAddIcon: () => _showAddEducationDialog(context),

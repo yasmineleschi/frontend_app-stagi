@@ -38,9 +38,9 @@ class SignInViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-         token = data['accessToken']; // JWT token from backend
+         token = data['accessToken'];
 
-        // Optionally store token for later use
+
         errorMessage = '';
       } else {
         final errorData = jsonDecode(response.body);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String? hintText; // Rendre le labelText facultatif
+  final String? hintText;
   final bool obscureText;
   final Function(String) onChanged;
   final TextInputType keyboardType;
@@ -11,7 +11,7 @@ class CustomTextField extends StatelessWidget {
 
   const CustomTextField({
     super.key,
-    this.hintText, // Remove labelText
+    this.hintText,
     this.obscureText = false,
     required this.onChanged,
     this.keyboardType = TextInputType.text,
@@ -39,7 +39,7 @@ class CustomTextField extends StatelessWidget {
         obscureText: obscureText,
         onChanged: onChanged,
         keyboardType: keyboardType,
-        style: const TextStyle(fontSize: 16, color: Colors.black),
+        style: const TextStyle(fontSize: 18, color: Colors.black),
         validator: validator,
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
