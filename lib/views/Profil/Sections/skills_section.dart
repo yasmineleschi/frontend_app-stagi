@@ -117,10 +117,6 @@ class _SkillsSectionState extends State<SkillsSection> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.skills.isEmpty) {
-      return const Center(child: Text('No skills available.'));
-    }
-
 
     final displayedSkills = _showAllSkills ? widget.skills : widget.skills.take(3).toList();
 

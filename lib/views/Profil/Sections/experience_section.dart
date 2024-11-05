@@ -204,9 +204,6 @@ class _ExperienceSectionState extends State<ExperienceSection> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.experiences.isEmpty) {
-      return const Center(child: Text('No experiences available.'));
-    }
 
     final displayedExperiences = _showAllExperiences ? widget.experiences : widget.experiences.take(3).toList();
 

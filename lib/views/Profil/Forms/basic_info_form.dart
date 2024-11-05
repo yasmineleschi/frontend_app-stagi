@@ -18,6 +18,7 @@ class BasicInfoForm extends StatelessWidget {
     required this.bioController,
     required this.locationController,
   });
+
   static bool isValid(BuildContext context, {
     required TextEditingController firstNameController,
     required TextEditingController lastNameController,
@@ -71,6 +72,7 @@ class BasicInfoForm extends StatelessWidget {
     }
     return true;
   }
+
 
   @override
   Widget build(BuildContext context) {

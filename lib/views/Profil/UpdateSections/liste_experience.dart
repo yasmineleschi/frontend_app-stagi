@@ -206,7 +206,7 @@ class _ListeExperiencePagePageState extends State<ListeExperiencePage> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
+                backgroundColor: Colors.blueGrey,
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
@@ -273,7 +273,8 @@ class _ListeExperiencePagePageState extends State<ListeExperiencePage> {
           return ListView.builder(
             itemCount: experiencesList.length,
             itemBuilder: (context, index) {
-              final experience = experiencesList[index];
+              final reverseIndex = experiencesList.length - 1 - index;
+              final experience = experiencesList[reverseIndex];
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
                 padding: const EdgeInsets.all(10),

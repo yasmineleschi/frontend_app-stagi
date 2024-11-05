@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
+import 'package:frontend_app_stagi/views/Profil/Forms/institution_autocomplete.dart';
 import 'package:frontend_app_stagi/views/Profil/UpdateSections/UpdateEducations.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetsCreateProfile/Custom_dropdown_field_profile.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetsCreateProfile/costum_widget_profile.dart';
@@ -100,12 +101,7 @@ class _ListeEducationPageState extends State<ListeEducationPage> {
                   },
                 ),
                 const SizedBox(height: 20),
-                CustomTextField(
-                  controller: institutionController,
-                  labelText: 'Institution name',
-                  icon: Icons.business,
-                  hintText: 'Enter your institution',
-                ),
+                InstitutionAutocomplete(controller: institutionController),
                 const SizedBox(height: 20),
                 CustomTextField(
                   controller: specialtyController,
@@ -188,7 +184,7 @@ class _ListeEducationPageState extends State<ListeEducationPage> {
                 Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
+                backgroundColor: Colors.blueGrey,
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8.0),
@@ -253,9 +249,11 @@ class _ListeEducationPageState extends State<ListeEducationPage> {
           }
 
           return ListView.builder(
+
             itemCount: educationList.length,
             itemBuilder: (context, index) {
-              final edu = educationList[index];
+              final reverseIndex = educationList.length - 1 - index;
+              final edu = educationList[reverseIndex]; // Access the
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
                 padding: const EdgeInsets.all(10),

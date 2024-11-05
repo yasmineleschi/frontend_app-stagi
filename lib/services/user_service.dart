@@ -31,16 +31,4 @@ class ApiService {
     }
   }
 
-
-  Future<void> signUpWithGoogle(User user) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/signup/google'),
-      headers: {'Content-Type': 'application/json'},
-      body: user.toJson(),
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception('Failed to sign up with Google');
-    }
-  }
 }

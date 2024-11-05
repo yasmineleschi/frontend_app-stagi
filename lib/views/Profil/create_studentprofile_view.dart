@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
@@ -7,6 +8,7 @@ import 'package:frontend_app_stagi/views/Profil/Forms/basic_info_form.dart';
 import 'package:frontend_app_stagi/views/Profil/Forms/education_form.dart';
 import 'package:frontend_app_stagi/views/Profil/Forms/experience_form.dart';
 import 'package:frontend_app_stagi/views/Profil/Forms/skills_form.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfileStepper extends StatefulWidget {
@@ -20,6 +22,17 @@ class ProfileStepper extends StatefulWidget {
 
 class _ProfileStepperState extends State<ProfileStepper> {
   int _currentStep = 0;
+  File? _profileImage;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickProfileImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+    }
+  }
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
@@ -56,7 +69,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/img_1.png'),
+                image: AssetImage('assets/img_4.png'),
                 fit: BoxFit.cover,
 
               ),
@@ -76,7 +89,6 @@ class _ProfileStepperState extends State<ProfileStepper> {
                   ),
                 ),
               ),
-
               Expanded(
                 child: Theme(
                   data: Theme.of(context).copyWith(
@@ -102,17 +114,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
                               locationController: locationController)) {
                             setState(() => _currentStep++);
                           }
-                        } if (_currentStep == 1) {
-                          if (EducationForm.isValid(
-                              context,
-                              degreeController: degreeController,
-                              institutionController: institutionController,
-                              specialitController: specialitController,
-                              startDateController: startDateController,
-                              endDateController: endDateController)) {
-                            setState(() => _currentStep++);
-                          }
-                        } else if (_currentStep == 2) {
+                        } else if (_currentStep < 3) {
                           setState(() => _currentStep++);
                         }
                       }else {
@@ -171,6 +173,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
                             bio: bioController.text,
                             location: locationController.text,
                             specialite: specialityController.text,
+                            profileImage: _profileImage?.path,
                             education: [
                               Education(
                                 degree: degreeController.text,
@@ -313,7 +316,7 @@ void main() {
     ChangeNotifierProvider(
       create: (context) => StudentProfileViewModel(),
       child: MaterialApp(
-        home: ProfileStepper(userId: '6707a1dbe577fcca2132b883'),
+        home: ProfileStepper(userId: '6718e961d9aa2a38578d1bec'),
       ),
     ),
   );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_app_stagi/views/Profil/Student_view.dart';
 import 'package:frontend_app_stagi/views/Profil/create_studentprofile_view.dart';
 import 'package:frontend_app_stagi/widgets/WidgetSignUp/CustomDropdown.dart';
 import 'package:frontend_app_stagi/widgets/WidgetSignUp/custom_text_field.dart';
@@ -47,7 +46,7 @@ class _SignUpViewState extends State<SignUpView> {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/background_auth.png"),
+                image: AssetImage("assets/img_3.png"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -61,18 +60,20 @@ class _SignUpViewState extends State<SignUpView> {
                   ),
                   child: IntrinsicHeight(
                     child: Padding(
-                      padding: const EdgeInsets.all(30.0),
+                      padding: const EdgeInsets.only(right: 40.0, left: 20.0),
                       child: Form(
                         key: _formKey,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 150),
-                            const Text(
-                              "Let's get you registered",
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+
+                            const Center(
+                              child: Text(
+                                "Let's get you registered",
+                                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold , color: Colors.black, fontFamily: 'Roboto Slab',),
+                              ),
                             ),
-                            const SizedBox(height: 30),
+                            const SizedBox(height: 10),
                             const LabeledText(label: "Username"),
                             const SizedBox(height: 10),
                             CustomTextField(
@@ -161,14 +162,16 @@ class _SignUpViewState extends State<SignUpView> {
                             const SizedBox(height: 14),
                             ElevatedButton(
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF4267B2)),
+                                backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF012E65)),
                                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                     side: const BorderSide(color: Colors.white),
                                   ),
+
                                 ),
                               ),
+
                               onPressed: () async {
                                 if (_formKey.currentState?.validate() ?? false) {
                                   await viewModel.signUp();
@@ -196,69 +199,13 @@ class _SignUpViewState extends State<SignUpView> {
                                 }
                               },
 
-                              child: const Text('Create my account', style: TextStyle(color: Colors.white)),
+                              child: const Text('Create my account', style: TextStyle(color: Colors.white, fontFamily: 'Roboto Slab',fontSize: 15)),
                             ),
-                            const SizedBox(height: 14),
+                          const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(height: 1, width: 100, color: Colors.white),
-                                const SizedBox(width: 10),
-                                const Text("or sign up with", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-                                const SizedBox(width: 10),
-                                Container(height: 1, width: 100, color: Colors.white),
-                              ],
-                            ),
-                            const SizedBox(height: 14),
-                          ElevatedButton.icon(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: const BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                            ),
-                            onPressed: () async {
-                              // Démarrer le processus d'inscription avec Google, sans validation de formulaire
-                              await viewModel.signUpWithGoogle();
-
-                              // Afficher un message d'erreur ou de succès selon le résultat
-                              if (viewModel.errorMessage.isNotEmpty) {
-                                // En cas d'erreur
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(viewModel.errorMessage),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
-                              } else {
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Signed up successfully!'),
-                                    backgroundColor: Colors.green,
-                                  ),
-                                );
-
-
-
-                              }
-                            },
-                            icon: Image.asset('assets/google_logo.png', height: 24), // Icône Google
-                            label: const Text(
-                              'Sign Up with Google',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-
-
-                          const SizedBox(height: 14),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text("You Already Have An Account?", style: TextStyle(color: Colors.black)),
+                                const Text("You Already Have An Account?", style: TextStyle(color: Colors.black,fontFamily: 'Roboto Slab', fontSize: 15)),
                                 const SizedBox(width: 5),
                                 TextButton(
                                   onPressed: () {
@@ -268,8 +215,8 @@ class _SignUpViewState extends State<SignUpView> {
                                     'LogIn Now',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 20,
-                                      fontStyle: FontStyle.italic,
+                                      fontFamily: 'Roboto Slab',
+                                      fontSize: 18,
                                     ),
                                   ),
                                 ),

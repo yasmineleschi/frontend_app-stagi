@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
 import 'package:http/http.dart' as http;
 
+
 class ApiService {
   final String baseUrl = 'http://10.0.2.2:5001/api/users/profile';
 
@@ -12,7 +13,6 @@ class ApiService {
       if (response.statusCode == 200) {
         final decodedJson = jsonDecode(response.body);
         print('Decoded JSON: $decodedJson');
-
 
         final studentProfileJson = decodedJson['studentProfile'];
         if (studentProfileJson != null) {
@@ -30,6 +30,7 @@ class ApiService {
       return null;
     }
   }
+
   Future<bool> createStudentProfile(StudentProfile studentProfile) async {
     try {
       final response = await http.post(
@@ -65,7 +66,10 @@ class ApiService {
           'location': updatedProfile.location,
           'phone': updatedProfile.phone,
           'bio': updatedProfile.bio,
-          'education': updatedProfile.education.map((edu) => edu.toJson()).toList(),  // assuming education has a `toJson()` method
+          'profileImage':updatedProfile.profileImage,
+          'education': updatedProfile.education
+              .map((edu) => edu.toJson())
+              .toList(),
           'skills': updatedProfile.skills,
           'experience': updatedProfile.experience,
         }),
@@ -83,7 +87,4 @@ class ApiService {
       return false;
     }
   }
-
 }
-
-

@@ -15,9 +15,10 @@ class LabeledText extends StatelessWidget {
       child: Text(
         label,
         style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+          fontSize: 18,
+          fontFamily: 'Roboto Slab',
+
+          color: Color(0xFF012E65),
         ),
       ),
     );
