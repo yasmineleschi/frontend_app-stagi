@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_app_stagi/viewmodels/HomeSearchViewModel.dart';
+import 'package:provider/provider.dart';
 import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
 import 'package:frontend_app_stagi/views/Home/PublicationPage.dart';
 import 'package:frontend_app_stagi/widgets/WidgetHome/sidebar.dart';
-import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   final String token;
@@ -15,13 +16,17 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   bool _isSidebarVisible = false;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    final publicationViewModel =
-    Provider.of<PublicationViewModel>(context, listen: false);
+    final publicationViewModel = Provider.of<PublicationViewModel>(context, listen: false);
     publicationViewModel.fetchPublications(widget.token);
+    publicationViewModel.addListener(() {
+      final publications = publicationViewModel.publications;
+      Provider.of<HomeSearchViewModel>(context, listen: false).initializePublications(publications);
+    });
   }
 
   void _toggleSidebar() {
@@ -40,6 +45,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final publicationViewModel = Provider.of<PublicationViewModel>(context);
+    final searchViewModel = Provider.of<HomeSearchViewModel>(context);
 
     return Scaffold(
       body: Column(
@@ -54,6 +60,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
             title: TextField(
+              controller: _searchController,
               decoration: InputDecoration(
                 hintText: 'Search',
                 prefixIcon: Icon(Icons.search),
@@ -65,6 +72,9 @@ class _HomeViewState extends State<HomeView> {
                 fillColor: Colors.white,
                 contentPadding: EdgeInsets.zero,
               ),
+              onChanged: (query) {
+                searchViewModel.filterPublications(query);
+              },
             ),
             actions: [
               IconButton(
@@ -83,10 +93,11 @@ class _HomeViewState extends State<HomeView> {
                   child: publicationViewModel.isLoading
                       ? Center(child: CircularProgressIndicator())
                       : ListView.builder(
-                    itemCount: publicationViewModel.publications.length,
+                    itemCount: searchViewModel.filteredPublications.length,
                     itemBuilder: (context, index) {
-                      final publication = publicationViewModel.publications[index];
+                      final publication = searchViewModel.filteredPublications[index];
                       final user = publication['user'];
+                      final hasLiked = publication['likedByUser'] ?? false;
 
                       return Card(
                         margin: const EdgeInsets.symmetric(vertical: 8),
@@ -116,15 +127,19 @@ class _HomeViewState extends State<HomeView> {
                               // Publication content
                               Text(publication['content']),
                               SizedBox(height: 8),
-                              // Like and comment icons
+                              // Like and comment icons with like count
                               Row(
                                 children: [
                                   IconButton(
-                                    icon: Icon(Icons.thumb_up_alt_outlined),
+                                    icon: Icon(
+                                      hasLiked ? Icons.thumb_up_alt : Icons.thumb_up_alt_outlined,
+                                      color: hasLiked ? Colors.blue : null,
+                                    ),
                                     onPressed: () {
-                                      // Add like functionality here
+                                      publicationViewModel.toggleLike(widget.token, publication['_id'], hasLiked);
                                     },
                                   ),
+                                  Text('${publication['likes']} likes'),
                                   SizedBox(width: 8),
                                   IconButton(
                                     icon: Icon(Icons.comment_outlined),

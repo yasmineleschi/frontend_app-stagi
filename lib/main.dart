@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/firebase_options.dart';
+import 'package:frontend_app_stagi/viewmodels/HomeSearchViewModel.dart';
 import 'package:frontend_app_stagi/viewmodels/student_viewmodel.dart';
 import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
 import 'package:frontend_app_stagi/viewmodels/signin_viewmodel.dart';
@@ -28,6 +29,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => SignInViewModel()),
         ChangeNotifierProvider(create: (context) => PublicationViewModel()),
         ChangeNotifierProvider(create: (context) => StudentProfileViewModel()),
+        ChangeNotifierProvider(create: (context) => HomeSearchViewModel()),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -38,6 +41,7 @@ class MyApp extends StatelessWidget {
         },
         onUnknownRoute: (settings) => MaterialPageRoute(
           builder: (context) => const SignInView(),
+
         ),
       ),
     );
