@@ -21,6 +21,7 @@ class PublicationViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         publications = json.decode(response.body);
+        errorMessage = '';
       } else {
         errorMessage = 'Failed to load publications';
       }
@@ -49,6 +50,7 @@ class PublicationViewModel extends ChangeNotifier {
       final response = await request.send();
       if (response.statusCode == 201) {
         await fetchPublications(token); // Refresh publications
+        errorMessage = '';
       } else {
         errorMessage = 'Failed to create publication';
       }
@@ -68,7 +70,8 @@ class PublicationViewModel extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        await fetchPublications(token); // Refresh publications to update like count
+        await fetchPublications(token); // Refresh publications
+        errorMessage = '';
       } else {
         errorMessage = 'Failed to like publication';
       }
@@ -86,7 +89,8 @@ class PublicationViewModel extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
-        await fetchPublications(token); // Refresh publications to update like count
+        await fetchPublications(token); // Refresh publications
+        errorMessage = '';
       } else {
         errorMessage = 'Failed to unlike publication';
       }
