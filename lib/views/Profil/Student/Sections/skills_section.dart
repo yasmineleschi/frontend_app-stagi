@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
-import 'package:frontend_app_stagi/views/Profil/UpdateSections/liste_skils.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/UpdateSections/liste_skils.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetViewProfile/widget_sections.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetsUpdateProfile/CustomTextField_update.dart';
 
@@ -147,6 +147,8 @@ class _SkillsSectionState extends State<SkillsSection> {
                           color: const Color(0xFF879DBA),
                         ),
                         const SizedBox(height: 15),
+                        Divider(color: Colors.white,),
+
                       ],
                     );
                   }).toList(),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/viewmodels/student_viewmodel.dart';
-import 'package:frontend_app_stagi/views/Profil/Sections/education_section.dart';
-import 'package:frontend_app_stagi/views/Profil/Sections/experience_section.dart';
-import 'package:frontend_app_stagi/views/Profil/Sections/profile_header.dart';
-import 'package:frontend_app_stagi/views/Profil/Sections/skills_section.dart';
-import 'package:frontend_app_stagi/views/Profil/Sections/about_section.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Sections/about_section.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Sections/education_section.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Sections/experience_section.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Sections/profile_header.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Sections/skills_section.dart';
 import 'package:provider/provider.dart';
 
 class StudentProfileView extends StatelessWidget {
@@ -87,7 +87,7 @@ class StudentProfileView extends StatelessWidget {
 void main() {
   runApp(MaterialApp(
     home: StudentProfileView(
-      userId: '6716377dffbb52f37658d2eb',
+      userId: '672b2980283d37063db38e51',
     ),
   ));
 }

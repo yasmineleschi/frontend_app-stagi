@@ -1,38 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_app_stagi/views/Profil/UpdateSections/UpdateProfile.dart';
 
-class ProfileHeader extends StatefulWidget {
-  final dynamic profile;
+class CompanyProfileHeader extends StatefulWidget {
+  final dynamic Companyprofile;
 
-  const ProfileHeader({Key? key, required this.profile}) : super(key: key);
+  const CompanyProfileHeader({Key? key, required this.Companyprofile}) : super(key: key);
 
   @override
   _ProfileHeaderState createState() => _ProfileHeaderState();
 }
 
-class _ProfileHeaderState extends State<ProfileHeader> {
-  void _navigateToUpdateProfile() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => UpdateProfilePage(
-          initialFirstName: widget.profile.firstName,
-          initialLastName: widget.profile.lastName,
-          initialPhone: widget.profile.phone,
-          initialSpeciality: widget.profile.specialite,
-          initialLocation: widget.profile.location,
-          onProfileUpdated: (firstName, lastName, phone, speciality, location) {
-            setState(() {
-              widget.profile.firstName = firstName;
-              widget.profile.lastName = lastName;
-              widget.profile.phone = phone;
-              widget.profile.specialite = speciality;
-              widget.profile.location = location;
-            });
-          },
-        ),
-      ),
-    );
-  }
+class _ProfileHeaderState extends State<CompanyProfileHeader> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +29,11 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             child: Stack(
               children: [
                 Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 40),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const CircleAvatar(
                           radius: 50,
@@ -68,7 +47,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '${widget.profile.firstName} ${widget.profile.lastName}', // Full name
+                                '${widget.Companyprofile.name}',
                                 style: const TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
@@ -77,11 +56,14 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                widget.profile.specialite, // Speciality
+                                '${widget.Companyprofile.sector}',
                                 style: const TextStyle(
-                                  color: Colors.white70,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.white,
                                 ),
                               ),
+
                               const SizedBox(height: 10),
                               Row(
                                 children: [
@@ -89,7 +71,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                                       color: Colors.white70, size: 16),
                                   const SizedBox(width: 4),
                                   Text(
-                                    widget.profile.location, // Location
+                                    widget.Companyprofile.address,
                                     style: const TextStyle(color: Colors.white70),
                                   ),
                                 ],
@@ -99,24 +81,10 @@ class _ProfileHeaderState extends State<ProfileHeader> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 60),
                   ],
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: 16,
-                  child: OutlinedButton.icon(
-                    onPressed: _navigateToUpdateProfile,
-                    icon: const Icon(Icons.edit, color: Colors.white),
-                    label: const Text('Edit profile', style: TextStyle(color: Colors.white)),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.white),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                ),
+
               ],
             ),
           ),

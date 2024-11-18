@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ProfileSectionCard extends StatelessWidget {
   final String title;
-  final Widget content; // Contenu à afficher sous le titre
+  final Widget content;
   final IconData icon;
   final VoidCallback? hasAddIcon;
   final VoidCallback? onEditPressed;
@@ -49,6 +49,7 @@ class ProfileSectionCard extends StatelessWidget {
                       icon: const Icon(Icons.add, color: Colors.deepOrangeAccent),
                       onPressed: hasAddIcon,
                     ),
+                  if (onEditPressed != null)
                   IconButton(
                     icon: const Icon(Icons.edit, color: Colors.orange),
                     onPressed: onEditPressed,

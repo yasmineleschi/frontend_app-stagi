@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
-import 'package:frontend_app_stagi/views/Profil/UpdateSections/updateSkills.dart';
-import 'package:frontend_app_stagi/widgets/profile/WidgetsUpdateProfile/CustomTextField_update.dart'; // Page d'édition individuelle
+import 'package:frontend_app_stagi/views/Profil/Student/UpdateSections/updateSkills.dart';
+import 'package:frontend_app_stagi/widgets/profile/WidgetsUpdateProfile/CustomTextField_update.dart';
 
 class ListeSkillsPage extends StatefulWidget {
   final List<Skill> skills;

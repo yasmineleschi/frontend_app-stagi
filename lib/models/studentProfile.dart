@@ -12,7 +12,7 @@ class StudentProfile {
   List<Experience> experience;
 
   StudentProfile({
-    required this.userId,
+    this.userId,
     required this.firstName,
     required this.lastName,
     required this.phone,

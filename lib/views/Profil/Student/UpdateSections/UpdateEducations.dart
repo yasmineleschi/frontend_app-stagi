@@ -55,6 +55,7 @@ class _EditEducationPageState extends State<EditEducationPage> {
     Navigator.pop(context, updatedEducation);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

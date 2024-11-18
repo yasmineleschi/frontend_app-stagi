@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
-import 'package:frontend_app_stagi/views/Profil/UpdateSections/UpdateBio.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/UpdateSections/UpdateBio.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetViewProfile/widget_about.dart';
 
 

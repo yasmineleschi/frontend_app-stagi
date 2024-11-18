@@ -1,14 +1,12 @@
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart' as appUser;
-import '../services/user_service.dart';
+import '../services/auth_service.dart';
 
 class SignUpViewModel extends ChangeNotifier {
+
   final ApiService _apiService = ApiService();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   Future<void> saveUserId(String userId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -48,6 +46,7 @@ class SignUpViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+
   Future<void> signUp() async {
     if (username.isEmpty || email.isEmpty || password.isEmpty || role.isEmpty) {
       errorMessage = "All fields are mandatory!";
@@ -72,6 +71,11 @@ class SignUpViewModel extends ChangeNotifier {
 
       userId = userIdFromApi;
       await saveUserId(userId);
+      print('User created:');
+      print('Username: $username');
+      print('Email: $email');
+      print('Role: $role');
+      print('User ID: $userId');
       isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -80,6 +84,5 @@ class SignUpViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 
 }
