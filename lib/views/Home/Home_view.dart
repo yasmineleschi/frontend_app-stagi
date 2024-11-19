@@ -3,6 +3,7 @@ import 'package:frontend_app_stagi/viewmodels/HomeSearchViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
 import 'package:frontend_app_stagi/views/Home/CommentsPage.dart';
+import 'package:frontend_app_stagi/views/Home/PublicationPage.dart'; // Import the PublicationPage
 import 'package:frontend_app_stagi/views/Home/PublicationDetailsPage.dart';
 import 'package:frontend_app_stagi/widgets/WidgetHome/sidebar.dart';
 
@@ -70,6 +71,19 @@ class _HomeViewState extends State<HomeView> {
                 searchViewModel.filterPublications(query);
               },
             ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.add_box_outlined),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PublicationPage(token: widget.token), // Navigate here
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
           Divider(color: Colors.grey[300], thickness: 1),
           SizedBox(height: 16.0),
