@@ -9,6 +9,7 @@ class CustomTextField extends StatelessWidget {
   final bool isPhoneField;
   final GestureTapCallback? onTap;
   final Function(String)? onChanged;
+  final int? maxLines;
 
   CustomTextField({
     required this.controller,
@@ -19,7 +20,7 @@ class CustomTextField extends StatelessWidget {
     this.isPhoneField = false,
     this.onTap,
     this.onChanged,
-
+    this.maxLines = 1,
   });
 
   @override
@@ -42,6 +43,7 @@ class CustomTextField extends StatelessWidget {
           child: TextFormField(
             controller: controller,
             readOnly: isReadOnly,
+            maxLines: maxLines,
             decoration: InputDecoration(
               labelText: labelText,
               labelStyle: const TextStyle(color: Color(0xFF3A6D8C)),
@@ -60,6 +62,7 @@ class CustomTextField extends StatelessWidget {
               hintStyle: const TextStyle(color: Color(0xFF3A6D8C)),
             ),
             style: const TextStyle(color: Colors.black),
+            onChanged: onChanged,
           ),
         ),
       ),

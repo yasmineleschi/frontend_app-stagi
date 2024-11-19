@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
-import 'package:frontend_app_stagi/views/Profil/Forms/institution_autocomplete.dart';
-import 'package:frontend_app_stagi/views/Profil/UpdateSections/UpdateEducations.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Forms/institution_autocomplete.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/UpdateSections/UpdateEducations.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetsCreateProfile/Custom_dropdown_field_profile.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetsCreateProfile/costum_widget_profile.dart';
 import 'package:intl/intl.dart';

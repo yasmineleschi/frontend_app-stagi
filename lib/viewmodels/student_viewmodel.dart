@@ -32,6 +32,7 @@ class StudentProfileViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
   Future<bool> createStudentProfile(StudentProfile studentProfile, String userId) async {
     _isLoading = true;
     _errorMessage = '';
@@ -52,7 +53,6 @@ class StudentProfileViewModel extends ChangeNotifier {
     notifyListeners();
     return success;
   }
-
 
   Future<void> updateBio(String userId, String newBio) async {
     if (_studentProfile == null) return;
@@ -79,7 +79,7 @@ class StudentProfileViewModel extends ChangeNotifier {
     }
   }
 
-  Future<bool> updateStudentProfile( StudentProfile updatedProfile, String userId, File? profileImage) async {
+  Future<bool> updateStudentProfile(StudentProfile updatedProfile, String userId, File? profileImage) async {
     _isLoading = true;
     _errorMessage = '';
     notifyListeners();
@@ -95,7 +95,6 @@ class StudentProfileViewModel extends ChangeNotifier {
       request.fields['bio'] = updatedProfile.bio ?? '';
       request.fields['specialite'] = updatedProfile.specialite;
       request.fields['location'] = updatedProfile.location;
-
 
       if (profileImage != null) {
         var stream = http.ByteStream(profileImage.openRead());
@@ -125,7 +124,6 @@ class StudentProfileViewModel extends ChangeNotifier {
     }
     return false;
   }
-
 
   Future<void> updateSkill(String userId, Skill updatedSkill) async {
     if (_studentProfile == null) return;

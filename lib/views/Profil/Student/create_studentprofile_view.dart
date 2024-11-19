@@ -3,11 +3,11 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
 import 'package:frontend_app_stagi/viewmodels/student_viewmodel.dart';
-import 'package:frontend_app_stagi/views/Profil/Student_view.dart';
-import 'package:frontend_app_stagi/views/Profil/Forms/basic_info_form.dart';
-import 'package:frontend_app_stagi/views/Profil/Forms/education_form.dart';
-import 'package:frontend_app_stagi/views/Profil/Forms/experience_form.dart';
-import 'package:frontend_app_stagi/views/Profil/Forms/skills_form.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Forms/basic_info_form.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Forms/education_form.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Forms/experience_form.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Forms/skills_form.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Student_view.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -23,16 +23,7 @@ class ProfileStepper extends StatefulWidget {
 class _ProfileStepperState extends State<ProfileStepper> {
   int _currentStep = 0;
   File? _profileImage;
-  final ImagePicker _picker = ImagePicker();
 
-  Future<void> _pickProfileImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        _profileImage = File(pickedFile.path);
-      });
-    }
-  }
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();

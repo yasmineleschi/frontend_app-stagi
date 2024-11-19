@@ -22,8 +22,7 @@ class _EditExperiencePageState extends State<EditExperiencePage> {
   late TextEditingController _startDateController;
   late TextEditingController _endDateController;
   late TextEditingController _responsibilitiesController;
-  Future<void> _selectDate(
-      BuildContext context, TextEditingController controller) async {
+  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
-import 'package:frontend_app_stagi/views/Profil/Forms/institution_autocomplete.dart';
-import 'package:frontend_app_stagi/views/Profil/UpdateSections/liste_education.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Forms/institution_autocomplete.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/UpdateSections/liste_education.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetViewProfile/widget_sections.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetsCreateProfile/Custom_dropdown_field_profile.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetsCreateProfile/costum_widget_profile.dart';
@@ -211,6 +211,8 @@ class _EducationSectionState extends State<EducationSection> {
                         Text(
                             'From ${education.startDate.year} to ${education.endDate.year}'),
                         const SizedBox(height: 15),
+                        Divider(color: Colors.white,),
+
                       ],
                     );
                   }).toList(),

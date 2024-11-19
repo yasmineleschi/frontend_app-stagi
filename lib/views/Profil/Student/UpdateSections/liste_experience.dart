@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
-import 'package:frontend_app_stagi/views/Profil/UpdateSections/liste_experience.dart';
-import 'package:frontend_app_stagi/widgets/profile/WidgetViewProfile/widget_sections.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/UpdateSections/UpdateExperiences.dart';
 import 'package:frontend_app_stagi/widgets/profile/WidgetsCreateProfile/costum_widget_profile.dart';
 import 'package:intl/intl.dart';
 
-class ExperienceSection extends StatefulWidget {
+class ListeExperiencePage extends StatefulWidget {
   final List<Experience> experiences;
   final Function(Experience) onExperienceUpdated;
 
-  const ExperienceSection({Key? key, required this.experiences, required this.onExperienceUpdated}) : super(key: key);
+  const ListeExperiencePage(
+      {Key? key, required this.experiences, required this.onExperienceUpdated})
+      : super(key: key);
 
   @override
-  _ExperienceSectionState createState() => _ExperienceSectionState();
+  _ListeExperiencePagePageState createState() =>
+      _ListeExperiencePagePageState();
 }
 
-class _ExperienceSectionState extends State<ExperienceSection> {
-  bool _showAllExperiences = false;
+class _ListeExperiencePagePageState extends State<ListeExperiencePage> {
+  late List<Experience> experiences;
   TextEditingController responsibilitiesController = TextEditingController();
   List<String> responsibilities = [];
 
@@ -41,11 +43,30 @@ class _ExperienceSectionState extends State<ExperienceSection> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    experiences = widget.experiences;
+  }
+
+  void _updateExperience(int index, Experience updatedExperience) {
+    setState(() {
+      experiences[index] = updatedExperience;
+    });
+    widget.onExperienceUpdated(updatedExperience);
+  }
+
+  Future<List<Experience>> _loadExperiences() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return experiences;
+  }
+
   void _showAddExperienceDialog(BuildContext context) {
     TextEditingController jobTitleController = TextEditingController();
     TextEditingController companyController = TextEditingController();
     TextEditingController startDateController = TextEditingController();
     TextEditingController endDateController = TextEditingController();
+    TextEditingController responsibilitiesController = TextEditingController();
 
     showDialog(
       context: context,
@@ -53,7 +74,7 @@ class _ExperienceSectionState extends State<ExperienceSection> {
         return AlertDialog(
           backgroundColor: const Color(0xFFF5F2F2),
           title: const Text(
-            'Add New Experience',
+            'Add new Experience',
             style: TextStyle(
               fontSize: 20,
               fontFamily: 'Roboto Slab',
@@ -123,11 +144,12 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
-                    child: const Text('Add Responsibility', style: TextStyle(color: Colors.white),),
+                    child: const Text(
+                      'Add Responsibility',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
-
-
                 const SizedBox(height: 10),
                 if (responsibilities.isNotEmpty)
                   Column(
@@ -145,19 +167,17 @@ class _ExperienceSectionState extends State<ExperienceSection> {
             ),
           ),
           actions: [
-            // Add Experience Button
             TextButton(
               onPressed: () {
                 if (jobTitleController.text.isNotEmpty &&
-                    companyController.text.isNotEmpty &&
-                    startDateController.text.isNotEmpty &&
-                    endDateController.text.isNotEmpty) {
+                    companyController.text.isNotEmpty) {
                   Experience newExperience = Experience(
                     jobTitle: jobTitleController.text,
                     company: companyController.text,
                     startDate: DateTime.parse(startDateController.text),
                     endDate: DateTime.parse(endDateController.text),
-                    responsibilities: List.from(responsibilities),
+                    responsibilities:
+                        responsibilitiesController.text.split(','),
                   );
 
                   setState(() {
@@ -179,7 +199,6 @@ class _ExperienceSectionState extends State<ExperienceSection> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            // Cancel Button
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
@@ -204,73 +223,101 @@ class _ExperienceSectionState extends State<ExperienceSection> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F2F2),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFF5F2F2),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.blueGrey),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: const Center(
+          child: Text(
+            'Edit Experience',
+            style: TextStyle(
+              fontSize: 25,
+              fontFamily: 'Roboto Slab',
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF3A6D8C),
+            ),
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add, color: Color(0xFF3A6D8C)),
+            onPressed: () => _showAddExperienceDialog(context),
+          ),
+        ],
+      ),
+      body: FutureBuilder<List<Experience>>(
+        future: _loadExperiences(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-    final displayedExperiences = _showAllExperiences ? widget.experiences : widget.experiences.take(3).toList();
+          if (snapshot.hasError) {
+            return const Center(child: Text('Failed to load experiences'));
+          }
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 10),
-          ProfileSectionCard(
-            title: 'Experience',
-            content: Stack(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: displayedExperiences.map((experience) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${experience.jobTitle} at ${experience.company}',
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 5),
-                        Text('From ${experience.startDate.year} to ${experience.endDate.year}'),
-                        const SizedBox(height: 5),
-                        Text('Responsibilities:\n${experience.responsibilities.join(', ')}'),
-                        const SizedBox(height: 15),
-                      ],
-                    );
-                  }).toList(),
+          final experiencesList = snapshot.data;
+
+          if (experiencesList == null || experiencesList.isEmpty) {
+            return const Center(child: Text('No experiences available.'));
+          }
+
+          return ListView.builder(
+            itemCount: experiencesList.length,
+            itemBuilder: (context, index) {
+              final reverseIndex = experiencesList.length - 1 - index;
+              final experience = experiencesList[reverseIndex];
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                 ),
-                Positioned(
-                  right: 5.0,
-                  bottom: 0.0,
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _showAllExperiences = !_showAllExperiences;
-                      });
-                    },
-                    child: Text(
-                      _showAllExperiences ? 'See Less..' : 'See More..',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Roboto Slab',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.deepOrangeAccent,
-                      ),
+                child: ListTile(
+                  title: Text(
+                    '${experience.jobTitle} at ${experience.company} \n From ${experience.startDate.year} TO ${experience.endDate.year} \n Responsibilities : ${experience.responsibilities.join(', ')} ',
+                    style: const TextStyle(
+                      fontFamily: 'Roboto Slab',
+                      fontSize: 16,
+                      color: Colors.black,
                     ),
                   ),
-                ),
-              ],
-            ),
-            icon: Icons.work_outline,
-            hasAddIcon: () => _showAddExperienceDialog(context),
-            onEditPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ListeExperiencePage(
-                    experiences: widget.experiences,
-                    onExperienceUpdated: widget.onExperienceUpdated,
+                  trailing: IconButton(
+                    icon: const Icon(Icons.edit, color: Colors.orange),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EditExperiencePage(
+                            experience: experience,
+                            onExperienceUpdated: (updateExperience) {
+                              _updateExperience(index, updateExperience);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               );
             },
-          ),
-        ],
+          );
+        },
       ),
     );
   }
