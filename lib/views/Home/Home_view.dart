@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/viewmodels/HomeSearchViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
-import 'package:frontend_app_stagi/views/Home/PublicationPage.dart';
+import 'package:frontend_app_stagi/views/Home/CommentsPage.dart';
+import 'package:frontend_app_stagi/views/Home/PublicationDetailsPage.dart';
 import 'package:frontend_app_stagi/widgets/WidgetHome/sidebar.dart';
 
 class HomeView extends StatefulWidget {
@@ -33,13 +34,6 @@ class _HomeViewState extends State<HomeView> {
     setState(() {
       _isSidebarVisible = !_isSidebarVisible;
     });
-  }
-
-  void _navigateToPublicationPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => PublicationPage(token: widget.token)),
-    );
   }
 
   @override
@@ -76,12 +70,6 @@ class _HomeViewState extends State<HomeView> {
                 searchViewModel.filterPublications(query);
               },
             ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.create),
-                onPressed: _navigateToPublicationPage,
-              ),
-            ],
           ),
           Divider(color: Colors.grey[300], thickness: 1),
           SizedBox(height: 16.0),
@@ -99,57 +87,81 @@ class _HomeViewState extends State<HomeView> {
                       final user = publication['user'];
                       final hasLiked = publication['likedByUser'] ?? false;
 
-                      return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Row for profile photo and username
-                              Row(
-                                children: [
-                                  CircleAvatar(
-                                    backgroundImage: AssetImage('assets/photoprofile.png'),
-                                    radius: 20,
-                                  ),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    user['username'] ?? 'Anonymous',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PublicationDetailsPage(
+                                publicationId: publication['_id'],
+                                token: widget.token,
                               ),
-                              SizedBox(height: 8),
-                              // Publication content
-                              Text(publication['content']),
-                              SizedBox(height: 8),
-                              // Like and comment icons with like count
-                              Row(
-                                children: [
-                                  IconButton(
-                                    icon: Icon(
-                                      hasLiked ? Icons.thumb_up_alt : Icons.thumb_up_alt_outlined,
-                                      color: hasLiked ? Colors.blue : null,
+                            ),
+                          );
+                        },
+                        child: Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Row for profile photo and username
+                                Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundImage: AssetImage('assets/photoprofile.png'),
+                                      radius: 20,
                                     ),
-                                    onPressed: () {
-                                      publicationViewModel.toggleLike(widget.token, publication['_id'], hasLiked);
-                                    },
-                                  ),
-                                  Text('${publication['likes']} likes'),
-                                  SizedBox(width: 8),
-                                  IconButton(
-                                    icon: Icon(Icons.comment_outlined),
-                                    onPressed: () {
-                                      // Add comment functionality here
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
+                                    SizedBox(width: 8),
+                                    Text(
+                                      user['username'] ?? 'Anonymous',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 8),
+                                // Publication content
+                                Text(publication['content']),
+                                SizedBox(height: 8),
+                                // Like and comment icons with like count
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(
+                                        hasLiked
+                                            ? Icons.thumb_up_alt
+                                            : Icons.thumb_up_alt_outlined,
+                                        color: hasLiked ? Colors.blue : null,
+                                      ),
+                                      onPressed: () {
+                                        publicationViewModel.toggleLike(
+                                            widget.token, publication['_id'], hasLiked);
+                                      },
+                                    ),
+                                    Text('${publication['likes']} likes'),
+                                    SizedBox(width: 8),
+                                    IconButton(
+                                      icon: Icon(Icons.comment_outlined),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => CommentsPage(
+                                              publicationId: publication['_id'],
+                                              token: widget.token,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );
