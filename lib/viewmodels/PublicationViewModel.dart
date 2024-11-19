@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class PublicationViewModel extends ChangeNotifier {
-  final String backendUrl = 'http://localhost:5001/api/publications';
+  final String backendUrl = 'http://10.0.2.2:5001/api/publications';
   List<dynamic> publications = [];
   bool isLoading = false;
   String errorMessage = '';

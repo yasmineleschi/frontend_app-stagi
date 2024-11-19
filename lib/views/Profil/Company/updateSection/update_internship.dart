@@ -47,7 +47,7 @@ class _EditInternshipPageState extends State<EditInternshipPage> {
     final DateTime updatedStartDate = DateTime.parse(_startDateController.text);
     final DateTime updatedEndDate = DateTime.parse(_endDateController.text);
 
-    // Make sure the internship object is structured properly for the API
+
     Internship updatedInternship = widget.internship.copyWith(
       title: updatedTitle,
       description: updatedDescription,
@@ -57,10 +57,8 @@ class _EditInternshipPageState extends State<EditInternshipPage> {
       isActive: isActive,
     );
 
-    // Update internship in parent widget
     widget.onInternshipUpdated(updatedInternship);
 
-    // Pop and return updated internship to previous screen
     Navigator.pop(context, updatedInternship);
   }
 

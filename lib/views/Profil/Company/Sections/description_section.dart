@@ -99,30 +99,30 @@ class _DescriptionSectionState extends State<DescriptionSection> {
         ],
       ),
       icon: Icons.account_box_outlined,
-      onEditPressed: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => EditAboutUsPage(
-              initialDescription: widget.companyProfile.description,
-              initialSector: widget.companyProfile.sector,
-              initialWebsite: widget.companyProfile.website,
-              initialEmployeCount: widget.companyProfile.employeeCount,
-              initialYearFounded: widget.companyProfile.yearFounded,
-              initialPhone: widget.companyProfile.phoneNumber,
-              onProfileUpdated: (description, sector, website, employeeCount, yearFounded, phone) {
-                setState(() {
-                  widget.companyProfile.description = description;
-                  widget.companyProfile.sector = sector;
-                  widget.companyProfile.website = website;
-                  widget.companyProfile.employeeCount = employeeCount;
-                  widget.companyProfile.yearFounded = yearFounded;
-                  widget.companyProfile.phoneNumber = phone;
-                });
-              },
-            ),
-          ),
-        );
-      },
+      // onEditPressed: () {
+      //   Navigator.of(context).push(
+      //     MaterialPageRoute(
+      //       builder: (context) => EditAboutUsPage(
+      //         initialDescription: widget.companyProfile.description,
+      //         initialSector: widget.companyProfile.sector,
+      //         initialWebsite: widget.companyProfile.website,
+      //         initialEmployeCount: widget.companyProfile.employeeCount,
+      //         initialYearFounded: widget.companyProfile.yearFounded,
+      //         initialPhone: widget.companyProfile.phoneNumber,
+      //         onProfileUpdated: (description, sector, website, employeeCount, yearFounded, phone) {
+      //           setState(() {
+      //             widget.companyProfile.description = description;
+      //             widget.companyProfile.sector = sector;
+      //             widget.companyProfile.website = website;
+      //             widget.companyProfile.employeeCount = employeeCount;
+      //             widget.companyProfile.yearFounded = yearFounded;
+      //             widget.companyProfile.phoneNumber = phone;
+      //           });
+      //         },
+      //       ),
+      //     ),
+      //   );
+      // },
     );
   }
 }

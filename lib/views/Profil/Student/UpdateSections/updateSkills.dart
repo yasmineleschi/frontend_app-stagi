@@ -23,8 +23,7 @@ class _EditSkillPageState extends State<EditSkillPage> {
   void initState() {
     super.initState();
     _skillNameController = TextEditingController(text: widget.skill.name);
-    _skillPercentageController =
-        TextEditingController(text: widget.skill.percentage.toString());
+    _skillPercentageController = TextEditingController(text: widget.skill.percentage.toString());
   }
 
   void _updateSkill() {

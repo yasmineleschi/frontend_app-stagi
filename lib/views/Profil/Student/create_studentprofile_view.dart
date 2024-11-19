@@ -8,7 +8,6 @@ import 'package:frontend_app_stagi/views/Profil/Student/Forms/education_form.dar
 import 'package:frontend_app_stagi/views/Profil/Student/Forms/experience_form.dart';
 import 'package:frontend_app_stagi/views/Profil/Student/Forms/skills_form.dart';
 import 'package:frontend_app_stagi/views/Profil/Student/Student_view.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfileStepper extends StatefulWidget {
