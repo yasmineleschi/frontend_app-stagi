@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/viewmodels/student_viewmodel.dart';
 import 'package:frontend_app_stagi/views/Profil/Student/Sections/about_section.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Sections/attachment_section.dart';
 import 'package:frontend_app_stagi/views/Profil/Student/Sections/education_section.dart';
 import 'package:frontend_app_stagi/views/Profil/Student/Sections/experience_section.dart';
 import 'package:frontend_app_stagi/views/Profil/Student/Sections/profile_header.dart';
@@ -70,7 +71,8 @@ class StudentProfileView extends StatelessWidget {
                               viewModel.updateExperience(profile.userId!, updatedExperience);
                             },
                           ),
-
+                          const SizedBox(height: 10),
+                          AttachmentsSection(studentId: profile.id!)
                         ],
                       ),
                     ),
@@ -88,7 +90,7 @@ class StudentProfileView extends StatelessWidget {
 void main() {
   runApp(MaterialApp(
     home: StudentProfileView(
-      userId: '672b2980283d37063db38e51',
+      userId: '672b222b283d37063db38e2e',
     ),
   ));
 }

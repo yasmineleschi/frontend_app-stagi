@@ -1,4 +1,5 @@
 class StudentProfile {
+  String? id;
   String? userId;
   String firstName;
   String lastName;
@@ -12,6 +13,7 @@ class StudentProfile {
   List<Experience> experience;
 
   StudentProfile({
+    this.id,
     this.userId,
     required this.firstName,
     required this.lastName,
@@ -27,6 +29,7 @@ class StudentProfile {
 
   factory StudentProfile.fromJson(Map<String, dynamic> json) {
     return StudentProfile(
+      id: json['_id'] as String?,
       userId: json['userId'] as String? ?? '',
       firstName: json['firstName'] as String? ?? '',
       lastName: json['lastName'] as String? ?? '',
@@ -52,6 +55,7 @@ class StudentProfile {
 
   Map<String, dynamic> toJson() {
     return {
+      '_id': id,
       'userId': userId,
       'firstName': firstName,
       'lastName': lastName,
