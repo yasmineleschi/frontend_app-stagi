@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:http_parser/http_parser.dart';
 
 class PublicationViewModel extends ChangeNotifier {
   final String backendUrl = 'http://localhost:5001/api/publications';
@@ -32,33 +35,65 @@ class PublicationViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> createPublication(String token, String title, String content, Uint8List? imageBytes) async {
+
+
+  Future<void> createPublication(
+      String token,
+      String title,
+      String content,
+      Uint8List? image, // Image in bytes (for image uploads)
+      Uint8List? pdf,   // PDF in bytes (for PDF uploads)
+      ) async {
+    final uri = Uri.parse('http://localhost:5001/api/publications');
+    final request = http.MultipartRequest('POST', uri)
+      ..headers['Authorization'] = 'Bearer $token'
+      ..fields['title'] = title
+      ..fields['content'] = content;
+
+    // Add image to the request (if available)
+    if (image != null) {
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'image', // The field name expected by the backend
+          image,   // Image byte data
+          filename: 'image.png', // Set a default filename for the image
+          contentType: MediaType('image', 'png'), // Correct MIME type for image
+        ),
+      );
+    }
+
+    // Add PDF to the request (if available)
+    if (pdf != null) {
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'pdf', // The field name expected by the backend
+          pdf,   // PDF byte data
+          filename: 'file.pdf', // Set a default filename for the PDF
+          contentType: MediaType('application', 'pdf'), // Correct MIME type for PDF
+        ),
+      );
+    }
+
     try {
-      isLoading = true;
-      notifyListeners();
-
-      final request = http.MultipartRequest('POST', Uri.parse(backendUrl));
-      request.headers['Authorization'] = 'Bearer $token';
-      request.fields['title'] = title;
-      request.fields['content'] = content;
-
-      if (imageBytes != null) {
-        request.files.add(http.MultipartFile.fromBytes('image', imageBytes, filename: 'image.jpg'));
-      }
-
       final response = await request.send();
+
       if (response.statusCode == 201) {
-        await fetchPublications(token); // Refresh publications
+        print('Publication created successfully');
+        // Optionally, you can fetch the publications again after successful creation
       } else {
-        errorMessage = 'Failed to create publication';
+        // Log the full response for debugging purposes
+        final responseBody = await response.stream.bytesToString();
+        print('Failed to create publication. Status code: ${response.statusCode}');
+        print('Response body: $responseBody');
       }
     } catch (e) {
-      errorMessage = 'An error occurred: $e';
-    } finally {
-      isLoading = false;
-      notifyListeners();
+      print('An error occurred: $e');
     }
   }
+
+
+
+
 
   Future<void> likePublication(String token, String publicationId) async {
     try {
