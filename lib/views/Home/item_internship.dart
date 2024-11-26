@@ -40,7 +40,7 @@ class InternshipItem extends StatelessWidget {
                   backgroundImage: AssetImage('assets/photoprofile.png'),
                   radius: 20,
                 ),
-                SizedBox(width: 14,),
+                SizedBox(width: 10,),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -68,7 +68,7 @@ class InternshipItem extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(width: 20,),
+                SizedBox(width: 10,),
                 IconButton(onPressed: (){}, icon: Icon(Icons.save_outlined),)
 
               ],
@@ -190,7 +190,7 @@ class InternshipItem extends StatelessWidget {
 
             SizedBox(height: 16),
             Align(
-              alignment: Alignment.centerRight,  // Align the button to the right
+              alignment: Alignment.centerRight,
               child: ElevatedButton(
                 onPressed: onApply,
                 style: ElevatedButton.styleFrom(

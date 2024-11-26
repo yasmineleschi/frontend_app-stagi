@@ -20,9 +20,7 @@ class InternshipListPage extends StatefulWidget {
 
 class _InternshipListPageState extends State<InternshipListPage> {
   late List<Internship> internships;
-  TextEditingController requirementController = TextEditingController();
   List<String> requirements = [];
-  bool isActive = false;
 
   Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
     DateTime? picked = await showDatePicker(
@@ -35,8 +33,6 @@ class _InternshipListPageState extends State<InternshipListPage> {
       controller.text = DateFormat('yyyy-MM-dd').format(picked);
     }
   }
-
-
 
   @override
   void initState() {
@@ -56,7 +52,6 @@ class _InternshipListPageState extends State<InternshipListPage> {
     return internships;
   }
 
-  TextEditingController requirementsController = TextEditingController();
 
   void _showAddInternshipDialog(BuildContext context) {
     TextEditingController titleController = TextEditingController();
@@ -280,6 +275,7 @@ class _InternshipListPageState extends State<InternshipListPage> {
             itemBuilder: (context, index) {
               final reverseIndex = internshipList.length - 1 - index;
               final internship = internshipList[reverseIndex];
+
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 16),
                 padding: const EdgeInsets.all(10),

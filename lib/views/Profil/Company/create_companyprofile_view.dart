@@ -156,7 +156,6 @@ class _ProfileStepperState extends State<CompanyProfileStepper> {
 
                         if (shouldProceed) {
 
-
                           Company profile = Company(
                             userId: widget.userId,
                             name: nameController.text,
@@ -165,7 +164,7 @@ class _ProfileStepperState extends State<CompanyProfileStepper> {
                             phoneNumber: phoneNumberController.text,
                             website: websiteController.text,
                             description: descriptionController.text,
-                            yearFounded: DateTime.parse(yearFoundedController.text),
+                            yearFounded: DateTime.parse(yearFoundedController.text) ,
                             employeeCount: employeeCountController.text,
                             internships: internships,
                           );

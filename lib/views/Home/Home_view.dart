@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/viewmodels/HomeSearchViewModel.dart';
+import 'package:frontend_app_stagi/viewmodels/company_viewmodel.dart';
+import 'package:frontend_app_stagi/views/Home/item_internship.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
 import 'package:frontend_app_stagi/views/Home/CommentsPage.dart';
@@ -23,13 +25,24 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    final publicationViewModel = Provider.of<PublicationViewModel>(context, listen: false);
+
+    final companyProfileViewModel = Provider.of<CompanyProfileViewModel>(context, listen: false);
+    companyProfileViewModel.fetchInternships();
+    companyProfileViewModel.addListener(() {
+      debugPrint('Internships loaded: ${companyProfileViewModel.internships.length}');
+    });
+
+    final publicationViewModel =
+        Provider.of<PublicationViewModel>(context, listen: false);
     publicationViewModel.fetchPublications(widget.token);
     publicationViewModel.addListener(() {
       final publications = publicationViewModel.publications;
-      Provider.of<HomeSearchViewModel>(context, listen: false).initializePublications(publications);
+      Provider.of<HomeSearchViewModel>(context, listen: false)
+          .initializePublications(publications);
     });
   }
+
+
 
   void _toggleSidebar() {
     setState(() {
@@ -41,6 +54,8 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     final publicationViewModel = Provider.of<PublicationViewModel>(context);
     final searchViewModel = Provider.of<HomeSearchViewModel>(context);
+    final companyProfileViewModel =
+        Provider.of<CompanyProfileViewModel>(context);
 
     return Scaffold(
       body: Column(
@@ -78,7 +93,8 @@ class _HomeViewState extends State<HomeView> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => PublicationPage(token: widget.token), // Navigate here
+                      builder: (context) =>
+                          PublicationPage(token: widget.token), // Navigate here
                     ),
                   );
                 },
@@ -91,96 +107,132 @@ class _HomeViewState extends State<HomeView> {
             child: Stack(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: publicationViewModel.isLoading
                       ? Center(child: CircularProgressIndicator())
                       : ListView.builder(
-                    itemCount: searchViewModel.filteredPublications.length,
-                    itemBuilder: (context, index) {
-                      final publication = searchViewModel.filteredPublications[index];
-                      final user = publication['user'];
-                      final hasLiked = publication['likedByUser'] ?? false;
+                          itemCount:
+                              searchViewModel.filteredPublications.length +
+                                  companyProfileViewModel.internships.length,
+                          itemBuilder: (context, index) {
+                            if (index <
+                                searchViewModel.filteredPublications.length) {
+                              final publication =
+                                  searchViewModel.filteredPublications[index];
+                              final user = publication['user'];
+                              final hasLiked =
+                                  publication['likedByUser'] ?? false;
 
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PublicationDetailsPage(
-                                publicationId: publication['_id'],
-                                token: widget.token,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Card(
-                          margin: const EdgeInsets.symmetric(vertical: 8),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Row for profile photo and username
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundImage: AssetImage('assets/photoprofile.png'),
-                                      radius: 20,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      user['username'] ?? 'Anonymous',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          PublicationDetailsPage(
+                                        publicationId: publication['_id'],
+                                        token: widget.token,
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 8),
-                                // Publication content
-                                Text(publication['content']),
-                                SizedBox(height: 8),
-                                // Like and comment icons with like count
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(
-                                        hasLiked
-                                            ? Icons.thumb_up_alt
-                                            : Icons.thumb_up_alt_outlined,
-                                        color: hasLiked ? Colors.blue : null,
-                                      ),
-                                      onPressed: () {
-                                        publicationViewModel.toggleLike(
-                                            widget.token, publication['_id'], hasLiked);
-                                      },
-                                    ),
-                                    Text('${publication['likes']} likes'),
-                                    SizedBox(width: 8),
-                                    IconButton(
-                                      icon: Icon(Icons.comment_outlined),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => CommentsPage(
-                                              publicationId: publication['_id'],
-                                              token: widget.token,
+                                  );
+                                },
+                                child: Card(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // Row for profile photo and username
+                                        Row(
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundImage: AssetImage(
+                                                  'assets/photoprofile.png'),
+                                              radius: 20,
                                             ),
-                                          ),
-                                        );
-                                      },
+                                            SizedBox(width: 8),
+                                            Text(
+                                              user['username'] ?? 'Anonymous',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8),
+                                        // Publication content
+                                        Text(publication['content']),
+                                        SizedBox(height: 8),
+                                        // Like and comment icons with like count
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(
+                                                hasLiked
+                                                    ? Icons.thumb_up_alt
+                                                    : Icons
+                                                        .thumb_up_alt_outlined,
+                                                color: hasLiked
+                                                    ? Colors.blue
+                                                    : null,
+                                              ),
+                                              onPressed: () {
+                                                publicationViewModel.toggleLike(
+                                                    widget.token,
+                                                    publication['_id'],
+                                                    hasLiked);
+                                              },
+                                            ),
+                                            Text(
+                                                '${publication['likes']} likes'),
+                                            SizedBox(width: 8),
+                                            IconButton(
+                                              icon:
+                                                  Icon(Icons.comment_outlined),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CommentsPage(
+                                                      publicationId:
+                                                          publication['_id'],
+                                                      token: widget.token,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
+                              );
+                            } else {
+                              final internship =
+                                  companyProfileViewModel.internships[index -
+                                      searchViewModel
+                                          .filteredPublications.length];
+                              return ListTile(
+                                  subtitle: InternshipItem(
+                                      companyName: internship.companyName,
+                                      companyAddress: internship.companyAddress,
+                                      title: internship.title,
+                                      description: internship.description,
+                                      requirements: internship.requirements,
+                                      startDate: internship.startDate,
+                                      endDate: internship.endDate,
+                                      postedDate: internship.postedDate,
+                                      onApply: () {}));
+                            }
+                          },
                         ),
-                      );
-                    },
-                  ),
                 ),
                 if (_isSidebarVisible)
                   Positioned(
