@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => StudentProfileViewModel()),
         ChangeNotifierProvider(create: (context) => HomeSearchViewModel()),
         ChangeNotifierProvider(create: (context) => CompanyProfileViewModel()),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
