@@ -16,7 +16,8 @@ class HomeSearchViewModel extends ChangeNotifier {
     } else {
       filteredPublications = _allPublications.where((publication) {
         final userName = publication['user']['username']?.toLowerCase() ?? '';
-        return userName.contains(query.toLowerCase());
+        final content = publication['content']?.toLowerCase() ?? '';
+        return userName.contains(query.toLowerCase()) || content.contains(query.toLowerCase());
       }).toList();
     }
     notifyListeners();

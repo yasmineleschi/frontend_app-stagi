@@ -27,7 +27,7 @@ class _CommentsPageState extends State<CommentsPage> {
   Future<void> fetchComments() async {
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:5001/api/publications/${widget.publicationId}'),
+        Uri.parse('http://localhost:5001/api/publications/${widget.publicationId}'),
         headers: {'Authorization': 'Bearer ${widget.token}'},
       );
 
