@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/viewmodels/HomeSearchViewModel.dart';
+import 'package:frontend_app_stagi/viewmodels/attachment_viewmodel.dart';
 import 'package:frontend_app_stagi/viewmodels/company_viewmodel.dart';
 import 'package:frontend_app_stagi/viewmodels/student_viewmodel.dart';
 import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => StudentProfileViewModel()),
         ChangeNotifierProvider(create: (context) => HomeSearchViewModel()),
         ChangeNotifierProvider(create: (context) => CompanyProfileViewModel()),
+        ChangeNotifierProvider(create: (_) => AttachmentViewModel()),
 
       ],
       child: MaterialApp(
