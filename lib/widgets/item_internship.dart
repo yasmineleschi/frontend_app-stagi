@@ -10,6 +10,8 @@ class InternshipItem extends StatelessWidget {
   final DateTime endDate;
   final DateTime postedDate;
   final VoidCallback? onApply;
+  final String companyId;
+
 
   InternshipItem({
     required this.companyName,
@@ -21,6 +23,7 @@ class InternshipItem extends StatelessWidget {
     required this.endDate,
     required this.postedDate,
      this.onApply,
+    required this.companyId,
   });
 
   @override

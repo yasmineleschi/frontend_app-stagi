@@ -128,7 +128,7 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
                   Text('No attachments available.'),
                 ..._attachments.map((attachment) {
                   return ListTile(
-                    title: Text(attachment.fileType),
+                    title: Text(attachment.fileName),
                     subtitle: Text(attachment.fileType),
                     trailing: IconButton(
                       icon: Icon(Icons.download),

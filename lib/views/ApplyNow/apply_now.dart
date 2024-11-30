@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend_app_stagi/viewmodels/internship_application_viewmodel.dart';
+import 'package:frontend_app_stagi/viewmodels/attachment_viewmodel.dart';
+import 'package:frontend_app_stagi/viewmodels/internship_application_viewmodel.dart';  // Correct import
 import 'package:provider/provider.dart';
 
 class ApplyForInternshipPage extends StatefulWidget {
@@ -19,6 +20,15 @@ class ApplyForInternshipPage extends StatefulWidget {
 class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
   final _formKey = GlobalKey<FormState>();
   String? _message;
+  String? _selectedAttachment;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Provider.of<AttachmentViewModel>(context, listen: false)
+        .fetchAttachments(widget.studentId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +36,9 @@ class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
       appBar: AppBar(title: Text("Apply for Internship")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Consumer<InternshipViewModel>(
-          builder: (context, viewModel, child) {
-            if (viewModel.isLoading) {
+        child: Consumer2<InternshipViewModel, AttachmentViewModel>(
+          builder: (context, internshipViewModel, attachmentViewModel, child) {
+            if (attachmentViewModel.isUploading) {
               return Center(child: CircularProgressIndicator());
             }
 
@@ -48,24 +58,51 @@ class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
                     onSaved: (value) => _message = value,
                   ),
                   SizedBox(height: 16),
+
+                    DropdownButton<String>(
+                      value: _selectedAttachment,
+                      hint: Text("Select an attachment"),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedAttachment = newValue;
+                        });
+                      },
+                      items: attachmentViewModel.attachments
+                          .map<DropdownMenuItem<String>>((attachment) {
+                        return DropdownMenuItem<String>(
+                          value: attachment.id,
+                          child: Text(attachment.fileName ?? 'Unknown Attachment'),
+                        );
+                      }).toList(),
+                    ),
+                  SizedBox(height: 16),
+
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
                         _formKey.currentState?.save();
-                        await viewModel.applyForInternship(
+
+
+                        await internshipViewModel.applyForInternship(
                           internshipId: widget.internshipId,
                           studentId: widget.studentId,
                           message: _message!,
+                          attachmentId: _selectedAttachment,
                         );
 
-                        if (viewModel.errorMessage == null) {
+                        print('Submitting application...');
+                        print('Internship ID: ${widget.internshipId}');
+                        print('Student ID: ${widget.studentId}');
+                        print('Selected Attachment: $_selectedAttachment');
+
+                        if (internshipViewModel.errorMessage == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text("Application submitted!")),
                           );
-                          Navigator.pop(context); // Go back to previous page
+                          Navigator.pop(context);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(viewModel.errorMessage!)),
+                            SnackBar(content: Text(internshipViewModel.errorMessage!)),
                           );
                         }
                       }

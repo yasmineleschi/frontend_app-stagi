@@ -94,6 +94,7 @@ class Internship {
   final bool isActive;
   final String companyName;
   final String companyAddress;
+  String? companyId;
 
   Internship({
     this.id,
@@ -106,11 +107,12 @@ class Internship {
     required this.isActive,
     required this.companyName,
     required this.companyAddress,
+    this.companyId,
   });
 
   factory Internship.fromJson(Map<String, dynamic> json) {
     return Internship(
-      id: json['_id'] ,
+      id: json['_id'],
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       requirements: List<String>.from(json['requirements'] ?? []),
@@ -120,12 +122,13 @@ class Internship {
       isActive: json['isActive'] ?? false,
       companyName: json['companyName'] ?? 'Unknown Company',
       companyAddress: json['companyAddress'] ?? 'Unknown Company',
+      companyId: json['companyId'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,  // id can be null, no need for casting
+      '_id': id,
       'title': title,
       'description': description,
       'requirements': requirements,
@@ -133,8 +136,10 @@ class Internship {
       'endDate': endDate.toIso8601String(),
       'postedDate': postedDate.toIso8601String(),
       'isActive': isActive,
+      'companyId': companyId,
     };
   }
+
 
   Internship copyWith({
     String? title,
@@ -146,6 +151,7 @@ class Internship {
     bool? isActive,
     String? companyName,
     String? companyAddress,
+    String? companyId,
   }) {
     return Internship(
       title: title ?? this.title,
@@ -157,6 +163,8 @@ class Internship {
       isActive: isActive ?? this.isActive,
       companyName: companyName ?? this.companyName,
       companyAddress: companyAddress ?? this.companyAddress,
+      companyId: companyId ?? this.companyId,
+
     );
   }
 }

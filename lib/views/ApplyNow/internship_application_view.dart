@@ -16,7 +16,7 @@ class _InternshipApplicationsPageState extends State<InternshipApplicationsPage>
   @override
   void initState() {
     super.initState();
-    // Fetch applications when the page loads
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<InternshipViewModel>(context, listen: false)
           .fetchApplications(widget.companyId);

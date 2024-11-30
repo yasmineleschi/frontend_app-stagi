@@ -56,7 +56,7 @@ class _HomeViewState extends State<HomeView> {
         context,
         MaterialPageRoute(
           builder: (context) => ApplyForInternshipPage(
-            internshipId: ,
+            internshipId: internshipId,
             studentId: widget.userId,
           ),
         ),
@@ -197,8 +197,9 @@ class _HomeViewState extends State<HomeView> {
                       startDate: internship.startDate,
                       endDate: internship.endDate,
                       postedDate: internship.postedDate,
+                      companyId: internship.companyId ?? '',
                       onApply: widget.role == 'Student'
-                          ? () => _handleApplyNow(internship.id ?? '')
+                          ? () => _handleApplyNow(internship.companyId ?? '')
                           : null,
                     ),
                   );
