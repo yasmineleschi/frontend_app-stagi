@@ -89,7 +89,7 @@ class CompanyProfileViewModel extends ChangeNotifier {
     try {
       List<Internship> updatedInternships = List.from(_companyProfile!.internships);
       int InternshipIndex =
-      updatedInternships.indexWhere((skill) => skill.title == updatedInternship.title);
+      updatedInternships.indexWhere((internship) => internship.id == updatedInternship.id);
 
       if (InternshipIndex != -1) {
         updatedInternships[InternshipIndex] = updatedInternship;

@@ -22,8 +22,6 @@ class ApiService {
       print("User registered successfully");
       final data = json.decode(response.body);
 
-
-
       return data['_id'];
 
     } else {

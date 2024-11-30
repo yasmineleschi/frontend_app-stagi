@@ -9,7 +9,7 @@ class InternshipItem extends StatelessWidget {
   final DateTime startDate;
   final DateTime endDate;
   final DateTime postedDate;
-  final VoidCallback onApply;
+  final VoidCallback? onApply;
 
   InternshipItem({
     required this.companyName,
@@ -20,7 +20,7 @@ class InternshipItem extends StatelessWidget {
     required this.startDate,
     required this.endDate,
     required this.postedDate,
-    required this.onApply,
+     this.onApply,
   });
 
   @override
@@ -40,37 +40,56 @@ class InternshipItem extends StatelessWidget {
                   backgroundImage: AssetImage('assets/photoprofile.png'),
                   radius: 20,
                 ),
-                SizedBox(width: 10,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(companyName.isNotEmpty ? companyName : 'No companyName',
-                      style: TextStyle(
-                        fontFamily: "Roboto Slab",
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold
-                      ),),
-                    SizedBox(height: 4,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.location_on, size: 16, color: Colors.blueGrey,),
-                        SizedBox(width: 2),
-                        Text(
-                          companyAddress.isNotEmpty ? companyAddress : 'No company address',
-                          style: TextStyle(
-                            fontFamily: "Roboto Slab",
-                            fontSize: 10,
-                            color: Colors.blueGrey
-                          ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        companyName.isNotEmpty ? companyName : 'No companyName',
+                        style: TextStyle(
+                          fontFamily: "Roboto Slab",
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            size: 16,
+                            color: Colors.orangeAccent,
+                          ),
+                          SizedBox(width: 2),
+                          Expanded(
+                            child: Text(
+                              companyAddress.isNotEmpty
+                                  ? companyAddress
+                                  : 'No company address',
+                              style: TextStyle(
+                                fontFamily: "Roboto Slab",
+                                fontSize: 10,
+                                color: Colors.black87,
+                              ),
+                              overflow: TextOverflow.ellipsis, // Truncate text if too long
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(width: 10,),
-                IconButton(onPressed: (){}, icon: Icon(Icons.save_outlined),)
+                IconButton(
+                  onPressed: () {
 
+                  },
+                  icon: Icon(
+                    Icons.save_outlined,
+                    size: 30,
+                    color: Colors.black45,
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 8),
@@ -86,7 +105,7 @@ class InternshipItem extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.description_outlined, size: 16, color: Colors.blueGrey), // Icon for Description
+                Icon(Icons.description_outlined, size: 16, color: Colors.orangeAccent), // Icon for Description
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -104,7 +123,7 @@ class InternshipItem extends StatelessWidget {
             if (requirements.isNotEmpty) ...[
               Row(
                 children: [
-                  Icon(Icons.checklist, size: 16, color: Colors.blueGrey), // Icon for Requirements
+                  Icon(Icons.checklist, size: 16, color: Colors.orangeAccent), // Icon for Requirements
                   SizedBox(width: 8),
                   Text(
                     'Requirements:',
@@ -133,7 +152,7 @@ class InternshipItem extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.calendar_today, size: 16, color: Colors.blueGrey), // Icon for Start Date
+                        Icon(Icons.calendar_today, size: 16, color: Colors.orangeAccent),
                         SizedBox(width: 4),
                         Text(
                           'Start Date:',
@@ -152,7 +171,7 @@ class InternshipItem extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.event, size: 16, color: Colors.blueGrey), // Icon for End Date
+                        Icon(Icons.event, size: 16, color: Colors.orangeAccent),
                         SizedBox(width: 4),
                         Text(
                           'End Date:',
@@ -171,7 +190,7 @@ class InternshipItem extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.post_add, size: 16, color: Colors.blueGrey), // Icon for Posted Date
+                        Icon(Icons.post_add, size: 16, color: Colors.orangeAccent),
                         SizedBox(width: 4),
                         Text(
                           'Posted Date:',
@@ -189,6 +208,7 @@ class InternshipItem extends StatelessWidget {
             ),
 
             SizedBox(height: 16),
+            if (onApply != null)
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(

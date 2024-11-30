@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/viewmodels/HomeSearchViewModel.dart';
 import 'package:frontend_app_stagi/viewmodels/attachment_viewmodel.dart';
 import 'package:frontend_app_stagi/viewmodels/company_viewmodel.dart';
+import 'package:frontend_app_stagi/viewmodels/internship_application_viewmodel.dart';
 import 'package:frontend_app_stagi/viewmodels/student_viewmodel.dart';
 import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
 import 'package:frontend_app_stagi/viewmodels/signin_viewmodel.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => HomeSearchViewModel()),
         ChangeNotifierProvider(create: (context) => CompanyProfileViewModel()),
         ChangeNotifierProvider(create: (context) => AttachmentViewModel()),
+        ChangeNotifierProvider(create: (context) => InternshipViewModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

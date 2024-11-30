@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/viewmodels/HomeSearchViewModel.dart';
 import 'package:frontend_app_stagi/viewmodels/company_viewmodel.dart';
-import 'package:frontend_app_stagi/views/Home/item_internship.dart';
+import 'package:frontend_app_stagi/views/ApplyNow/apply_now.dart';
+import 'package:frontend_app_stagi/widgets/item_internship.dart';
 import 'package:frontend_app_stagi/views/Profil/Company/company_view.dart';
 import 'package:frontend_app_stagi/views/Profil/Student/Student_view.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
-import 'package:frontend_app_stagi/views/Home/CommentsPage.dart';
-import 'package:frontend_app_stagi/views/Home/PublicationPage.dart'; // Import the PublicationPage
-import 'package:frontend_app_stagi/views/Home/PublicationDetailsPage.dart';
+import 'package:frontend_app_stagi/views/Comments/CommentsPage.dart';
+import 'package:frontend_app_stagi/views/Publication/PublicationPage.dart'; // Import the PublicationPage
+import 'package:frontend_app_stagi/views/Publication/PublicationDetailsPage.dart';
 
 class HomeView extends StatefulWidget {
   final String token;
   final String userId;
-  final String role; // Add a role parameter
+  final String role;
 
   const HomeView({
     Key? key,
     required this.token,
     required this.userId,
-    required this.role, // Pass the role to the constructor
+    required this.role,
   }) : super(key: key);
 
   @override
@@ -49,6 +50,20 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
+  void _handleApplyNow(String internshipId) {
+    if (widget.role == 'Student') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ApplyForInternshipPage(
+            internshipId: ,
+            studentId: widget.userId,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final publicationViewModel = Provider.of<PublicationViewModel>(context);
@@ -68,7 +83,7 @@ class _HomeViewState extends State<HomeView> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    if (widget.role == 'Student') {  // Use widget.role here
+                    if (widget.role == 'Student') {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -76,7 +91,7 @@ class _HomeViewState extends State<HomeView> {
                               StudentProfileView(userId: widget.userId),
                         ),
                       );
-                    } else if (widget.role == 'Company') {  // Use widget.role here
+                    } else if (widget.role == 'Company') {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -89,7 +104,7 @@ class _HomeViewState extends State<HomeView> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/img4.png'), // Replace with your image asset
+                      backgroundImage: AssetImage('assets/photoprofile.png'),
                       radius: 20.0,
                     ),
                   ),
@@ -109,7 +124,6 @@ class _HomeViewState extends State<HomeView> {
                       contentPadding: EdgeInsets.zero,
                     ),
                     onChanged: (query) {
-                      // Implement search filtering
                       searchViewModel.filterPublications(query);
                     },
                   ),
@@ -162,7 +176,17 @@ class _HomeViewState extends State<HomeView> {
               child: ListView.builder(
                 itemCount: companyProfileViewModel.internships.length,
                 itemBuilder: (context, index) {
-                  final internship = companyProfileViewModel.internships[index];
+                  final sortedInternships = companyProfileViewModel.internships
+                      .where((internship) => internship.postedDate != null)
+                      .toList()
+                    ..sort((a, b) {
+                      final dateA = DateTime.parse(a.postedDate?.toString() ?? '');
+                      final dateB = DateTime.parse(b.postedDate?.toString() ?? '');
+                      return dateB.compareTo(dateA);
+                    });
+
+                  final internship = sortedInternships[index];
+
                   return ListTile(
                     subtitle: InternshipItem(
                       companyName: internship.companyName,
@@ -173,12 +197,15 @@ class _HomeViewState extends State<HomeView> {
                       startDate: internship.startDate,
                       endDate: internship.endDate,
                       postedDate: internship.postedDate,
-                      onApply: () {},
+                      onApply: widget.role == 'Student'
+                          ? () => _handleApplyNow(internship.id ?? '')
+                          : null,
                     ),
                   );
                 },
               ),
             ),
+
 
             Padding(
               padding: const EdgeInsets.all(16.0),

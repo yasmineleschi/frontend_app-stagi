@@ -84,6 +84,7 @@ class Company {
 
 
 class Internship {
+  String? id;
   final String title;
   final String description;
   final List<String> requirements;
@@ -95,6 +96,7 @@ class Internship {
   final String companyAddress;
 
   Internship({
+    this.id,
     required this.title,
     required this.description,
     required this.requirements,
@@ -108,6 +110,7 @@ class Internship {
 
   factory Internship.fromJson(Map<String, dynamic> json) {
     return Internship(
+      id: json['_id'] ,
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       requirements: List<String>.from(json['requirements'] ?? []),
@@ -117,12 +120,12 @@ class Internship {
       isActive: json['isActive'] ?? false,
       companyName: json['companyName'] ?? 'Unknown Company',
       companyAddress: json['companyAddress'] ?? 'Unknown Company',
-
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      '_id': id,  // id can be null, no need for casting
       'title': title,
       'description': description,
       'requirements': requirements,
@@ -154,10 +157,10 @@ class Internship {
       isActive: isActive ?? this.isActive,
       companyName: companyName ?? this.companyName,
       companyAddress: companyAddress ?? this.companyAddress,
-
     );
   }
 }
+
 
 
 
