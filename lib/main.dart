@@ -6,6 +6,10 @@ import 'package:frontend_app_stagi/viewmodels/student_viewmodel.dart';
 import 'package:frontend_app_stagi/viewmodels/PublicationViewModel.dart';
 import 'package:frontend_app_stagi/viewmodels/signin_viewmodel.dart';
 import 'package:frontend_app_stagi/viewmodels/auth_viewmodel.dart';
+import 'package:frontend_app_stagi/views/Profil/Company/company_view.dart';
+import 'package:frontend_app_stagi/views/Profil/Company/create_companyprofile_view.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Student_view.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/create_studentprofile_view.dart';
 import 'package:frontend_app_stagi/views/authentification/signin_view.dart';
 import 'package:frontend_app_stagi/views/authentification/signup_view.dart';
 import 'package:provider/provider.dart';
@@ -27,8 +31,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => StudentProfileViewModel()),
         ChangeNotifierProvider(create: (context) => HomeSearchViewModel()),
         ChangeNotifierProvider(create: (context) => CompanyProfileViewModel()),
-        ChangeNotifierProvider(create: (_) => AttachmentViewModel()),
-
+        ChangeNotifierProvider(create: (context) => AttachmentViewModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -36,10 +39,13 @@ class MyApp extends StatelessWidget {
         routes: {
           '/signin': (context) => const SignInView(),
           '/signup': (context) => const SignUpView(),
+          '/profileStepper': (context) => ProfileStepper(userId: 'userId'),
+          '/companyProfileStepper': (context) => CompanyProfileStepper(userId: 'userId'),
+          '/companyProfileView': (context) => CompanyProfileView(userId: 'userId'),
+          '/studentProfileView': (context) => StudentProfileView(userId: 'userId'),
         },
         onUnknownRoute: (settings) => MaterialPageRoute(
           builder: (context) => const SignInView(),
-
         ),
       ),
     );

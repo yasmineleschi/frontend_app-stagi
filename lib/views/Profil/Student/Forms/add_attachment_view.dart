@@ -15,24 +15,53 @@ class AddAttachmentView extends StatefulWidget {
 
 class _AddAttachmentViewState extends State<AddAttachmentView> {
   File? _selectedFile;
+  bool _isUploading = false; // Variable to control the loading state
 
+  // Function to pick the PDF file
   Future<void> _pickFile() async {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
-
-    if (result != null && result.files.single.path != null) {
-      setState(() {
-        _selectedFile = File(result.files.single.path!);
-      });
+    if (result != null && result.files.isNotEmpty) {
+      final file = result.files.single;
+      if (file.path != null) {
+        setState(() {
+          _selectedFile = File(file.path!); // Save the file path
+        });
+      }
     }
   }
 
-  void _uploadFile() {
+
+  void _uploadFile() async {
     if (_selectedFile != null) {
-      Provider.of<AttachmentViewModel>(context, listen: false)
-          .addAttachment(widget.studentId, _selectedFile!);
+      setState(() {
+        _isUploading = true; // Show the loading indicator
+      });
+
+      try {
+        final viewModel = Provider.of<AttachmentViewModel>(context, listen: false);
+
+        // Log the file before uploading
+        print("Uploading file: ${_selectedFile!.path}");
+
+        await viewModel.uploadAttachment(widget.studentId, _selectedFile!);
+        print("Upload completed");
+
+        setState(() {
+          _isUploading = false; // Hide the loading indicator after upload
+        });
+
+      } catch (e) {
+        setState(() {
+          _isUploading = false; // Hide the loading indicator on error
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error: ${e.toString()}")),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Please select a file first")),
@@ -51,6 +80,7 @@ class _AddAttachmentViewState extends State<AddAttachmentView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Display selected file path
             if (_selectedFile != null)
               Text("Selected File: ${_selectedFile!.path.split('/').last}"),
             SizedBox(height: 16),
@@ -60,8 +90,8 @@ class _AddAttachmentViewState extends State<AddAttachmentView> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: viewModel.isUploading ? null : _uploadFile,
-              child: viewModel.isUploading
+              onPressed: _isUploading ? null : _uploadFile, // Disable button while uploading
+              child: _isUploading
                   ? CircularProgressIndicator()
                   : Text("Upload File"),
             ),

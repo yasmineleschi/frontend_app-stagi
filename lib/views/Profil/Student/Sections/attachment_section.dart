@@ -56,11 +56,9 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
     });
 
     try {
-      final attachment = await _attachmentService.uploadAttachment(widget.studentId, file);
+      final attachment = await _attachmentService.uploadAttachment(file ,widget.studentId);
       if (attachment != null) {
-        setState(() {
-          _attachments.add(attachment);
-        });
+
       }
     } catch (e) {
       setState(() {
@@ -130,7 +128,7 @@ class _AttachmentsSectionState extends State<AttachmentsSection> {
                   Text('No attachments available.'),
                 ..._attachments.map((attachment) {
                   return ListTile(
-                    title: Text(attachment.fileName),
+                    title: Text(attachment.fileType),
                     subtitle: Text(attachment.fileType),
                     trailing: IconButton(
                       icon: Icon(Icons.download),

@@ -160,7 +160,7 @@ class _SignInViewState extends State<SignInView> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => HomeView(token: viewModel.token),
+                                      builder: (context) => HomeView(token: viewModel.token, userId: viewModel.userId,role: viewModel.role,),
                                     ),
                                   );
                                 }

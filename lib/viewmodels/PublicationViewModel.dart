@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:http_parser/http_parser.dart';
 
 class PublicationViewModel extends ChangeNotifier {
-  final String backendUrl = 'http://localhost:5001/api/publications';
+  final String backendUrl = 'http://10.0.2.2:5001/api/publications';
   List<dynamic> publications = [];
   bool isLoading = false;
   String errorMessage = '';
@@ -44,7 +44,7 @@ class PublicationViewModel extends ChangeNotifier {
       Uint8List? image, // Image in bytes (for image uploads)
       Uint8List? pdf,   // PDF in bytes (for PDF uploads)
       ) async {
-    final uri = Uri.parse('http://localhost:5001/api/publications');
+    final uri = Uri.parse('http://10.0.2.2:5001/api/publications');
     final request = http.MultipartRequest('POST', uri)
       ..headers['Authorization'] = 'Bearer $token'
       ..fields['title'] = title

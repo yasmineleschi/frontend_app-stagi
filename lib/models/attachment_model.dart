@@ -1,21 +1,19 @@
 class AttachmentModel {
-  final String id;
+  final String? id;
   final String studentId;
   final String fileName;
   final String filePath;
   final String fileType;
   final DateTime uploadedAt;
 
-
   AttachmentModel({
-    required this.id,
+    this.id,
     required this.studentId,
     required this.fileName,
     required this.filePath,
     required this.fileType,
     required this.uploadedAt,
   });
-
 
   factory AttachmentModel.fromJson(Map<String, dynamic> json) {
     return AttachmentModel(
@@ -27,7 +25,6 @@ class AttachmentModel {
       uploadedAt: DateTime.parse(json['uploadedAt']),
     );
   }
-
 
   Map<String, dynamic> toJson() {
     return {

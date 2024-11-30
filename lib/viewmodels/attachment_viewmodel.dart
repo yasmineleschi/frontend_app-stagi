@@ -15,23 +15,26 @@ class AttachmentViewModel extends ChangeNotifier {
   List<AttachmentModel> _attachments = [];
   List<AttachmentModel> get attachments => _attachments;
 
-  Future<void> addAttachment(String studentId, File file) async {
+
+  Future<AttachmentModel?> uploadAttachment(String studentId, File file) async {
     _isUploading = true;
     notifyListeners();
 
     try {
-      final attachment = await _service.uploadAttachment(studentId, file);
+      final uploadedAttachment = await _service.uploadAttachment(file, studentId);
 
-      if (attachment != null) {
-        _attachments.add(attachment);
-      } else {
-        _errorMessage = 'Failed to upload attachment.';
+      if (uploadedAttachment != null) {
+        _attachments.add(uploadedAttachment);
+        notifyListeners();
       }
+
+      _isUploading = false;
+      return uploadedAttachment;
     } catch (e) {
-      _errorMessage = 'Error during upload: $e';
-    } finally {
+      _errorMessage = 'Upload failed: ${e.toString()}';
       _isUploading = false;
       notifyListeners();
+      return null;
     }
   }
 
@@ -40,12 +43,12 @@ class AttachmentViewModel extends ChangeNotifier {
     _isUploading = true;
     _errorMessage = '';
     notifyListeners();
-
     try {
       _attachments = await _service.getAttachments(studentId);
+      _isUploading = false;
+      notifyListeners();
     } catch (e) {
       _errorMessage = 'Failed to fetch attachments: $e';
-    } finally {
       _isUploading = false;
       notifyListeners();
     }
