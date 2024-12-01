@@ -25,13 +25,12 @@ class _ProfileHeaderState extends State<CompanyProfileHeader> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 20.0),
             child: Stack(
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 40),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -81,7 +80,6 @@ class _ProfileHeaderState extends State<CompanyProfileHeader> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 60),
                   ],
                 ),
 

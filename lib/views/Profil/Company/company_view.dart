@@ -16,40 +16,66 @@ class CompanyProfileView extends StatelessWidget {
       create: (_) => CompanyProfileViewModel()..getCompanyProfile(userId),
       child: DefaultTabController(
         length: 2,
-        child: Scaffold(
-          body: Container(
-            color: const Color(0xFFF5F2F2),
-            child: Consumer<CompanyProfileViewModel>(
-              builder: (context, viewModel, child) {
-                if (viewModel.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+        child: Consumer<CompanyProfileViewModel>(
+          builder: (context, viewModel, child) {
+            if (viewModel.isLoading) {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
 
-                if (viewModel.errorMessage.isNotEmpty) {
-                  return Center(child: Text(viewModel.errorMessage));
-                }
+            if (viewModel.errorMessage.isNotEmpty) {
+              return Scaffold(
+                appBar: AppBar(
+                  backgroundColor: const Color(0xFF1B3B6D),
+                  title: const Text('Company Profile'),
+                ),
+                body: Center(child: Text(viewModel.errorMessage)),
+              );
+            }
 
-                final profile = viewModel.company;
+            final profile = viewModel.company;
 
-                if (profile == null) {
-                  return const Center(child: Text('No profile data available.'));
-                }
+            if (profile == null) {
+              return Scaffold(
+                appBar: AppBar(
+                  backgroundColor: const Color(0xFF1B3B6D),
+                  title: const Text('Company Profile'),
+                ),
+                body: const Center(child: Text('No profile data available.')),
+              );
+            }
 
-                return Column(
+            return Scaffold(
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(150.0),
+                child: AppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: const Color(0xFFF5F2F2),
+                  flexibleSpace: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: CompanyProfileHeader(Companyprofile: profile),
+                  ),
+                ),
+              ),
+              body: Container(
+                color: const Color(0xFFF5F2F2),
+                child: Column(
                   children: [
-
-                    CompanyProfileHeader(Companyprofile: profile),
-
                     const TabBar(
                       tabs: [
-                        Tab(text: 'About Us' ,  icon: Icon(Icons.account_box_outlined),),
-                        Tab(text: 'Internships', icon: Icon(Icons.work_outline_outlined),),
+                        Tab(
+                          text: 'About Us',
+                          icon: Icon(Icons.account_box_outlined),
+                        ),
+                        Tab(
+                          text: 'Internships',
+                          icon: Icon(Icons.work_outline_outlined),
+                        ),
                       ],
-
                       labelColor: Colors.deepOrangeAccent,
                       indicatorColor: Colors.orangeAccent,
                     ),
-
                     Expanded(
                       child: TabBarView(
                         children: [
@@ -57,9 +83,10 @@ class CompanyProfileView extends StatelessWidget {
                             child: DescriptionSection(companyProfile: profile),
                           ),
                           SingleChildScrollView(
-                            child: InternshipSection(internships: profile.internships,
-                              onInternshipUpdated: (updateInternship) {
-                                viewModel.updateInternship(profile.userId!, updateInternship);
+                            child: InternshipSection(
+                              internships: profile.internships,
+                              onInternshipUpdated: (updatedInternship) {
+                                viewModel.updateInternship(profile.userId!, updatedInternship);
                               },
                             ),
                           ),
@@ -67,10 +94,10 @@ class CompanyProfileView extends StatelessWidget {
                       ),
                     ),
                   ],
-                );
-              },
-            ),
-          ),
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
