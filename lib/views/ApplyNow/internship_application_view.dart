@@ -53,34 +53,31 @@ class _InternshipApplicationsPageState extends State<InternshipApplicationsPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80.0),
-        child: AppBar(
-          iconTheme: IconThemeData(color: Colors.white),
-          title: Text(
-            "Confirm Internship",
-            style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Roboto Slab",
-              color: Colors.white,
-            ),
+        preferredSize: const Size.fromHeight(100.0),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(50.0),
+            bottomRight: Radius.circular(50.0),
           ),
-          backgroundColor: Color(0xFF1B3B6D),
-          elevation: 0,
-          centerTitle: true,
+          child: AppBar(
+            iconTheme: const IconThemeData(color: Colors.white),
+            title: const Text(
+              "Confirm Internship",
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Roboto Slab",
+                color: Colors.white,
+              ),
+            ),
+            backgroundColor: const Color(0xFF1B3B6D),
+            elevation: 4,
+            centerTitle: true,
+          ),
         ),
       ),
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xFF1B3B6D), Color(0xFF79A6D2)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(14.0),
             child: Column(
@@ -165,52 +162,119 @@ class _InternshipApplicationsPageState extends State<InternshipApplicationsPage>
                         itemBuilder: (context, index) {
                           final application = filteredApplications[index];
                           return Card(
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 16.0),
+                            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             elevation: 5.0,
+                            color: Colors.white,
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Row(
                                 children: [
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          application.message,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black87,
-                                          ),
+                                        Row(
+                                          children: [
+                                            Icon(Icons.business_center, color: Colors.blueGrey, size: 24),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              "stage: ",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                            Text(
+                                              application.internshipTitle,
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(height: 8.0),
-                                        Text(
-                                          "Attachment: ${application.attachmentId}",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey[700],
-                                          ),
+                                        const SizedBox(height: 12.0),
+                                        Row(
+                                          children: [
+                                            Icon(Icons.message_outlined, color: Colors.blueGrey, size: 24),
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              child: Text(
+                                                application.message,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black87,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(height: 8.0),
-                                        Text(
-                                          "Status: ${application.status}",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black,
-                                          ),
+                                        const SizedBox(height: 12.0),
+                                        Row(
+                                          children: [
+                                            Icon(Icons.attach_file, color: Colors.blueGrey, size: 24),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              "cv: ${application.attachmentId}",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey[700],
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        const SizedBox(height: 8.0),
-                                        Text(
-                                          "Applied at:  ${formatDate(application.appliedAt)}",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey[700],
-                                          ),
+                                        const SizedBox(height: 12.0),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              application.status.toLowerCase() == 'accepted'
+                                                  ? Icons.check_circle_outline
+                                                  : application.status.toLowerCase() == 'rejected'
+                                                  ? Icons.cancel_outlined
+                                                  : Icons.pending_outlined,
+                                              color: application.status.toLowerCase() == 'accepted'
+                                                  ? Colors.green
+                                                  : application.status.toLowerCase() == 'rejected'
+                                                  ? Colors.red
+                                                  : Colors.grey,
+                                              size: 24,
+                                            ),
+                                            const SizedBox(width: 8.0),
+                                            Text(
+                                              "Status: ${application.status}",
+                                              style: TextStyle(
+                                                fontSize: 14.0,
+                                                color: application.status.toLowerCase() == 'accepted'
+                                                    ? Colors.green
+                                                    : application.status.toLowerCase() == 'rejected'
+                                                    ? Colors.red
+                                                    : Colors.black,
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
+                                        const SizedBox(height: 12.0),
+                                        Divider(color: Colors.grey[200],),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Icon(Icons.access_alarm_outlined, color: Colors.blueGrey, size: 24),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              "Applied at: ${formatDate(application.appliedAt)}",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey[700],
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -228,14 +292,28 @@ class _InternshipApplicationsPageState extends State<InternshipApplicationsPage>
                                           );
                                         }
                                       },
+                                      iconColor: Colors.orangeAccent,
+                                      color: Colors.white,
                                       itemBuilder: (context) => [
                                         PopupMenuItem(
                                           value: "Accepted",
-                                          child: Text("Accept"),
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.check_circle, color: Colors.green, size: 20),
+                                              const SizedBox(width: 8),
+                                              Text("Accept"),
+                                            ],
+                                          ),
                                         ),
                                         PopupMenuItem(
                                           value: "Rejected",
-                                          child: Text("Reject"),
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.cancel, color: Colors.red, size: 20),
+                                              const SizedBox(width: 8),
+                                              Text("Reject"),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -243,8 +321,8 @@ class _InternshipApplicationsPageState extends State<InternshipApplicationsPage>
                                 ],
                               ),
                             ),
-
                           );
+
                         },
                       );
                     },

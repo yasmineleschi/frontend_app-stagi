@@ -7,11 +7,13 @@ import 'package:provider/provider.dart';
 class ApplyForInternshipPage extends StatefulWidget {
   final String internshipId;
   final String studentId;
+  final String internshipTitle;
 
   const ApplyForInternshipPage({
     Key? key,
     required this.internshipId,
     required this.studentId,
+    required this.internshipTitle,
   }) : super(key: key);
 
   @override
@@ -172,6 +174,7 @@ class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
                                   studentId: widget.studentId,
                                   message: _message!,
                                   attachmentId: _selectedAttachment,
+                                  internshipTitle: widget.internshipTitle,
                                 );
 
                                 if (internshipViewModel.errorMessage == null) {

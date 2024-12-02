@@ -88,7 +88,7 @@ class InternshipItem extends StatelessWidget {
 
                   },
                   icon: Icon(
-                    Icons.save_outlined,
+                    Icons.bookmark_border_outlined,
                     size: 30,
                     color: Colors.black45,
                   ),

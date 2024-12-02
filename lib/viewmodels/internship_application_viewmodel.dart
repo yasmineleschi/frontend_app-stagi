@@ -15,7 +15,15 @@ class InternshipViewModel with ChangeNotifier {
     required String studentId,
     required String message,
     String? attachmentId,
+    String? internshipTitle,
   }) async {
+    print('Applying for internship with the following details:');
+    print('Internship ID: $internshipId');
+    print('Student ID: $studentId');
+    print('Message: $message');
+    print('Attachment ID: ${attachmentId ?? "No attachment provided"}');
+    print('Internship Title: ${internshipTitle ?? "No title provided"}');
+
     _isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -25,6 +33,7 @@ class InternshipViewModel with ChangeNotifier {
       studentId: studentId,
       message: message,
       attachmentId: attachmentId,
+      internshipTitle: internshipTitle,
     );
 
     if (!success) {
@@ -85,6 +94,7 @@ class InternshipViewModel with ChangeNotifier {
           _applications[index] = InternshipApplication(
             id: _applications[index].id,
             internshipId: _applications[index].internshipId,
+            internshipTitle: _applications[index].internshipTitle,
             studentId: _applications[index].studentId,
             message: _applications[index].message,
             attachmentId: _applications[index].attachmentId,

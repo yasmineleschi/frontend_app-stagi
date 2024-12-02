@@ -15,6 +15,7 @@ class CompanyProfileViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
   List<Internship> get internships => _internships;
+
   Future<void> fetchInternships() async {
     _isLoading = true;
     notifyListeners();

@@ -1,50 +1,61 @@
 class InternshipApplication {
   String? id;
   final String internshipId;
+  final String internshipTitle; // Nouveau champ ajouté
   final String studentId;
   final String message;
   final String? attachmentId;
   final String status;
   final DateTime appliedAt;
-  final DateTime? interviewDate; // Ajout
+  final DateTime? interviewDate;
 
   InternshipApplication({
     this.id,
     required this.internshipId,
+    required this.internshipTitle, // Initialisation du champ
     required this.studentId,
     required this.message,
     this.attachmentId,
     required this.status,
     required this.appliedAt,
-    this.interviewDate, // Initialisation
+    this.interviewDate,
   });
 
   factory InternshipApplication.fromJson(Map<String, dynamic> json) {
     return InternshipApplication(
       id: json['_id'] as String?,
-      internshipId: json['internship']?['_id'] ?? '', // Assurez-vous que 'internship' existe
-      studentId: json['studentId'] ?? '',
+      internshipId: json['internshipId'] is Map<String, dynamic>
+          ? json['internshipId']['_id'] ?? ''
+          : json['internshipId'] ?? '',
+      internshipTitle: json['internshipTitle'] ?? '', // Récupération du champ
+      studentId: json['studentId'] is Map<String, dynamic>
+          ? json['studentId']['_id'] ?? ''
+          : json['studentId'] ?? '',
       message: json['message'] ?? '',
-      attachmentId: json['attachment']?['_id'], // Vérifiez si attachmentId est un objet
+      attachmentId: json['attachmentId'] is Map<String, dynamic>
+          ? json['attachmentId']['_id']
+          : json['attachmentId'],
       status: json['status'] ?? 'Pending',
-      appliedAt: DateTime.parse(json['appliedAt']),
+      appliedAt: json['appliedAt'] != null
+          ? DateTime.parse(json['appliedAt'])
+          : DateTime.now(),
       interviewDate: json['interviewDate'] != null
           ? DateTime.parse(json['interviewDate'])
           : null,
     );
   }
 
-
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
       'internshipId': internshipId,
+      'internshipTitle': internshipTitle,
       'studentId': studentId,
       'message': message,
       'attachmentId': attachmentId,
       'status': status,
       'appliedAt': appliedAt.toIso8601String(),
-      'interviewDate': interviewDate?.toIso8601String(), // Ajout à l’encodage
+      'interviewDate': interviewDate?.toIso8601String(),
     };
   }
 }

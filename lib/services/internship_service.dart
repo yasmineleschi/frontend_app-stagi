@@ -3,15 +3,16 @@ import 'package:http/http.dart' as http;
 import '../models/internship_application.dart';
 
 class InternshipService {
-  final String baseUrl = "http://localhost:5001/api/internshipApply";
+  final String baseUrl = "http://10.0.2.2:5001/api/internshipApply";
 
-  Future<bool> applyForInternship({ required String internshipId, required String studentId, required String message, String? attachmentId,}) async {
+  Future<bool> applyForInternship({ required String internshipId, required String studentId, required String message, String? attachmentId, String? internshipTitle, }) async {
     final url = Uri.parse('$baseUrl/apply');
     final body = {
       "internshipId": internshipId,
       "studentId": studentId,
       "message": message,
       if (attachmentId != null) "attachmentId": attachmentId,
+      if (internshipTitle != null) "internshipTitle": internshipTitle,
     };
 
     try {

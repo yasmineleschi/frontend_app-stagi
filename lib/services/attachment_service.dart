@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../models/attachment_model.dart';
 
 class AttachmentService {
-  final String baseUrl = "http://localhost:5001/api/attachment";
+  final String baseUrl = "http://10.0.2.2:5001/api/attachment";
 
   Future<AttachmentModel> uploadAttachment(File file, String studentId) async {
     final request = http.MultipartRequest("POST", Uri.parse("$baseUrl/upload"))
