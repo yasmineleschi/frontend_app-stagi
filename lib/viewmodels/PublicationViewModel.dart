@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,8 +6,9 @@ import 'dart:convert';
 
 import 'package:http_parser/http_parser.dart';
 
+
 class PublicationViewModel extends ChangeNotifier {
-  final String backendUrl = 'http://10.0.2.2:5001/api/publications';
+  final String backendUrl = 'http://localhost:5001/api/publications';
   List<dynamic> publications = [];
   bool isLoading = false;
   String errorMessage = '';
@@ -24,6 +25,8 @@ class PublicationViewModel extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         publications = json.decode(response.body);
+        publications.sort((a, b) => DateTime.parse(b['createdAt'])
+            .compareTo(DateTime.parse(a['createdAt'])));
       } else {
         errorMessage = 'Failed to load publications';
       }
@@ -37,6 +40,7 @@ class PublicationViewModel extends ChangeNotifier {
 
 
 
+
   Future<void> createPublication(
       String token,
       String title,
@@ -44,7 +48,7 @@ class PublicationViewModel extends ChangeNotifier {
       Uint8List? image, // Image in bytes (for image uploads)
       Uint8List? pdf,   // PDF in bytes (for PDF uploads)
       ) async {
-    final uri = Uri.parse('http://10.0.2.2:5001/api/publications');
+    final uri = Uri.parse('http://localhost:5001/api/publications');
     final request = http.MultipartRequest('POST', uri)
       ..headers['Authorization'] = 'Bearer $token'
       ..fields['title'] = title

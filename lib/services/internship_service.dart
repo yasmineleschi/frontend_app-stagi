@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/internship_application.dart';
 
 class InternshipService {
-  final String baseUrl = "http://10.0.2.2:5001/api/internshipApply";
+  final String baseUrl = "http://localhost:5001/api/internshipApply";
 
   Future<bool> applyForInternship({
 

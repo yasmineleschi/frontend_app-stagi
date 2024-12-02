@@ -237,96 +237,134 @@ class _HomeViewState extends State<HomeView> {
               child: publicationViewModel.isLoading
                   ? Center(child: CircularProgressIndicator())
                   : ListView.builder(
-                      itemCount: searchViewModel.filteredPublications.length,
-                      itemBuilder: (context, index) {
-                        final publication =
-                            searchViewModel.filteredPublications[index];
-                        final user = publication['user'];
-                        final hasLiked = publication['likedByUser'] ?? false;
+                itemCount: searchViewModel.filteredPublications.length,
+                itemBuilder: (context, index) {
+                  final publication = searchViewModel.filteredPublications[index];
+                  final user = publication['user'];
+                  final hasLiked = publication['likedByUser'] ?? false;
 
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PublicationDetailsPage(
-                                  publicationId: publication['_id'],
-                                  token: widget.token,
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PublicationDetailsPage(
+                            publicationId: publication['_id'],
+                            token: widget.token,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // User info
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage: AssetImage('assets/photoprofile.png'),
+                                  radius: 20,
                                 ),
-                              ),
-                            );
-                          },
-                          child: Card(
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            'assets/photoprofile.png'),
-                                        radius: 20,
-                                      ),
-                                      SizedBox(width: 8),
-                                      Text(
-                                        user['username'] ?? 'Anonymous',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ],
+                                SizedBox(width: 8),
+                                Text(
+                                  user['username'] ?? 'Anonymous',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                   ),
-                                  SizedBox(height: 8),
-                                  Text(publication['content']),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(
-                                          hasLiked
-                                              ? Icons.thumb_up_alt
-                                              : Icons.thumb_up_alt_outlined,
-                                          color: hasLiked ? Colors.blue : null,
-                                        ),
-                                        onPressed: () {
-                                          publicationViewModel.toggleLike(
-                                              widget.token,
-                                              publication['_id'],
-                                              hasLiked);
-                                        },
-                                      ),
-                                      Text('${publication['likes']} likes'),
-                                      SizedBox(width: 8),
-                                      IconButton(
-                                        icon: Icon(Icons.comment_outlined),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CommentsPage(
-                                                publicationId:
-                                                    publication['_id'],
-                                                token: widget.token,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 12),
+
+                            // Title of the publication
+                            Text(
+                              publication['title'] ?? 'No Title',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
                               ),
                             ),
-                          ),
-                        );
-                      },
+                            SizedBox(height: 8),
+
+                            // Content of the publication
+                            Text(
+                              publication['content'] ?? 'No Content',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            SizedBox(height: 12),
+
+                            // Image of the publication (if available)
+                            if (publication['image'] != null)
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 12.0),
+                                child: Image.network(publication['image']),
+                              ),
+
+                            // PDF link (if available)
+                            if (publication['pdf'] != null)
+                              TextButton(
+                                onPressed: () {
+                                  // Handle PDF viewing
+                                },
+                                child: Text('View PDF'),
+                              ),
+                            SizedBox(height: 12),
+
+                            // Like and comment section
+                            Row(
+                              children: [
+                                IconButton(
+                                  icon: Icon(
+                                    hasLiked
+                                        ? Icons.thumb_up_alt
+                                        : Icons.thumb_up_alt_outlined,
+                                    color: hasLiked ? Colors.blue : null,
+                                  ),
+                                  onPressed: () {
+                                    publicationViewModel.toggleLike(
+                                      widget.token,
+                                      publication['_id'],
+                                      hasLiked,
+                                    );
+                                  },
+                                ),
+                                Text('${publication['likes']} likes'),
+                                SizedBox(width: 12),
+                                IconButton(
+                                  icon: Icon(Icons.comment_outlined),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CommentsPage(
+                                          publicationId: publication['_id'],
+                                          token: widget.token,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
+                  );
+                },
+              ),
             ),
+
+
           ],
         ),
         floatingActionButton: _currentIndex == 1

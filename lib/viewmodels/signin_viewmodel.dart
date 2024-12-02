@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInViewModel extends ChangeNotifier {
-  final String backendUrl = 'http://10.0.2.2:5001/api/users/login';  // Your backend URL
+  final String backendUrl = 'http://localhost:5001/api/users/login';  // Your backend URL
   String email = '';
   String password = '';
   String errorMessage = '';
