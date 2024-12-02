@@ -15,7 +15,7 @@ class StudentProfileViewModel extends ChangeNotifier {
   StudentProfile? get studentProfile => _studentProfile;
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
-
+  String? get studentId => studentProfile?.id;
   Future<void> getStudentProfile(String userId) async {
     _isLoading = true;
     _errorMessage = '';

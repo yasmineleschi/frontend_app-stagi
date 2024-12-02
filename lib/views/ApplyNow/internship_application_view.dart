@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_app_stagi/models/internship_application.dart';
 import 'package:frontend_app_stagi/viewmodels/internship_application_viewmodel.dart';
 import 'package:provider/provider.dart';
 
@@ -13,9 +14,8 @@ class InternshipApplicationsPage extends StatefulWidget {
       _InternshipApplicationsPageState();
 }
 
-class _InternshipApplicationsPageState
-    extends State<InternshipApplicationsPage> {
-  String selectedFilter = "All"; // Filtre par défaut
+class _InternshipApplicationsPageState extends State<InternshipApplicationsPage> {
+  String selectedFilter = "All";
 
   @override
   void initState() {
@@ -27,6 +27,28 @@ class _InternshipApplicationsPageState
     });
   }
 
+
+  void _showInterviewDatePicker(InternshipApplication application) async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2101),
+    );
+
+    if (selectedDate != null) {
+      await Provider.of<InternshipViewModel>(context, listen: false)
+          .updateApplicationStatus(
+        application.id ?? '',
+        "Accepted",
+        interviewDate: selectedDate,
+      );
+    }
+  }
+  String formatDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')} "
+        "${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}";
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +99,7 @@ class _InternshipApplicationsPageState
                             ? Colors.white
                             : Colors.grey[200],
                       ),
-                      child: Text("Pending" , style: TextStyle(color: Colors.black),),
+                      child: Text("Pending", style: TextStyle(color: Colors.black)),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -90,7 +112,7 @@ class _InternshipApplicationsPageState
                             ? Colors.green
                             : Colors.grey[200],
                       ),
-                      child: Text("Accepted",style: TextStyle(color: Colors.black),),
+                      child: Text("Accepted", style: TextStyle(color: Colors.black)),
                     ),
                     ElevatedButton(
                       onPressed: () {
@@ -103,7 +125,7 @@ class _InternshipApplicationsPageState
                             ? Colors.red
                             : Colors.grey[200],
                       ),
-                      child: Text("Rejected",style: TextStyle(color: Colors.black),),
+                      child: Text("Rejected", style: TextStyle(color: Colors.black)),
                     ),
                   ],
                 ),
@@ -115,13 +137,11 @@ class _InternshipApplicationsPageState
                         return Center(child: CircularProgressIndicator());
                       }
 
-
                       final filteredApplications = viewModel.applications
                           .where((application) =>
                       selectedFilter == "All" ||
                           application.status == selectedFilter)
                           .toList();
-
 
                       filteredApplications.sort((a, b) {
                         const statusPriority = {
@@ -129,8 +149,8 @@ class _InternshipApplicationsPageState
                           "Accepted": 1,
                           "Rejected": 2,
                         };
-                        return statusPriority[a.status]
-                            ?.compareTo(statusPriority[b.status] ?? 3) ??
+                        return statusPriority[a.status]!
+                            .compareTo(statusPriority[b.status] ?? 3) ??
                             0;
                       });
 
@@ -186,7 +206,7 @@ class _InternshipApplicationsPageState
                                         ),
                                         const SizedBox(height: 8.0),
                                         Text(
-                                          "Applied at: ${application.appliedAt.toString()}",
+                                          "Applied at:  ${formatDate(application.appliedAt)}",
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: Colors.grey[700],
@@ -199,28 +219,38 @@ class _InternshipApplicationsPageState
                                     alignment: Alignment.centerRight,
                                     child: PopupMenuButton<String>(
                                       onSelected: (value) {
-                                        viewModel.updateApplicationStatus(
-                                            application.id ?? '', value);
+                                        if (value == "Accepted") {
+                                          _showInterviewDatePicker(application);
+                                        } else {
+                                          viewModel.updateApplicationStatus(
+                                            application.id ?? '',
+                                            value,
+                                          );
+                                        }
                                       },
                                       itemBuilder: (context) => [
                                         PopupMenuItem(
-                                            value: "Accepted",
-                                            child: Text("Accept")),
+                                          value: "Accepted",
+                                          child: Text("Accept"),
+                                        ),
                                         PopupMenuItem(
-                                            value: "Rejected",
-                                            child: Text("Reject")),
+                                          value: "Rejected",
+                                          child: Text("Reject"),
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
+
                           );
                         },
                       );
                     },
                   ),
                 ),
+
               ],
             ),
           ),

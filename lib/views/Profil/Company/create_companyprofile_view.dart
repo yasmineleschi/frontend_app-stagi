@@ -44,6 +44,7 @@ class _ProfileStepperState extends State<CompanyProfileStepper> {
 
   List<Internship> internships = [];
 
+
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CompanyProfileViewModel>(context);

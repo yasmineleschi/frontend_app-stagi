@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend_app_stagi/viewmodels/student_viewmodel.dart';
 import 'package:frontend_app_stagi/views/ApplyNow/internship_application_view.dart';
+import 'package:frontend_app_stagi/views/ApplyNow/internship_student.dart';
 import 'package:frontend_app_stagi/views/Home/Home_view.dart';
+import 'package:frontend_app_stagi/views/authentification/signin_view.dart';
+import 'package:provider/provider.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:frontend_app_stagi/views/Profil/Student/Student_view.dart';
 import 'package:frontend_app_stagi/views/Profil/Company/Company_view.dart';
@@ -12,6 +16,7 @@ class CustomDrawer extends StatelessWidget {
   final String token;
   final String companyId;
 
+
   const CustomDrawer({
     Key? key,
     required this.sidebarController,
@@ -19,6 +24,7 @@ class CustomDrawer extends StatelessWidget {
     required this.userId,
     required this.token,
     required this.companyId,
+
   }) : super(key: key);
 
   @override
@@ -27,7 +33,7 @@ class CustomDrawer extends StatelessWidget {
       child: SidebarX(
         controller: sidebarController,
         theme: SidebarXTheme(
-          decoration: BoxDecoration(color: Colors.white),
+          decoration: const BoxDecoration(color: Colors.white),
           textStyle: const TextStyle(color: Colors.black),
           selectedTextStyle: const TextStyle(color: Colors.black),
           selectedItemDecoration: BoxDecoration(
@@ -37,6 +43,7 @@ class CustomDrawer extends StatelessWidget {
         ),
         extendedTheme: const SidebarXTheme(width: 200),
         items: [
+          // Home Menu
           SidebarXItem(
             icon: Icons.home_outlined,
             label: 'Home',
@@ -53,6 +60,8 @@ class CustomDrawer extends StatelessWidget {
               );
             },
           ),
+
+          // Profile Menu
           SidebarXItem(
             icon: Icons.account_box_outlined,
             label: 'Profile',
@@ -74,22 +83,44 @@ class CustomDrawer extends StatelessWidget {
               }
             },
           ),
+
+          // Student-specific menu items
           if (role == 'Student') ...[
             SidebarXItem(
               icon: Icons.save_outlined,
               label: 'Internship Saved',
               onTap: () {
-                print('Navigating to Saved Internships...');
+                // Navigation or action for saved internships
+
               },
             ),
             SidebarXItem(
               icon: Icons.touch_app_outlined,
               label: 'Internship Applied',
               onTap: () {
-                print('Navigating to Applied Internships...');
+                final studentId = Provider.of<StudentProfileViewModel>(
+                  context,
+                  listen: false,
+                ).studentId;
+
+                if (studentId != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => StudentApplicationsPage(studentId: studentId),
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Student ID is not available.')),
+                  );
+                }
               },
             ),
+
           ],
+
+          // Company-specific menu items
           if (role == 'Company') ...[
             SidebarXItem(
               icon: Icons.verified_outlined,
@@ -105,17 +136,35 @@ class CustomDrawer extends StatelessWidget {
                     ),
                   );
                 } else {
-                  print('Company ID is required to confirm internships');
+                  // Display a feedback message for missing companyId
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Company ID is required to confirm internships.'),
+                    ),
+                  );
                 }
               },
             ),
           ],
+
+          // Logout
           SidebarXItem(
             icon: Icons.logout,
             label: 'Logout',
             onTap: () {
-              print('Logging out...');
-
+              // Clear session or perform logout logic
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Logging out...'),
+                ),
+              );
+              // Navigate to Login page (if applicable)
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SignInView(),
+                ),
+              );
             },
           ),
         ],

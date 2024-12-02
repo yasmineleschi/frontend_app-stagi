@@ -71,7 +71,7 @@ class _HomeViewState extends State<HomeView> {
     if (widget.role == 'Student') {
       final studentProfileViewModel =
       Provider.of<StudentProfileViewModel>(context, listen: false);
-      final studentId = studentProfileViewModel.studentProfile?.id;
+      final studentId = studentProfileViewModel.studentId;
 
       if (studentId != null) {
         Navigator.push(
@@ -192,6 +192,8 @@ class _HomeViewState extends State<HomeView> {
           userId: widget.userId,
           token: widget.token,
           companyId: widget.userId ,
+
+
         ),
         body: TabBarView(
           children: [

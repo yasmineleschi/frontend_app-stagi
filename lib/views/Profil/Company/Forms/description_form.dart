@@ -26,7 +26,9 @@ class _DescriptionFormState extends State<DescriptionForm> {
     );
     if (pickedDate != null) {
       setState(() {
-        controller.text = "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
+        controller.text = "${pickedDate.year.toString().padLeft(4, '0')}-"
+            "${pickedDate.month.toString().padLeft(2, '0')}-"
+            "${pickedDate.day.toString().padLeft(2, '0')}";
       });
     }
   }

@@ -6,6 +6,7 @@ class InternshipApplication {
   final String? attachmentId;
   final String status;
   final DateTime appliedAt;
+  final DateTime? interviewDate; // Ajout
 
   InternshipApplication({
     this.id,
@@ -15,27 +16,24 @@ class InternshipApplication {
     this.attachmentId,
     required this.status,
     required this.appliedAt,
+    this.interviewDate, // Initialisation
   });
 
   factory InternshipApplication.fromJson(Map<String, dynamic> json) {
     return InternshipApplication(
       id: json['_id'] as String?,
-      internshipId: json['internshipId'] is Map<String, dynamic>
-          ? json['internshipId']['_id'] ?? ''
-          : json['internshipId'] ?? '',
-      studentId: json['studentId'] is Map<String, dynamic>
-          ? json['studentId']['_id'] ?? ''
-          : json['studentId'] ?? '',
+      internshipId: json['internship']?['_id'] ?? '', // Assurez-vous que 'internship' existe
+      studentId: json['studentId'] ?? '',
       message: json['message'] ?? '',
-      attachmentId: json['attachmentId'] is Map<String, dynamic>
-          ? json['attachmentId']['_id']
-          : json['attachmentId'],
+      attachmentId: json['attachment']?['_id'], // Vérifiez si attachmentId est un objet
       status: json['status'] ?? 'Pending',
-      appliedAt: json['appliedAt'] != null
-          ? DateTime.parse(json['appliedAt'])
-          : DateTime.now(),
+      appliedAt: DateTime.parse(json['appliedAt']),
+      interviewDate: json['interviewDate'] != null
+          ? DateTime.parse(json['interviewDate'])
+          : null,
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {
@@ -46,6 +44,7 @@ class InternshipApplication {
       'attachmentId': attachmentId,
       'status': status,
       'appliedAt': appliedAt.toIso8601String(),
+      'interviewDate': interviewDate?.toIso8601String(), // Ajout à l’encodage
     };
   }
 }

@@ -48,25 +48,51 @@ class InternshipViewModel with ChangeNotifier {
       notifyListeners();
     }
   }
-
-
-  Future<void> updateApplicationStatus(String applicationId, String status) async {
+  Future<void> fetchApplicationsForStudent(String studentId) async {
     try {
       _isLoading = true;
       notifyListeners();
-      await _service.updateApplicationStatus(applicationId, status);
+      _applications = await _service.getStudentApplications(studentId);
+    } catch (e) {
+      debugPrint("Error fetching applications: $e");
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 
-      final index = _applications.indexWhere((app) => app.id == applicationId);
-      if (index != -1) {
-        _applications[index] = InternshipApplication(
-          id: _applications[index].id,
-          internshipId: _applications[index].internshipId,
-          studentId: _applications[index].studentId,
-          message: _applications[index].message,
-          attachmentId: _applications[index].attachmentId,
-          status: status,
-          appliedAt: _applications[index].appliedAt,
-        );
+
+  Future<void> updateApplicationStatus(
+      String applicationId,
+      String status, {
+        DateTime? interviewDate,
+      }) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+
+      final success = await _service.updateApplicationStatus(
+        applicationId,
+        status,
+        interviewDate: interviewDate,
+      );
+
+      if (success) {
+        final index =
+        _applications.indexWhere((app) => app.id == applicationId);
+        if (index != -1) {
+          _applications[index] = InternshipApplication(
+            id: _applications[index].id,
+            internshipId: _applications[index].internshipId,
+            studentId: _applications[index].studentId,
+            message: _applications[index].message,
+            attachmentId: _applications[index].attachmentId,
+            status: status,
+            appliedAt: _applications[index].appliedAt,
+            interviewDate: interviewDate,
+          );
+        }
       }
     } catch (e) {
       throw Exception("Failed to update application status: $e");
@@ -75,4 +101,5 @@ class InternshipViewModel with ChangeNotifier {
       notifyListeners();
     }
   }
+
 }
