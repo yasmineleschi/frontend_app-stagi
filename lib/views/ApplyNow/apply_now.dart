@@ -24,6 +24,7 @@ class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
   final _formKey = GlobalKey<FormState>();
   String? _message;
   String? _selectedAttachment;
+  bool _isSubmitted = false;  // Track submission status
 
   @override
   void initState() {
@@ -41,34 +42,31 @@ class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
       },
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80.0),
-          child: AppBar(
-            iconTheme: IconThemeData(color: Colors.white),
-            title: Text(
-              "Apply for Internship",
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                fontFamily: "Roboto Slab",
-                color: Colors.white,
-              ),
+          preferredSize: const Size.fromHeight(100.0),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(50.0),
+              bottomRight: Radius.circular(50.0),
             ),
-            backgroundColor: Color(0xFF1B3B6D),
-            elevation: 0,
-            centerTitle: true,
+            child: AppBar(
+              iconTheme: const IconThemeData(color: Colors.white),
+              title: const Text(
+                "Apply for Internship",
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Roboto Slab",
+                  color: Colors.white,
+                ),
+              ),
+              backgroundColor: const Color(0xFF1B3B6D),
+              elevation: 4,
+              centerTitle: true,
+            ),
           ),
         ),
         body: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF1B3B6D), Color(0xFF79A6D2)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Consumer2<InternshipViewModel, AttachmentViewModel>(
@@ -86,7 +84,7 @@ class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
                         Text(
                           "Personalize your application",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: const Color(0xFF1B3B6D),
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -110,12 +108,12 @@ class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
                           },
                           onSaved: (value) => _message = value,
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(height: 25),
                         Text(
                           "Select an attachment",
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
+                            color: const Color(0xFF1B3B6D),
+                            fontSize: 20,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -157,7 +155,9 @@ class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
                         Center(
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF79A6D2),
+                              backgroundColor: _isSubmitted
+                                  ? Colors.grey  // Grey color if already submitted
+                                  : const Color(0xFF1B3B6D),  // Original color if not submitted
                               padding: EdgeInsets.symmetric(
                                 horizontal: 40,
                                 vertical: 15,
@@ -166,7 +166,9 @@ class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            onPressed: () async {
+                            onPressed: _isSubmitted
+                                ? null  // Disable button if already submitted
+                                : () async {
                               if (_formKey.currentState?.validate() ?? false) {
                                 _formKey.currentState?.save();
                                 await internshipViewModel.applyForInternship(
@@ -178,6 +180,10 @@ class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
                                 );
 
                                 if (internshipViewModel.errorMessage == null) {
+                                  setState(() {
+                                    _isSubmitted = true;  // Mark as submitted
+                                  });
+
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text("Application submitted!"),
@@ -234,5 +240,4 @@ class _ApplyForInternshipPageState extends State<ApplyForInternshipPage> {
       },
     );
   }
-
 }

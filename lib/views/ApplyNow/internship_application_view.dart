@@ -1,6 +1,11 @@
+import 'dart:io';
+import 'package:http/http.dart'as http;
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/internship_application.dart';
 import 'package:frontend_app_stagi/viewmodels/internship_application_viewmodel.dart';
+import 'package:frontend_app_stagi/widgets/file_viewer.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class InternshipApplicationsPage extends StatefulWidget {
@@ -16,6 +21,39 @@ class InternshipApplicationsPage extends StatefulWidget {
 
 class _InternshipApplicationsPageState extends State<InternshipApplicationsPage> {
   String selectedFilter = "All";
+  void _openAttachment(String filePath) async {
+    final url = 'http://10.0.2.2:5001/api/attachment/view/$filePath';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final tempDir = await getTemporaryDirectory();
+        final tempFile = File('${tempDir.path}/$filePath');
+
+        await tempFile.writeAsBytes(response.bodyBytes);
+
+        if (filePath.endsWith('.pdf')) {
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PDFViewerPage(filePath: tempFile.path),
+            ),
+          );
+        } else {
+          OpenFile.open(tempFile.path);
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Échec de l'ouverture du fichier.")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Erreur : $e")),
+      );
+    }
+  }
 
   @override
   void initState() {
@@ -220,13 +258,18 @@ class _InternshipApplicationsPageState extends State<InternshipApplicationsPage>
                                           children: [
                                             Icon(Icons.attach_file, color: Colors.blueGrey, size: 24),
                                             const SizedBox(width: 8),
-                                            Text(
-                                              "cv: ${application.attachmentId}",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey[700],
+                                            GestureDetector(
+                                                onTap: () => _openAttachment(application.attachmentId ?? ''),
+                                              child: Text(
+                                                "cv: ${application.attachmentId}",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.grey[700],
+
+                                                ),
                                               ),
                                             ),
+
                                           ],
                                         ),
                                         const SizedBox(height: 12.0),

@@ -90,7 +90,7 @@ class StudentProfileView extends StatelessWidget {
 void main() {
   runApp(MaterialApp(
     home: StudentProfileView(
-      userId: '672b222b283d37063db38e2e',
+      userId: '674b80a905d7f790d500e234',
     ),
   ));
 }

@@ -1,7 +1,7 @@
 class InternshipApplication {
   String? id;
   final String internshipId;
-  final String internshipTitle; // Nouveau champ ajouté
+  final String internshipTitle;
   final String studentId;
   final String message;
   final String? attachmentId;
@@ -12,7 +12,7 @@ class InternshipApplication {
   InternshipApplication({
     this.id,
     required this.internshipId,
-    required this.internshipTitle, // Initialisation du champ
+    required this.internshipTitle,
     required this.studentId,
     required this.message,
     this.attachmentId,
@@ -27,13 +27,13 @@ class InternshipApplication {
       internshipId: json['internshipId'] is Map<String, dynamic>
           ? json['internshipId']['_id'] ?? ''
           : json['internshipId'] ?? '',
-      internshipTitle: json['internshipTitle'] ?? '', // Récupération du champ
+      internshipTitle: json['internshipTitle'] ?? '',
       studentId: json['studentId'] is Map<String, dynamic>
           ? json['studentId']['_id'] ?? ''
           : json['studentId'] ?? '',
       message: json['message'] ?? '',
       attachmentId: json['attachmentId'] is Map<String, dynamic>
-          ? json['attachmentId']['_id']
+          ? json['attachmentId']['fileName']
           : json['attachmentId'],
       status: json['status'] ?? 'Pending',
       appliedAt: json['appliedAt'] != null
