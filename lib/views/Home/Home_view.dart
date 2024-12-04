@@ -61,9 +61,10 @@ class _HomeViewState extends State<HomeView> {
     publicationViewModel.fetchPublications(widget.token);
     publicationViewModel.addListener(() {
       final publications = publicationViewModel.publications;
-      Provider.of<HomeSearchViewModel>(context, listen: false)
-          .initializePublications(publications);
-    });
+      Provider.of<HomeSearchViewModel>(context, listen: false).initializeData(
+        publications: publications,
+        companies: [],  // Pass an empty list or relevant data for companies
+      );});
   }
 
 

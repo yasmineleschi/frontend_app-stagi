@@ -1,4 +1,3 @@
-
 import 'package:frontend_app_stagi/models/company.dart';
 import 'package:frontend_app_stagi/services/company_service.dart';
 import 'package:flutter/material.dart';
@@ -8,21 +7,21 @@ class CompanyProfileViewModel extends ChangeNotifier {
   bool _isLoading = false;
   String _errorMessage = '';
   List<Internship> _internships = [];
-
+  List<Internship> _filteredInternships = [];
   final CompanyService _apiService = CompanyService();
 
+  List<Internship> get internships => _filteredInternships;
   Company? get company => _companyProfile;
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
-  List<Internship> get internships => _internships;
+
+  // Fetch internships from the API
   Future<void> fetchInternships() async {
     _isLoading = true;
     notifyListeners();
 
     try {
-
       final fetchedInternships = await _apiService.fetchInternships();
-
 
       if (fetchedInternships is List<Internship>) {
         _internships.clear();
@@ -38,6 +37,20 @@ class CompanyProfileViewModel extends ChangeNotifier {
     }
   }
 
+  // Filter internships based on search query
+  void filterInternships(String query) {
+    if (query.isEmpty) {
+      _filteredInternships = _internships;
+    } else {
+      _filteredInternships = _internships
+          .where((internship) =>
+          internship.title.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    }
+    notifyListeners();
+  }
+
+  // Get company profile by userId
   Future<void> getCompanyProfile(String userId) async {
     _isLoading = true;
     _errorMessage = '';
@@ -58,12 +71,13 @@ class CompanyProfileViewModel extends ChangeNotifier {
     }
   }
 
+  // Create company profile
   Future<bool> createCompanyProfile(Company profile, String userId) async {
     _isLoading = true;
     _errorMessage = '';
     notifyListeners();
 
-    profile.userId = profile.userId;
+    profile.userId = userId; // Correct userId assignment
 
     bool success = await _apiService.createCompanyProfile(profile);
 
@@ -79,6 +93,7 @@ class CompanyProfileViewModel extends ChangeNotifier {
     return success;
   }
 
+  // Update internship details
   Future<void> updateInternship(String userId, Internship updatedInternship) async {
     if (_companyProfile == null) return;
 
@@ -87,12 +102,12 @@ class CompanyProfileViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      List<Internship> updatedInternships = List.from(_companyProfile!.internships);
-      int InternshipIndex =
-      updatedInternships.indexWhere((internship) => internship.id == updatedInternship.id);
+      List<Internship> updatedInternships = _companyProfile!.internships ?? [];
+      int internshipIndex = updatedInternships.indexWhere((internship) =>
+      internship.id == updatedInternship.id);
 
-      if (InternshipIndex != -1) {
-        updatedInternships[InternshipIndex] = updatedInternship;
+      if (internshipIndex != -1) {
+        updatedInternships[internshipIndex] = updatedInternship;
 
         Company updatedProfile =
         _companyProfile!.copyWith(internships: updatedInternships);
@@ -100,9 +115,9 @@ class CompanyProfileViewModel extends ChangeNotifier {
         await _apiService.updateCompanyProfile(userId, updatedProfile);
 
         if (isSuccess) {
-          _companyProfile!.internships[InternshipIndex] = updatedInternship;
+          _companyProfile!.internships[internshipIndex] = updatedInternship;
         } else {
-          _errorMessage = 'Failed to update internship . Please try again.';
+          _errorMessage = 'Failed to update internship. Please try again.';
         }
       }
     } catch (e) {
@@ -113,21 +128,21 @@ class CompanyProfileViewModel extends ChangeNotifier {
     }
   }
 
+  // Update company profile information
   Future<void> updateProfile({
     required String userId,
-     String? newDescription,
-     String? newSector,
-     String? newPhoneNumber,
-     DateTime? newYearFounded,
-     String? newEmployeeCount,
-     String? newWebsite}) async {
-
+    String? newDescription,
+    String? newSector,
+    String? newPhoneNumber,
+    DateTime? newYearFounded,
+    String? newEmployeeCount,
+    String? newWebsite,
+  }) async {
     _isLoading = true;
     _errorMessage = '';
     notifyListeners();
 
     try {
-
       Company updatedProfile = _companyProfile!.copyWith(
         description: newDescription,
         sector: newSector,
@@ -136,7 +151,6 @@ class CompanyProfileViewModel extends ChangeNotifier {
         employeeCount: newEmployeeCount,
         website: newWebsite,
       );
-
 
       final bool isSuccess = await _apiService.updateCompanyProfile(userId, updatedProfile);
 
@@ -152,40 +166,4 @@ class CompanyProfileViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-
-  // Future<bool> deleteInternship(String internshipId) async {
-  //   if (_companyProfile == null) return false; // Check if company profile exists
-  //
-  //   _isLoading = true;
-  //   _errorMessage = '';
-  //   notifyListeners();
-  //
-  //   try {
-  //     // Find the companyId from the current company profile
-  //     String companyId = _companyProfile!.id ?? '';
-  //
-  //     // Remove the internship from the list
-  //     List<Internship> updatedInternships = List.from(_companyProfile!.internships);
-  //     updatedInternships.removeWhere((internship) => internship.id == internshipId);
-  //
-  //     // Call the API to delete the internship
-  //     final bool isSuccess = await _apiService.deleteInternship(companyId, internshipId);
-  //
-  //     if (isSuccess) {
-  //       // Update the company profile with the updated internships list
-  //       _companyProfile = _companyProfile!.copyWith(internships: updatedInternships);
-  //       _errorMessage = ''; // Clear any error messages
-  //     } else {
-  //       _errorMessage = 'Failed to delete internship'; // Set an error message if the API fails
-  //     }
-  //   } catch (e) {
-  //     _errorMessage = 'An error occurred while deleting the internship: $e'; // Catch and handle any errors
-  //   } finally {
-  //     _isLoading = false; // Set loading state to false
-  //     notifyListeners(); // Notify listeners to update the UI
-  //   }
-  //
-  //   return _errorMessage.isEmpty; // Return true if deletion was successful, false otherwise
-  // }
 }
