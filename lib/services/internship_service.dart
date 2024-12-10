@@ -3,21 +3,16 @@ import 'package:http/http.dart' as http;
 import '../models/internship_application.dart';
 
 class InternshipService {
-  final String baseUrl = "http://localhost:5001/api/internshipApply";
+  final String baseUrl = "http://10.0.2.2:5001/api/internshipApply";
 
-  Future<bool> applyForInternship({
-
-    required String internshipId,
-    required String studentId,
-    required String message,
-    String? attachmentId,
-  }) async {
+  Future<bool> applyForInternship({ required String internshipId, required String studentId, required String message, String? attachmentId, String? internshipTitle, }) async {
     final url = Uri.parse('$baseUrl/apply');
     final body = {
       "internshipId": internshipId,
       "studentId": studentId,
       "message": message,
       if (attachmentId != null) "attachmentId": attachmentId,
+      if (internshipTitle != null) "internshipTitle": internshipTitle,
     };
 
     try {
@@ -28,7 +23,7 @@ class InternshipService {
       );
 
       if (response.statusCode == 201) {
-        return true; // Application submitted successfully
+        return true;
       } else {
         print("Failed to apply: ${response.body}");
         return false;
@@ -39,13 +34,12 @@ class InternshipService {
     }
   }
 
-
   Future<List<InternshipApplication>> getCompanyApplications(String companyId) async {
     final url = Uri.parse("$baseUrl/company/$companyId");
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body); // Correct type
+      final List<dynamic> data = jsonDecode(response.body);
       print("API Response: $data");
 
       return data.map((e) => InternshipApplication.fromJson(e)).toList();
@@ -55,19 +49,39 @@ class InternshipService {
     }
   }
 
+  Future<List<InternshipApplication>> getStudentApplications(String studentId) async {
+    final url = Uri.parse("$baseUrl/student/$studentId");
+    final response = await http.get(url);
 
-  Future<bool> updateApplicationStatus(String applicationId, String status) async {
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      print("API Response: $data");
+      return data.map((app) => InternshipApplication.fromJson(app)).toList();
+    } else {
+      print("Failed to fetch applications: ${response.statusCode} ${response.body}");
+      throw Exception("Failed to fetch applications.");
+    }
+  }
+
+  Future<bool> updateApplicationStatus( String applicationId, String status, { DateTime? interviewDate,}) async {
     final url = Uri.parse("$baseUrl/$applicationId");
+    final body = {
+      'status': status,
+      if (interviewDate != null) 'interviewDate': interviewDate.toIso8601String(),
+    };
+
     final response = await http.put(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'status': status}),
+      body: jsonEncode(body),
     );
 
     if (response.statusCode == 200) {
       return true;
     } else {
+      print("Failed to update status: ${response.body}");
       throw Exception("Failed to update application status.");
     }
   }
+
 }

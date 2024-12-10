@@ -4,7 +4,7 @@ import 'package:frontend_app_stagi/models/company.dart';
 import 'package:http/http.dart' as http;
 
 class CompanyService {
-  final String baseUrl = 'http://localhost:5001/api/companies';
+  final String baseUrl = 'http://10.0.2.2:5001/api/companies';
 
 
   Future<Company?> fetchCompanyProfile(String userId) async {

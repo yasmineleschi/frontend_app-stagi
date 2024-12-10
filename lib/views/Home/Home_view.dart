@@ -68,11 +68,12 @@ class _HomeViewState extends State<HomeView> {
   }
 
 
-  void _handleApplyNow(String internshipId) {
+  void _handleApplyNow(String internshipId , String internshipTitle) {
     if (widget.role == 'Student') {
       final studentProfileViewModel =
       Provider.of<StudentProfileViewModel>(context, listen: false);
-      final studentId = studentProfileViewModel.studentProfile?.id;
+      final studentId = studentProfileViewModel.studentId;
+
 
       if (studentId != null) {
         Navigator.push(
@@ -81,6 +82,7 @@ class _HomeViewState extends State<HomeView> {
             builder: (context) => ApplyForInternshipPage(
               internshipId: internshipId,
               studentId: studentId,
+              internshipTitle: internshipTitle,
             ),
           ),
         );
@@ -224,7 +226,7 @@ class _HomeViewState extends State<HomeView> {
                       postedDate: internship.postedDate,
                       companyId: internship.companyId ?? '',
                       onApply: widget.role == 'Student'
-                          ? () => _handleApplyNow(internship.companyId ?? '')
+                          ? () => _handleApplyNow(internship.companyId ?? '' , internship.title)
                           : null,
                     ),
 

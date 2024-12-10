@@ -1,28 +1,41 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import '../models/attachment_model.dart';
 
 class AttachmentService {
-  final String baseUrl = "http://localhost:5001/api/attachment";
+  final String baseUrl = "http://10.0.2.2:5001/api/attachment";
 
-  Future<AttachmentModel> uploadAttachment(File file, String studentId) async {
-    final request = http.MultipartRequest("POST", Uri.parse("$baseUrl/upload"))
-      ..fields['studentId'] = studentId
-      ..files.add(await http.MultipartFile.fromPath("file", file.path));
+  Future<void> uploadAttachment(File file, String studentId) async {
+    try {
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$baseUrl/upload'),
+      );
 
-    final response = await request.send();
+      request.fields['studentId'] = studentId;
+      request.files.add(
+        http.MultipartFile(
+          'file',
+          file.readAsBytes().asStream(),
+          file.lengthSync(),
+          filename: file.path.split('/').last,
+        ),
+      );
 
-    if (response.statusCode == 201) {
-      final responseBody = await response.stream.bytesToString();
-      final responseData = json.decode(responseBody);
+      request.headers.addAll({'Accept': 'application/json'});
 
-      return AttachmentModel.fromJson(responseData);
-    } else {
-      throw Exception("Failed to upload attachment");
+      final response = await request.send();
+      if (response.statusCode != 201) {
+        final error = await response.stream.bytesToString();
+        throw Exception('Erreur : $error');
+      }
+    } catch (e) {
+      print('Erreur lors de l\'upload : $e');
+      throw Exception('Erreur lors de l\'upload : $e');
     }
   }
-
 
   Future<List<AttachmentModel>> getAttachments(String studentId) async {
     try {
@@ -35,7 +48,30 @@ class AttachmentService {
         throw Exception("Failed to fetch attachments. Status code: ${response.statusCode}");
       }
     } catch (e) {
-      throw Exception("Error fetching attachments: $e");
+      print('Error fetching attachments: $e');
+      throw Exception('Error fetching attachments: $e');
+    }
+  }
+
+  Future<File> viewAttachment(String filename) async {
+    try {
+      final url = Uri.parse('$baseUrl/view/$filename');
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        // Save the file locally
+        final directory = await getApplicationDocumentsDirectory();
+        final filePath = '${directory.path}/$filename';
+        final file = File(filePath);
+
+        await file.writeAsBytes(response.bodyBytes);
+        return file;
+      } else {
+        throw Exception("Failed to view attachment. Status code: ${response.statusCode}");
+      }
+    } catch (e) {
+      print('Error viewing attachment: $e');
+      throw Exception('Error viewing attachment: $e');
     }
   }
 }

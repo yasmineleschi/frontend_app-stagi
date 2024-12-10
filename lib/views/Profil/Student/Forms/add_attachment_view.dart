@@ -23,6 +23,7 @@ class _AddAttachmentViewState extends State<AddAttachmentView> {
       type: FileType.custom,
       allowedExtensions: ['pdf'],
     );
+
     if (result != null && result.files.isNotEmpty) {
       final file = result.files.single;
       if (file.path != null) {
@@ -30,10 +31,15 @@ class _AddAttachmentViewState extends State<AddAttachmentView> {
           _selectedFile = File(file.path!); // Save the file path
         });
       }
+    } else {
+      // User canceled or no file picked
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No file selected")),
+      );
     }
   }
 
-
+  // Function to upload the file
   void _uploadFile() async {
     if (_selectedFile != null) {
       setState(() {
@@ -46,12 +52,17 @@ class _AddAttachmentViewState extends State<AddAttachmentView> {
         // Log the file before uploading
         print("Uploading file: ${_selectedFile!.path}");
 
+        // Upload the selected file
         await viewModel.uploadAttachment(widget.studentId, _selectedFile!);
         print("Upload completed");
 
+        // After upload, update UI state
         setState(() {
-          _isUploading = false; // Hide the loading indicator after upload
+          _isUploading = false; // Hide the loading indicator
         });
+
+        // Optionally refresh the attachments list after upload (if necessary)
+        viewModel.fetchAttachments(widget.studentId); // Assuming this function exists
 
       } catch (e) {
         setState(() {
@@ -64,7 +75,7 @@ class _AddAttachmentViewState extends State<AddAttachmentView> {
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Please select a file first")),
+        const SnackBar(content: Text("Please select a file first")),
       );
     }
   }
@@ -74,7 +85,7 @@ class _AddAttachmentViewState extends State<AddAttachmentView> {
     final viewModel = Provider.of<AttachmentViewModel>(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text("Add Attachment")),
+      appBar: AppBar(title: const Text("Add Attachment")),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -83,20 +94,20 @@ class _AddAttachmentViewState extends State<AddAttachmentView> {
             // Display selected file path
             if (_selectedFile != null)
               Text("Selected File: ${_selectedFile!.path.split('/').last}"),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _pickFile,
-              child: Text("Pick PDF File"),
+              child: const Text("Pick PDF File"),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _isUploading ? null : _uploadFile, // Disable button while uploading
               child: _isUploading
-                  ? CircularProgressIndicator()
-                  : Text("Upload File"),
+                  ? const CircularProgressIndicator()  // Display loading indicator
+                  : const Text("Upload File"),
             ),
-            SizedBox(height: 16),
-            Text("Uploaded Attachments:"),
+            const SizedBox(height: 16),
+            const Text("Uploaded Attachments:"),
             Expanded(
               child: ListView.builder(
                 itemCount: viewModel.attachments.length,
