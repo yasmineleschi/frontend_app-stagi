@@ -45,7 +45,7 @@ void main() {
       final homeViewWidget = tester.widget<HomeView>(find.byType(HomeView));
       expect(homeViewWidget.token, data['accessToken']);
       expect(homeViewWidget.userId, data['userId']);
-      expect(homeViewWidget.role, 'Student');  // Adjust based on your response
+      expect(homeViewWidget.role, 'Company');  // Adjust based on your response
     } else {
       fail('Login failed with status code: ${response.statusCode}');
     }
