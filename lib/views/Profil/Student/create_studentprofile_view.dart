@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 class ProfileStepper extends StatefulWidget {
   final String userId;
 
-  ProfileStepper({required this.userId});
+  ProfileStepper({required this.userId, Key? key}) : super(key: key);
 
   @override
   _ProfileStepperState createState() => _ProfileStepperState();
@@ -56,6 +56,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
     final viewModel = Provider.of<StudentProfileViewModel>(context);
 
     return Scaffold(
+
       body: Stack(
         children: [
           Container(
@@ -92,6 +93,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
                     dividerColor:  Color(0xFF3A6D8C),
                   ),
                   child: Stepper(
+                    key: Key('profileStepper'),
                     currentStep: _currentStep,
                     onStepContinue: () async {
                       if (_currentStep < 3) {

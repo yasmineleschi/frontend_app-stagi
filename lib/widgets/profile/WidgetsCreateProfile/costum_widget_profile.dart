@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final GestureTapCallback? onTap;
   final Function(String)? onChanged;
   final int? maxLines;
+  final Key? key;
 
   CustomTextField({
     required this.controller,
@@ -21,7 +22,8 @@ class CustomTextField extends StatelessWidget {
     this.onTap,
     this.onChanged,
     this.maxLines = 1,
-  });
+    required this.key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -39,6 +39,7 @@ class _DescriptionFormState extends State<DescriptionForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextField(
+          key: const Key('usernameField'),
           controller: widget.descriptionController,
           labelText: 'Company Description',
           icon: Icons.description_outlined,
@@ -51,6 +52,7 @@ class _DescriptionFormState extends State<DescriptionForm> {
           children: [
             Expanded(
               child: CustomTextField(
+                key: const Key('usernameField'),
                 controller: widget.employeeCountController,
                 labelText: 'Number of Employees',
                 icon: Icons.groups_outlined,
@@ -60,6 +62,7 @@ class _DescriptionFormState extends State<DescriptionForm> {
             const SizedBox(width: 15),
             Expanded(
               child: CustomTextField(
+                key: const Key('usernameField'),
                 controller: widget.yearFoundedController,
                 labelText: 'Year Founded',
                 icon: Icons.date_range_outlined,

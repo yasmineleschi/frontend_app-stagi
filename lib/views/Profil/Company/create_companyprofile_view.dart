@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend_app_stagi/models/company.dart';
@@ -9,13 +6,13 @@ import 'package:frontend_app_stagi/views/Profil/Company/Forms/basic_info_form.da
 import 'package:frontend_app_stagi/views/Profil/Company/Forms/description_form.dart';
 import 'package:frontend_app_stagi/views/Profil/Company/Forms/internship_form.dart';
 import 'package:frontend_app_stagi/views/Profil/Company/company_view.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class CompanyProfileStepper extends StatefulWidget {
   final String userId;
 
-  CompanyProfileStepper({required this.userId});
+  CompanyProfileStepper({required this.userId, Key? key}) : super(key: key);
+
 
   @override
   _ProfileStepperState createState() => _ProfileStepperState();
@@ -83,6 +80,7 @@ class _ProfileStepperState extends State<CompanyProfileStepper> {
                     dividerColor: const Color(0xFF3A6D8C),
                   ),
                   child: Stepper(
+                    key: Key('companyProfileStepper'),
                     currentStep: _currentStep,
                     onStepContinue: () async {
                       if (_currentStep < 2) {

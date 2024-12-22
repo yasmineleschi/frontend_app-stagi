@@ -5,8 +5,12 @@ import 'package:provider/provider.dart';
 
 class InstitutionAutocomplete extends StatefulWidget {
   final TextEditingController controller;
+  final Key? key;
 
-  InstitutionAutocomplete({required this.controller});
+  InstitutionAutocomplete({
+    required this.controller,
+    required this.key,
+  }) : super(key: key);
 
   @override
   _InstitutionAutocompleteState createState() => _InstitutionAutocompleteState();
