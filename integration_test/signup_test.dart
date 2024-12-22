@@ -65,7 +65,6 @@ void main() {
 
       // Check if the userId was saved in SharedPreferences
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('userId', userId);
       final userId = prefs.getString('userId');
       expect(userId, isNotNull, reason: "userId should be saved in SharedPreferences.");
 
