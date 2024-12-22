@@ -86,6 +86,7 @@ class BasicInfoForm extends StatelessWidget {
           children: [
             Expanded(
               child: CustomTextField(
+                key: const Key('firstNameField'),
                 controller: firstNameController,
                 labelText: 'First Name',
                 icon: Icons.person_outline,
@@ -95,6 +96,7 @@ class BasicInfoForm extends StatelessWidget {
             const SizedBox(width: 15),
             Expanded(
               child: CustomTextField(
+                key: const Key('lastNameField'),
                 controller: lastNameController,
                 labelText: 'Last Name',
                 icon: Icons.person,
@@ -119,6 +121,7 @@ class BasicInfoForm extends StatelessWidget {
             const SizedBox(width: 15),
             Expanded(
               child: CustomTextField(
+                key: const Key('phoneField'),
                 controller: phoneController,
                 labelText: 'Phone',
                 icon: Icons.phone,
@@ -131,6 +134,7 @@ class BasicInfoForm extends StatelessWidget {
         const SizedBox(height: 15),
 
         CustomTextField(
+          key: const Key('specialityField'),
           controller: specialityController,
           labelText: 'Speciality',
           icon: Icons.work_outline,
@@ -139,6 +143,7 @@ class BasicInfoForm extends StatelessWidget {
         const SizedBox(height: 15),
 
         CustomTextField(
+          key: const Key('locationField'),
           controller: locationController,
           labelText: 'Location',
           icon: Icons.location_on,
@@ -147,6 +152,7 @@ class BasicInfoForm extends StatelessWidget {
         const SizedBox(height: 15),
 
         CustomTextField(
+          key: const Key('bioField'),
           controller: bioController,
           labelText: 'Bio',
           icon: Icons.info_outline,

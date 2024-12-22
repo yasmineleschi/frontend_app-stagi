@@ -59,10 +59,13 @@ class _EducationFormState extends State<EducationForm> {
           },
         ),
         const SizedBox(height: 20),
-        InstitutionAutocomplete(controller: widget.institutionController),
+        InstitutionAutocomplete(
+            key: const Key('institutionField'),
+            controller: widget.institutionController),
         const SizedBox(height: 20),
 
         CustomTextField(
+          key: const Key('specialityEducationField'),
           controller: widget.specialitController,
           labelText: 'Field of study',
           icon: Icons.book,
@@ -74,6 +77,7 @@ class _EducationFormState extends State<EducationForm> {
           children: [
             Expanded(
               child: CustomTextField(
+                key: const Key('startDateField'),
                 controller: widget.startDateController,
                 labelText: 'Start Date',
                 icon: Icons.calendar_today,
@@ -86,6 +90,7 @@ class _EducationFormState extends State<EducationForm> {
 
             Expanded(
               child: CustomTextField(
+                key: const Key('endDateField'),
                 controller: widget.endDateController,
                 labelText: 'End Date',
                 icon: Icons.calendar_today,

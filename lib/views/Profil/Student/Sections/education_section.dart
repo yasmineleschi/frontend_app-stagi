@@ -85,9 +85,10 @@ class _EducationSectionState extends State<EducationSection> {
                   },
                 ),
                 const SizedBox(height: 20),
-                InstitutionAutocomplete(controller: institutionController),
+                InstitutionAutocomplete( key: const Key('institutionField'),controller: institutionController),
                 const SizedBox(height: 20),
                 CustomTextField(
+                  key: const Key('usernameField'),
                   controller: specialtyController,
                   labelText: 'Field of study',
                   icon: Icons.book,
@@ -98,6 +99,7 @@ class _EducationSectionState extends State<EducationSection> {
                   children: [
                     Expanded(
                       child: CustomTextField(
+                        key: const Key('usernameField'),
                         controller: startDateController,
                         labelText: 'Start Date',
                         icon: Icons.calendar_today,
@@ -111,6 +113,7 @@ class _EducationSectionState extends State<EducationSection> {
                     // End Date
                     Expanded(
                       child: CustomTextField(
+                        key: const Key('usernameField'),
                         controller: endDateController,
                         labelText: 'End Date',
                         icon: Icons.calendar_today,

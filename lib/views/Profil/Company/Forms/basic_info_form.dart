@@ -72,6 +72,7 @@ class BasicInfoForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextField(
+          key: const Key('usernameField'),
           controller: nameController,
           labelText: 'Company Name',
           icon: Icons.business_outlined,
@@ -79,6 +80,7 @@ class BasicInfoForm extends StatelessWidget {
         ),
         const SizedBox(height: 15),
         CustomTextField(
+          key: const Key('usernameField'),
           controller: sectorController,
           labelText: 'Sector',
           icon: Icons.work_outline,
@@ -99,6 +101,7 @@ class BasicInfoForm extends StatelessWidget {
             const SizedBox(width: 15),
             Expanded(
               child: CustomTextField(
+                key: const Key('usernameField'),
                 controller: phoneNumberController,
                 labelText: 'Phone Number',
                 icon: Icons.phone_outlined,
@@ -110,6 +113,7 @@ class BasicInfoForm extends StatelessWidget {
         ),
         const SizedBox(height: 15),
         CustomTextField(
+          key: const Key('usernameField'),
           controller: addressController,
           labelText: 'Company Address',
           icon: Icons.location_on_outlined,
@@ -117,6 +121,7 @@ class BasicInfoForm extends StatelessWidget {
         ),
         const SizedBox(height: 15),
         CustomTextField(
+          key: const Key('usernameField'),
           controller: websiteController,
           labelText: 'Website',
           icon: Icons.web_outlined,

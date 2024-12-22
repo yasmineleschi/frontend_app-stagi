@@ -82,6 +82,7 @@ class _ExperienceFormState extends State<ExperienceForm> {
       children: [
         // Entrée des expériences
         CustomTextField(
+          key: const Key('usernameField'),
           controller: widget.jobTitleController,
           labelText: 'Job Title',
           icon: Icons.work,
@@ -89,6 +90,7 @@ class _ExperienceFormState extends State<ExperienceForm> {
         ),
         const SizedBox(height: 10),
         CustomTextField(
+          key: const Key('usernameField'),
           controller: widget.companyController,
           labelText: 'Company',
           icon: Icons.business,
@@ -100,6 +102,7 @@ class _ExperienceFormState extends State<ExperienceForm> {
             // Date de début
             Expanded(
               child: CustomTextField(
+                key: const Key('usernameField'),
                 controller: widget.startDateController,
                 labelText: 'Start Date',
                 icon: Icons.calendar_today,
@@ -113,6 +116,7 @@ class _ExperienceFormState extends State<ExperienceForm> {
             // Date de fin
             Expanded(
               child: CustomTextField(
+                key: const Key('usernameField'),
                 controller: widget.endDateController,
                 labelText: 'End Date',
                 icon: Icons.calendar_today,
@@ -130,6 +134,7 @@ class _ExperienceFormState extends State<ExperienceForm> {
           children: [
             Expanded(
               child: CustomTextField(
+                key: const Key('usernameField'),
                 controller: widget.responsibilityController,
                 labelText: 'Responsibility',
                 icon: Icons.task,

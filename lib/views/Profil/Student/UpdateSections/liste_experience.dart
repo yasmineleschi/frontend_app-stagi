@@ -87,6 +87,7 @@ class _ListeExperiencePagePageState extends State<ListeExperiencePage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 CustomTextField(
+                  key: const Key('usernameField'),
                   controller: jobTitleController,
                   labelText: 'Job Title',
                   icon: Icons.business,
@@ -94,6 +95,7 @@ class _ListeExperiencePagePageState extends State<ListeExperiencePage> {
                 ),
                 const SizedBox(height: 10),
                 CustomTextField(
+                  key: const Key('usernameField'),
                   controller: companyController,
                   labelText: 'Company Name',
                   icon: Icons.business,
@@ -104,6 +106,7 @@ class _ListeExperiencePagePageState extends State<ListeExperiencePage> {
                   children: [
                     Expanded(
                       child: CustomTextField(
+                        key: const Key('usernameField'),
                         controller: startDateController,
                         labelText: 'Start Date',
                         icon: Icons.calendar_today,
@@ -115,6 +118,7 @@ class _ListeExperiencePagePageState extends State<ListeExperiencePage> {
                     const SizedBox(width: 20),
                     Expanded(
                       child: CustomTextField(
+                        key: const Key('usernameField'),
                         controller: endDateController,
                         labelText: 'End Date',
                         icon: Icons.calendar_today,
@@ -127,6 +131,7 @@ class _ListeExperiencePagePageState extends State<ListeExperiencePage> {
                 ),
                 const SizedBox(height: 10),
                 CustomTextField(
+                  key: const Key('usernameField'),
                   controller: responsibilitiesController,
                   labelText: 'Responsibility',
                   icon: Icons.task,

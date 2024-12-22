@@ -74,6 +74,7 @@ class _InternshipFormState extends State<InternshipForm> {
 
 
         CustomTextField(
+          key: const Key('usernameField'),
           controller: titleController,
           labelText: 'Internship Title',
           icon: Icons.work_outline,
@@ -83,6 +84,7 @@ class _InternshipFormState extends State<InternshipForm> {
 
 
         CustomTextField(
+          key: const Key('usernameField'),
           controller: descriptionController,
           labelText: 'Description',
           icon: Icons.description_outlined,
@@ -93,6 +95,7 @@ class _InternshipFormState extends State<InternshipForm> {
 
 
         CustomTextField(
+          key: const Key('usernameField'),
           controller: requirementsController,
           labelText: 'Requirements',
           icon: Icons.check_circle_outline,
@@ -104,6 +107,7 @@ class _InternshipFormState extends State<InternshipForm> {
           children: [
             Expanded(
               child: CustomTextField(
+                key: const Key('usernameField'),
                 controller: startDateController,
                 labelText: 'Start Date',
                 icon: Icons.date_range_outlined,
@@ -115,6 +119,7 @@ class _InternshipFormState extends State<InternshipForm> {
             const SizedBox(width: 15),
             Expanded(
               child: CustomTextField(
+                key: const Key('usernameField'),
                 controller: endDateController,
                 labelText: 'End Date',
                 icon: Icons.date_range_outlined,

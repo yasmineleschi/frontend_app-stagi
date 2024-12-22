@@ -44,6 +44,7 @@ class _SkillsFormState extends State<SkillsForm> {
           children: [
             Expanded(
               child: CustomTextField(
+                key: const Key('usernameField'),
                 controller: widget.skillController,
                 labelText: 'Skill',
                 icon: Icons.star,
@@ -55,6 +56,7 @@ class _SkillsFormState extends State<SkillsForm> {
               child: Column(
                 children: [
                   CustomTextField(
+                    key: const Key('usernameField'),
                     controller: widget.percentageController,
                     labelText: 'Percentage (0-100)',
                     icon: Icons.percent,

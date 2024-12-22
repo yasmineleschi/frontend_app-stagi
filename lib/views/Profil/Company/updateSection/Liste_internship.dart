@@ -82,6 +82,7 @@ class _InternshipListPageState extends State<InternshipListPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomTextField(
+                      key: const Key('usernameField'),
                       controller: titleController,
                       labelText: 'Internship Title',
                       icon: Icons.work_outline,
@@ -89,6 +90,7 @@ class _InternshipListPageState extends State<InternshipListPage> {
                     ),
                     const SizedBox(height: 20),
                     CustomTextField(
+                      key: const Key('usernameField'),
                       controller: descriptionController,
                       labelText: 'Description',
                       icon: Icons.description_outlined,
@@ -97,6 +99,7 @@ class _InternshipListPageState extends State<InternshipListPage> {
                     ),
                     const SizedBox(height: 20),
                     CustomTextField(
+                      key: const Key('usernameField'),
                       controller: requirementsController,
                       labelText: 'Requirements',
                       icon: Icons.check_circle_outline,
@@ -121,6 +124,7 @@ class _InternshipListPageState extends State<InternshipListPage> {
                       children: [
                         Expanded(
                           child: CustomTextField(
+                            key: const Key('usernameField'),
                             controller: startDateController,
                             labelText: 'Start Date',
                             icon: Icons.date_range_outlined,
@@ -132,6 +136,7 @@ class _InternshipListPageState extends State<InternshipListPage> {
                         const SizedBox(width: 15),
                         Expanded(
                           child: CustomTextField(
+                            key: const Key('usernameField'),
                             controller: endDateController,
                             labelText: 'End Date',
                             icon: Icons.date_range_outlined,

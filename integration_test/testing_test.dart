@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:frontend_app_stagi/models/user.dart';
-import 'package:frontend_app_stagi/views/Profil/Company/create_companyprofile_view.dart';
+import 'package:frontend_app_stagi/views/Profil/Student/Student_view.dart';
 import 'package:frontend_app_stagi/views/Profil/Student/create_studentprofile_view.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:frontend_app_stagi/main.dart' as app;
@@ -10,12 +9,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  group('Test', () {
-    testWidgets('Sign up as a new user and navigate to create profile page', (WidgetTester tester) async {
-      // Launch the app
+  group('End-to-End Test: Student Profile Creation', () {
+    testWidgets('Register, navigate, and create student profile', (WidgetTester tester) async {
+      // Initialize app
       app.main();
       await tester.pumpAndSettle();
-
       // Navigate to SignUp screen if needed
       final signUpButton = find.text('Sign Up Now');
       if (signUpButton.evaluate().isNotEmpty) {
@@ -43,43 +41,46 @@ void main() {
       expect(roleDropdown, findsOneWidget);  // Ensure the widget exists
       await tester.tap(roleDropdown);
       await tester.pumpAndSettle();
-
-      // Select "Student" or "Company" role
-      final selectedRole = 'Student'; // Change to 'Company' to test Company flow
-      final roleOption = find.text(selectedRole).last;
+      final roleOption = find.text('Student').last; // Ensure this matches the role you want to test
       await tester.tap(roleOption);
       await tester.pumpAndSettle();
 
       // Tap the Sign Up button
       final signUpButton2 = find.byKey(const Key('signUpButton'));
-      expect(signUpButton2, findsOneWidget);
-
-      print('Pressing Sign Up button...');
       await tester.tap(signUpButton2);
       await tester.pumpAndSettle();
-      print('Sign Up button pressed successfully.');
 
-      // Wait for async operations
-      await Future.delayed(const Duration(seconds: 2));
-
-
-      // Check if the userId was saved in SharedPreferences
+      // Verify SharedPreferences userId setup
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('userId', userId);
       final userId = prefs.getString('userId');
-      expect(userId, isNotNull, reason: "userId should be saved in SharedPreferences.");
+      expect(userId, isNotNull);
 
-      // Navigate and validate based on role
-      await tester.pumpAndSettle(); // Ensure the page has settled after navigation
-      if (selectedRole == 'Student') {
-        expect(find.byType(ProfileStepper), findsOneWidget);
-        final profileStepperWidget = tester.widget<ProfileStepper>(find.byType(ProfileStepper));
-        expect(profileStepperWidget.userId, userId);
-      } else if (selectedRole == 'Company') {
-        expect(find.byType(CompanyProfileStepper), findsOneWidget);
-        final companyProfileStepperWidget = tester.widget<CompanyProfileStepper>(find.byType(CompanyProfileStepper));
-        expect(companyProfileStepperWidget.userId, userId);
-      }
+      // Navigate to ProfileStepper
+      expect(find.byType(ProfileStepper), findsOneWidget);
+
+      // Fill Basic Info form
+      await tester.enterText(find.byKey(Key('firstNameField')), 'John');
+      await tester.enterText(find.byKey(Key('lastNameField')), 'Doe');
+      await tester.enterText(find.byKey(Key('phoneField')), '123456789');
+      await tester.enterText(find.byKey(Key('bioField')), 'A passionate student.');
+      await tester.tap(find.text('Continue'));
+      await tester.pumpAndSettle();
+
+      // Fill Education form
+      await tester.enterText(find.byKey(Key('degreeField')), 'Bachelor of Science');
+      await tester.enterText(find.byKey(Key('institutionField')), 'University of Example');
+      await tester.tap(find.text('Continue'));
+      await tester.pumpAndSettle();
+
+      // Skip through remaining steps
+      await tester.tap(find.text('Continue'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Continue'));
+      await tester.pumpAndSettle();
+
+      // Verify navigation to StudentProfileView
+      expect(find.byType(StudentProfileView), findsOneWidget);
     });
   });
 }
