@@ -34,7 +34,7 @@ class _SignInViewState extends State<SignInView> {
         child: Container(
           color: const Color(0xFF1B3B6D),
           child: Padding(
-            padding: const EdgeInsets.only(top: 200),
+            padding: const EdgeInsets.only(top: 90),
             child: Align(
               alignment: Alignment.topCenter,
               child: Container(

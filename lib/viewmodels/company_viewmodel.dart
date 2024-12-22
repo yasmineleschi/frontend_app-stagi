@@ -116,12 +116,12 @@ class CompanyProfileViewModel extends ChangeNotifier {
 
   Future<void> updateProfile({
     required String userId,
-     String? newDescription,
-     String? newSector,
-     String? newPhoneNumber,
-     DateTime? newYearFounded,
-     String? newEmployeeCount,
-     String? newWebsite}) async {
+    String? newDescription,
+    String? newSector,
+    String? newPhoneNumber,
+    DateTime? newYearFounded,
+    String? newEmployeeCount,
+    String? newWebsite}) async {
 
     _isLoading = true;
     _errorMessage = '';
@@ -153,6 +153,7 @@ class CompanyProfileViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
 
   Future<void> fetchFilteredCompanies({
@@ -190,5 +191,6 @@ class CompanyProfileViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
 }

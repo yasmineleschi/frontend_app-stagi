@@ -56,7 +56,9 @@ class _CommentsPageState extends State<CommentsPage> {
 
     try {
       final response = await http.post(
+
         Uri.parse('https://backend-app-stagi.vercel.app/api/publications/${widget.publicationId}/comment'),
+
         headers: {
           'Authorization': 'Bearer ${widget.token}',
           'Content-Type': 'application/json',

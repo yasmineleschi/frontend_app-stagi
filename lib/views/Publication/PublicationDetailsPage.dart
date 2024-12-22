@@ -28,7 +28,9 @@ class _PublicationDetailsPageState extends State<PublicationDetailsPage> {
   Future<void> fetchPublicationDetails() async {
     try {
       final response = await http.get(
+
         Uri.parse('https://backend-app-stagi.vercel.app/api/publications/${widget.publicationId}'),
+
         headers: {'Authorization': 'Bearer ${widget.token}'},
       );
 

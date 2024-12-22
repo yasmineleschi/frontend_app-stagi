@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 
 class ApiService {
+
   final String baseUrl = 'https://backend-app-stagi.vercel.app/api/users/profile';
 
   Future<StudentProfile?> fetchStudentProfile(String userId) async {

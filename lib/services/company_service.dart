@@ -4,6 +4,7 @@ import 'package:frontend_app_stagi/models/company.dart';
 import 'package:http/http.dart' as http;
 
 class CompanyService {
+
   final String baseUrl = 'https://backend-app-stagi.vercel.app/api/companies';
 
   Future<Company?> fetchCompanyProfile(String userId) async {

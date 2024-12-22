@@ -1,14 +1,11 @@
-
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:http_parser/http_parser.dart';
 
-
 class PublicationViewModel extends ChangeNotifier {
-  final String backendUrl = 'http://10.0.2.2:5001/api/publications';
+  final String backendUrl = 'http://localhost:5001/api/publications';
   List<dynamic> publications = [];
   bool isLoading = false;
   String errorMessage = '';
@@ -38,9 +35,6 @@ class PublicationViewModel extends ChangeNotifier {
     }
   }
 
-
-
-
   Future<void> createPublication(
       String token,
       String title,
@@ -48,7 +42,7 @@ class PublicationViewModel extends ChangeNotifier {
       Uint8List? image, // Image in bytes (for image uploads)
       Uint8List? pdf,   // PDF in bytes (for PDF uploads)
       ) async {
-    final uri = Uri.parse('http://10.0.2.2:5001/api/publications');
+    final uri = Uri.parse('http://localhost:5001/api/publications');
     final request = http.MultipartRequest('POST', uri)
       ..headers['Authorization'] = 'Bearer $token'
       ..fields['title'] = title
@@ -83,21 +77,21 @@ class PublicationViewModel extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         print('Publication created successfully');
-        // Optionally, you can fetch the publications again after successful creation
+        // Refresh publications after creating a new one
+        fetchPublications(token);
       } else {
         // Log the full response for debugging purposes
         final responseBody = await response.stream.bytesToString();
         print('Failed to create publication. Status code: ${response.statusCode}');
         print('Response body: $responseBody');
+        errorMessage = 'Failed to create publication';
       }
     } catch (e) {
       print('An error occurred: $e');
+      errorMessage = 'An error occurred: $e';
     }
+    notifyListeners(); // Notify listeners about the state change
   }
-
-
-
-
 
   Future<void> likePublication(String token, String publicationId) async {
     try {

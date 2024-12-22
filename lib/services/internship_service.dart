@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/internship_application.dart';
 
 class InternshipService {
+
   final String baseUrl = "https://backend-app-stagi.vercel.app/api/internshipApply";
 
   Future<bool> applyForInternship({ required String internshipId, required String studentId, required String message, String? attachmentId, String? internshipTitle, }) async {
