@@ -1,3 +1,5 @@
+import 'package:frontend_app_stagi/models/attachment_model.dart';
+
 class StudentProfile {
   String? id;
   String? userId;
@@ -11,6 +13,8 @@ class StudentProfile {
   List<Education> education;
   List<Skill> skills;
   List<Experience> experience;
+  List<AttachmentModel> attachement;
+
 
   StudentProfile({
     this.id,
@@ -25,6 +29,7 @@ class StudentProfile {
     required this.education,
     required this.skills,
     required this.experience,
+    required this.attachement,
   });
 
   factory StudentProfile.fromJson(Map<String, dynamic> json) {
@@ -50,6 +55,10 @@ class StudentProfile {
           ?.map((e) => Experience.fromJson(e as Map<String, dynamic>))
           .toList() ??
           [],
+      attachement: (json['attachments'] as List<dynamic>?)
+          ?.map((e) => AttachmentModel.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+          [],
     );
   }
 
@@ -67,6 +76,7 @@ class StudentProfile {
       'education': education.map((e) => e.toJson()).toList(),
       'skills': skills.map((e) => e.toJson()).toList(),
       'experience': experience.map((e) => e.toJson()).toList(),
+      'attachments': attachement.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -82,6 +92,7 @@ class StudentProfile {
     List<Education>? education,
     List<Skill>? skills,
     List<Experience>? experience,
+    List<AttachmentModel>? attachement,
   }) {
     return StudentProfile(
       userId: userId ?? this.userId,
@@ -95,6 +106,7 @@ class StudentProfile {
       education: education ?? this.education,
       skills: skills ?? this.skills,
       experience: experience ?? this.experience,
+      attachement: attachement ?? this.attachement,
     );
   }
 }

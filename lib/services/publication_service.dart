@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = 'http://localhost:5001/api';
+
+  final String baseUrl = 'https://backend-app-stagi.vercel.app/api';
+
 
   Future<List<dynamic>> fetchPublications(String token) async {
     final response = await http.get(

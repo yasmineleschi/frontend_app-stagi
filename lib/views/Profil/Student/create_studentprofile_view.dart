@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend_app_stagi/models/attachment_model.dart';
 import 'package:frontend_app_stagi/models/studentProfile.dart';
 import 'package:frontend_app_stagi/viewmodels/student_viewmodel.dart';
 import 'package:frontend_app_stagi/views/Profil/Student/Forms/basic_info_form.dart';
@@ -48,6 +49,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
 
   List<Skill> skills = [];
   List<Experience> experiences = [];
+  List<AttachmentModel> attachments = [];
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +177,7 @@ class _ProfileStepperState extends State<ProfileStepper> {
                             ],
                             skills: skills,
                             experience: experiences,
+                            attachement: attachments,
                           );
 
                           bool success = await viewModel.createStudentProfile(profile, widget.userId);

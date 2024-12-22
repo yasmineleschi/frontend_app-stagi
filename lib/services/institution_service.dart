@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class InstitutionService {
-  final String baseUrl = 'http://localhost:5001/api/institutions';
+
+  final String baseUrl = 'https://backend-app-stagi.vercel.app/api/institutions';
+
 
   Future<List<String>> fetchInstitutions(String query) async {
     if (query.isEmpty) return [];

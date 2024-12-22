@@ -70,6 +70,7 @@ class _SignInViewState extends State<SignInView> {
                           const LabeledText(label: "Email"),
                           const SizedBox(height: 10),
                           CustomTextField(
+                            key: const Key('usernameField'),
                             hintText: 'Enter your email@gamil.com',
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -92,6 +93,7 @@ class _SignInViewState extends State<SignInView> {
                           const LabeledText(label: "Password"),
                           const SizedBox(height: 10),
                           CustomTextField (
+                            key: const Key('passwordField'),
                             hintText: 'Enter your password',
                             controller: _passwordController,
                             obscureText: hidePassword,

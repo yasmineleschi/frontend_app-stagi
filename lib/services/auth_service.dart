@@ -3,7 +3,9 @@ import 'package:http/http.dart' as http;
 import '../models/user.dart';
 
 class ApiService {
-  final String baseUrl = 'http://localhost:5001/api/users';
+
+  final String baseUrl = 'https://backend-app-stagi.vercel.app/api/users';
+
 
 
   Future<String> signUp(User user) async {

@@ -8,9 +8,9 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Widget? suffixIcon;
   final TextEditingController? controller;
+  final Key? key;
 
   const CustomTextField({
-    super.key,
     this.hintText,
     this.obscureText = false,
     required this.onChanged,
@@ -18,7 +18,8 @@ class CustomTextField extends StatelessWidget {
     this.validator,
     this.suffixIcon,
     this.controller,
-  });
+    required this.key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
