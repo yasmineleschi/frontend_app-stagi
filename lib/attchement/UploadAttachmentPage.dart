@@ -9,7 +9,7 @@ class UploadAttachmentPage extends StatefulWidget {
 
 class _UploadAttachmentPageState extends State<UploadAttachmentPage> {
   String? _selectedFile;
-  String? studentId;
+  String? studentId ;
   bool _isUploading = false;
 
   Future<void> _pickFile() async {
@@ -23,38 +23,59 @@ class _UploadAttachmentPageState extends State<UploadAttachmentPage> {
 
   Future<void> _uploadFile() async {
     if (_selectedFile == null || studentId == null || studentId!.isEmpty) {
+      print("Erreur : Aucun fichier sélectionné ou ID étudiant non renseigné.");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Veuillez sélectionner un fichier et entrer un ID étudiant.")),
       );
       return;
     }
 
+    print("Démarrage de l'upload...");
+    print("Fichier sélectionné : $_selectedFile");
+    print("ID étudiant : $studentId");
+
     setState(() {
       _isUploading = true;
     });
 
-    final uri = Uri.parse('http://10.0.2.2:5001/api/attachment/upload');
-    final request = http.MultipartRequest('POST', uri);
+    try {
+      final uri = Uri.parse('http://10.0.2.2:5001/api/attachment/upload');
+      final request = http.MultipartRequest('POST', uri);
 
-    request.fields['studentId'] = studentId!;
-    request.files.add(await http.MultipartFile.fromPath('file', _selectedFile!));
+      request.fields['studentId'] = studentId!;
+      request.files.add(await http.MultipartFile.fromPath('file', _selectedFile!));
 
-    final response = await request.send();
+      print("Envoi de la requête à l'API...");
+      final response = await request.send();
 
-    setState(() {
-      _isUploading = false;
-    });
+      final responseBody = await response.stream.bytesToString();
+      print("Statut HTTP : ${response.statusCode}");
+      print("Réponse API : $responseBody");
 
-    if (response.statusCode == 201) {
+      setState(() {
+        _isUploading = false;
+      });
+
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Fichier téléchargé avec succès.")),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Échec du téléchargement.")),
+        );
+      }
+    } catch (e) {
+      print("Erreur lors de l'upload : $e");
+      setState(() {
+        _isUploading = false;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Fichier téléchargé avec succès.")),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Échec du téléchargement.")),
+        SnackBar(content: Text("Erreur réseau ou serveur inaccessible.")),
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -87,4 +108,12 @@ class _UploadAttachmentPageState extends State<UploadAttachmentPage> {
       ),
     );
   }
+}
+void main() {
+  runApp(
+    MaterialApp(
+      home: UploadAttachmentPage(),
+    ),
+
+  );
 }

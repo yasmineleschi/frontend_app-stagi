@@ -8,9 +8,9 @@ class CompanyProfileViewModel extends ChangeNotifier {
   bool _isLoading = false;
   String _errorMessage = '';
   List<Internship> _internships = [];
-
+  List<Company> _filteredCompanies = [];
   final CompanyService _apiService = CompanyService();
-
+  List<Company> get filteredCompanies => _filteredCompanies;
   Company? get company => _companyProfile;
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
@@ -155,38 +155,40 @@ class CompanyProfileViewModel extends ChangeNotifier {
   }
 
 
-  // Future<bool> deleteInternship(String internshipId) async {
-  //   if (_companyProfile == null) return false; // Check if company profile exists
-  //
-  //   _isLoading = true;
-  //   _errorMessage = '';
-  //   notifyListeners();
-  //
-  //   try {
-  //     // Find the companyId from the current company profile
-  //     String companyId = _companyProfile!.id ?? '';
-  //
-  //     // Remove the internship from the list
-  //     List<Internship> updatedInternships = List.from(_companyProfile!.internships);
-  //     updatedInternships.removeWhere((internship) => internship.id == internshipId);
-  //
-  //     // Call the API to delete the internship
-  //     final bool isSuccess = await _apiService.deleteInternship(companyId, internshipId);
-  //
-  //     if (isSuccess) {
-  //       // Update the company profile with the updated internships list
-  //       _companyProfile = _companyProfile!.copyWith(internships: updatedInternships);
-  //       _errorMessage = ''; // Clear any error messages
-  //     } else {
-  //       _errorMessage = 'Failed to delete internship'; // Set an error message if the API fails
-  //     }
-  //   } catch (e) {
-  //     _errorMessage = 'An error occurred while deleting the internship: $e'; // Catch and handle any errors
-  //   } finally {
-  //     _isLoading = false; // Set loading state to false
-  //     notifyListeners(); // Notify listeners to update the UI
-  //   }
-  //
-  //   return _errorMessage.isEmpty; // Return true if deletion was successful, false otherwise
-  // }
+  Future<void> fetchFilteredCompanies({
+    String? name,
+    String? sector,
+    String? address,
+    String? internshipTitle,
+    String? internshipDescription,
+    String? internshipRequirements,
+
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final companies = await _apiService.getFilteredCompanies(
+        name: name,
+        sector: sector,
+        address: address,
+        internshipTitle: internshipTitle,
+        internshipDescription: internshipDescription,
+        internshipRequirements: internshipRequirements,
+
+      );
+
+      if (companies is List<Company>) {
+        _filteredCompanies = companies;
+      } else {
+        _errorMessage = 'Failed to load companies: Invalid data format.';
+      }
+    } catch (e) {
+      _errorMessage = 'Error fetching companies: $e';
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
 }

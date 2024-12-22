@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import '../models/attachment_model.dart';
 
 class AttachmentService {
-  final String baseUrl = "http://10.0.2.2:5001/api/attachment";
+  final String baseUrl = "https://backend-app-stagi.vercel.app/api/attachment";
 
   Future<void> uploadAttachment(File file, String studentId) async {
     try {

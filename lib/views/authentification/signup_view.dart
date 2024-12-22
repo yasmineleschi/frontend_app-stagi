@@ -86,6 +86,7 @@ class _SignUpViewState extends State<SignUpView> {
                           const LabeledText(label: "Username"),
                           const SizedBox(height: 10),
                           CustomTextField(
+                            key: const Key('usernameField'),
                             hintText: 'Enter your username',
                             controller: _usernameController,
                             obscureText: false,
@@ -107,6 +108,7 @@ class _SignUpViewState extends State<SignUpView> {
                           const LabeledText(label: "Email"),
                           const SizedBox(height: 10),
                           CustomTextField(
+                            key: const Key('emailField'),
                             hintText: 'Enter your email@gmail.com',
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -129,6 +131,7 @@ class _SignUpViewState extends State<SignUpView> {
                           const LabeledText(label: "Password"),
                           const SizedBox(height: 10),
                           CustomTextField(
+                            key: const Key('passwordField'),
                             hintText: 'Enter your password',
                             controller: _passwordController,
                             obscureText: hidePassword,
@@ -163,6 +166,7 @@ class _SignUpViewState extends State<SignUpView> {
                           const LabeledText(label: "Sign up As "),
                           const SizedBox(height: 10),
                           CustomDropdown(
+                            key: const Key('roleDropdown'),
                             value: role,
                             items: roles,
                             onChanged: (value) {
@@ -174,6 +178,7 @@ class _SignUpViewState extends State<SignUpView> {
                           ),
                           const SizedBox(height: 16),
                           ElevatedButton(
+                            key: const Key('signUpButton'),
                             style: ButtonStyle(
                               backgroundColor:
                               MaterialStateProperty.all<Color>(
