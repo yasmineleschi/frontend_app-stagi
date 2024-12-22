@@ -11,7 +11,7 @@ void main() {
     await tester.pumpWidget(MyApp());  // This launches your app
 
     // Find the email and password text fields
-    final emailFieldFinder = find.byType(TextField).first;
+     final emailFieldFinder = find.byType(TextField).first;
     final passwordFieldFinder = find.byType(TextField).last;
 
     // Enter email and password
