@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:frontend_app_stagi/viewmodels/signin_viewmodel.dart';
 import 'package:frontend_app_stagi/views/Home/Home_view.dart';
 import 'package:frontend_app_stagi/views/authentification/signin_view.dart';
-import 'package:provider/provider.dart';
-import 'package:frontend_app_stagi/viewmodels/signin_viewmodel.dart';
-import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
 
-// Mock HTTP Client
+// Mock class for the HTTP client
 class MockHttpClient extends Mock implements http.Client {}
 
 void main() {
@@ -19,28 +19,32 @@ void main() {
     // Simulate the login response from the backend
     when(mockClient.post(
       Uri.parse('http://localhost:5001/api/users/login'),
+      headers: anyNamed('headers'),
       body: anyNamed('body'),
-    )).thenAnswer((_) async => http.Response(
-      json.encode({
-        'token': 'mockToken',
-        'userId': '67616ebe3524b5a512dc290d',
-        'role': 'Student',
-      }),
-      200,
-    ));
+    )).thenAnswer((_) async {
+      // Simulate the response from the server
+      return http.Response(
+        json.encode({
+          'accessToken': 'mockToken',
+          'userId': '67616ebe3524b5a512dc290d',
+          'role': 'Student',
+        }),
+        200,
+      );
+    });
 
-    // Initialize SignInViewModel with mock data
+    // Create an instance of SignInViewModel
     final signInViewModel = SignInViewModel();
-    signInViewModel.token = 'mockToken';
-    signInViewModel.userId = '67616ebe3524b5a512dc290d';
-    signInViewModel.role = 'Student';
 
-    // Wrap the SignInView in a Provider with the mocked client
+    // Replace the actual HTTP client with the mock client in the ViewModel
+    signInViewModel.httpClient = mockClient;
+
+    // Wrap the SignInView in a Provider with the mocked SignInViewModel
     await tester.pumpWidget(
       MaterialApp(
         home: ChangeNotifierProvider<SignInViewModel>.value(
           value: signInViewModel,
-          child: SignInView(),
+          child: const SignInView(),
         ),
       ),
     );
@@ -67,10 +71,9 @@ void main() {
     // Verify navigation to HomeView
     expect(find.byType(HomeView), findsOneWidget);
 
-    // Verify HomeView parameters (from mock data)
-    final homeView = tester.widget<HomeView>(find.byType(HomeView));
-    expect(homeView.token, 'mockToken');
-    expect(homeView.userId, '67616ebe3524b5a512dc290d');
-    expect(homeView.role, 'Student');
+    // Verify the token, userId, and role are passed correctly (you can modify this as needed)
+    expect(find.text('mockToken'), findsOneWidget);
+    expect(find.text('67616ebe3524b5a512dc290d'), findsOneWidget);
+    expect(find.text('Student'), findsOneWidget);
   });
 }

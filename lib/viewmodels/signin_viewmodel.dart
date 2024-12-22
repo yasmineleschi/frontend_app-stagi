@@ -12,6 +12,11 @@ class SignInViewModel extends ChangeNotifier {
   String token = '';
   String userId = '';
   String role = 'Student';
+  // HTTP client injected via constructor
+  http.Client httpClient;
+
+  // Constructor with injected HTTP client
+  SignInViewModel({http.Client? client}) : httpClient = client ?? http.Client();
 
   void setEmail(String value) {
     email = value;
